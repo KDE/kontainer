@@ -145,12 +145,17 @@ QList<QMap<QString, QString>> Backend::getAvailableImages()
 
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
         QMap<QString, QString> image;
-        image["line"] = line.trimmed();
+        QString trimmed = line.trimmed();
+        image["line"] = trimmed;
+        image["url"] = trimmed; // <- Hier wird jetzt "url" gesetzt
+        image["name"] = trimmed.split('/').last(); // optional
+        image["distro"] = parseDistroFromImage(trimmed); // optional
         images.append(image);
     }
 
     return images;
 }
+
 
 
 QList<QMap<QString, QString>> Backend::searchImages(const QString &query)

@@ -8,7 +8,7 @@
 #include <QMessageBox>
 
 CreateContainerDialog::CreateContainerDialog(Backend *backend, QWidget *parent)
-    : QDialog(parent), m_backend(backend)
+: QDialog(parent), m_backend(backend)
 {
     setWindowTitle("Create New Container");
     resize(600, 400);
@@ -60,11 +60,11 @@ void CreateContainerDialog::refreshImages()
 {
     m_imageList->clear();
     QList<QMap<QString, QString>> images = m_backend->getAvailableImages();
-    
+
     for (const auto &image : images) {
-        QString displayText = QString("%1 (%2)").arg(image["name"], image["distro"]);
-        QListWidgetItem *item = new QListWidgetItem(displayText, m_imageList);
-        item->setData(Qt::UserRole, image["url"]);
+        QString url = image["url"];
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
+        item->setData(Qt::UserRole, url);
     }
 }
 
@@ -77,17 +77,17 @@ void CreateContainerDialog::searchImages(const QString &query)
 
     m_imageList->clear();
     QList<QMap<QString, QString>> images = m_backend->searchImages(query);
-    
+
     for (const auto &image : images) {
-        QString displayText = QString("%1 (%2)").arg(image["name"], image["distro"]);
-        QListWidgetItem *item = new QListWidgetItem(displayText, m_imageList);
-        item->setData(Qt::UserRole, image["url"]);
+        QString url = image["url"];
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
+        item->setData(Qt::UserRole, url);
     }
 }
 
 QString CreateContainerDialog::containerName() const { return m_nameEdit->text(); }
 
-QString CreateContainerDialog::imageUrl() const 
+QString CreateContainerDialog::imageUrl() const
 {
     if (m_imageList->currentItem()) {
         return m_imageList->currentItem()->data(Qt::UserRole).toString();
@@ -99,7 +99,7 @@ QString CreateContainerDialog::homePath() const { return m_homeEdit->text(); }
 
 bool CreateContainerDialog::useInit() const { return m_initCheckbox->isChecked(); }
 
-QStringList CreateContainerDialog::volumes() const 
+QStringList CreateContainerDialog::volumes() const
 {
     return m_volumesEdit->text().split(',', Qt::SkipEmptyParts);
 }
