@@ -147,7 +147,7 @@ QList<QMap<QString, QString>> Backend::getAvailableImages()
         QMap<QString, QString> image;
         QString trimmed = line.trimmed();
         image["line"] = trimmed;
-        image["url"] = trimmed; // <- Hier wird jetzt "url" gesetzt
+        image["url"] = trimmed;
         image["name"] = trimmed.split('/').last(); // optional
         image["distro"] = parseDistroFromImage(trimmed); // optional
         images.append(image);
