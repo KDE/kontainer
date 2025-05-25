@@ -38,61 +38,44 @@ public:
         }
 
         // Get container data
-        QString distro = index.data(Qt::UserRole + 1).toString();
-        bool isRunning = index.data(Qt::UserRole + 2).toString().contains("running", Qt::CaseInsensitive);
+        QString image = index.data(Qt::UserRole + 3).toString(); // Get image name
 
         // Draw icon using system theme's box icon
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        QIcon icon = QIcon::fromTheme("package-x-generic"); // System theme box icon
-        if (isRunning) {
-            icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
-        } else {
-            icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Disabled);
-        }
+        QIcon icon = QIcon::fromTheme("package-x-generic");
+        icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
 
-        // Draw text with accent color
-        QColor accentColor = getDistroColor(distro);
-        if (opt.state & QStyle::State_Selected) {
-            painter->setPen(opt.palette.highlightedText().color());
-        } else {
-            painter->setPen(accentColor);
-        }
+        // Draw container name with accent color
+        painter->setPen(opt.state & QStyle::State_Selected ?
+        opt.palette.highlightedText().color() :
+        opt.palette.text().color());
 
-        QRect textRect = opt.rect.adjusted(iconSize + 12, 0, -30, 0);
-        QString elidedText = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, textRect.width());
-        painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, elidedText);
+        QRect nameRect = opt.rect.adjusted(iconSize + 12, 0, -30, -opt.rect.height()/2);
+        QString elidedName = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, nameRect.width());
+        painter->drawText(nameRect, Qt::AlignLeft | Qt::AlignVCenter, elidedName);
 
-        // Simple status indicator
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(isRunning ? QColor(46, 204, 113) : QColor(231, 76, 60));
-        painter->drawEllipse(opt.rect.right() - 16, opt.rect.y() + (opt.rect.height() - 6)/2, 6, 6);
+        // Draw image name below
+        QFont smallFont = opt.font;
+        smallFont.setPointSize(smallFont.pointSize() - 2);
+        painter->setFont(smallFont);
+
+        QColor textColor = opt.palette.text().color();
+        textColor.setAlpha(180); // Slightly muted color
+        painter->setPen(textColor);
+
+        QRect imageRect = opt.rect.adjusted(iconSize + 12, opt.rect.height()/2, -30, 0);
+        QString elidedImage = opt.fontMetrics.elidedText(image, Qt::ElideRight, imageRect.width());
+        painter->drawText(imageRect, Qt::AlignLeft | Qt::AlignVCenter, elidedImage);
 
         painter->restore();
     }
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
-        size.setHeight(qMax(size.height(), 36)); // Slightly smaller row height
+        size.setHeight(qMax(size.height(), 48)); // Enough space for two lines
         return size;
-    }
-
-private:
-    QColor getDistroColor(const QString &distro) const {
-        static QMap<QString, QColor> distroColors = {
-            {"ubuntu", QColor(233, 84, 32)},    // Ubuntu orange
-            {"debian", QColor(211, 32, 42)},    // Debian red
-            {"fedora", QColor(52, 101, 164)},   // Fedora blue
-            {"arch", QColor(23, 147, 209)},     // Arch blue
-            {"centos", QColor(132, 28, 45)},    // CentOS red
-            {"alpine", QColor(10, 108, 155)},   // Alpine blue
-            {"gentoo", QColor(102, 2, 60)},     // Gentoo purple
-            {"opensuse", QColor(111, 180, 36)},  // openSUSE green
-            {"void", QColor(72, 129, 52)}       // Void green
-        };
-
-        return distroColors.value(distro.toLower(), QColor(100, 100, 100)); // Default gray
     }
 };
 
@@ -244,8 +227,7 @@ void MainWindow::refreshContainers()
 
     for (const auto &container : containers) {
         QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
-        item->setData(Qt::UserRole + 1, container["distro"]); // Store distro
-        item->setData(Qt::UserRole + 2, container["status"]); // Store status
+        item->setData(Qt::UserRole + 3, container["image"]); // Store image name
     }
 
     if (containers.isEmpty()) {
