@@ -84,8 +84,7 @@ void CreateContainerDialog::refreshImages()
 
     for (const auto &image : images) {
         QString url = image["url"];
-        QString name = image["name"];
-        QListWidgetItem *item = new QListWidgetItem(name.isEmpty() ? url : name, m_imageList);
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList); // Display full URL instead of name
         item->setData(Qt::UserRole, url);
         item->setToolTip(url);
     }
@@ -103,8 +102,7 @@ void CreateContainerDialog::searchImages(const QString &query)
 
     for (const auto &image : images) {
         QString url = image["url"];
-        QString name = image["name"];
-        QListWidgetItem *item = new QListWidgetItem(name.isEmpty() ? url : name, m_imageList);
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList); // Display full URL instead of name
         item->setData(Qt::UserRole, url);
         item->setToolTip(url);
     }
