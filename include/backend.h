@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QMap>
+#include <QStandardPaths>	
 
 class Backend : public QObject
 {

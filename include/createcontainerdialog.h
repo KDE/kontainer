@@ -2,11 +2,12 @@
 #define CREATECONTAINERDIALOG_H
 
 #include <QDialog>
+#include <QLineEdit>
+#include <QCheckBox>
 #include <QListWidget>
+#include <QFormLayout>
+#include "backend.h"
 
-class QLineEdit;
-class QComboBox;
-class QCheckBox;
 class Backend;
 
 class CreateContainerDialog : public QDialog

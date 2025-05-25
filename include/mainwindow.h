@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include <QApplication> 
 
 class Backend;
 class QTreeWidget;

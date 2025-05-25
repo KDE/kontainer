@@ -6,7 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Concurrent)
+# Set include directory before adding executable
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 set(SOURCES
     src/main.cpp
