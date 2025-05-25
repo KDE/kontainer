@@ -32,6 +32,8 @@ private:
     void setupContainerList();
     void setupActionButtons();
     void showAppsForContainer(const QString &name);
+    void updateButtonStates();
+
 
     Backend *backend;
     QListWidget *containerList;
