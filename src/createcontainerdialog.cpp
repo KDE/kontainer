@@ -10,59 +10,171 @@
 #include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QIcon>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QApplication>
+#include <QStyle>
+#include <QFontMetrics>
+
+// Custom item delegate for image list
+class ImageListItemDelegate : public QStyledItemDelegate {
+public:
+    explicit ImageListItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        painter->save();
+
+        QStyleOptionViewItem opt = option;
+        initStyleOption(&opt, index);
+
+        // Draw selection background
+        if (opt.state & QStyle::State_Selected) {
+            painter->fillRect(opt.rect, opt.palette.highlight());
+        } else if (opt.state & QStyle::State_MouseOver) {
+            QColor hoverColor = opt.palette.highlight().color();
+            hoverColor.setAlpha(40);
+            painter->fillRect(opt.rect, hoverColor);
+        }
+
+        // Draw icon
+        int iconSize = opt.rect.height() - 8;
+        QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
+        QIcon icon = QIcon::fromTheme("distributor-logo");
+        icon.paint(painter, iconRect, Qt::AlignCenter,
+                   opt.state & QStyle::State_Selected ? QIcon::Selected : QIcon::Normal);
+
+        // Draw text
+        painter->setPen(opt.state & QStyle::State_Selected ?
+        opt.palette.highlightedText().color() :
+        opt.palette.text().color());
+        QRect textRect = opt.rect.adjusted(iconSize + 12, 0, -4, 0);
+        QString elidedText = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, textRect.width());
+        painter->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, elidedText);
+
+        painter->restore();
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        QSize size = QStyledItemDelegate::sizeHint(option, index);
+        size.setHeight(qMax(size.height(), 36)); // Minimum row height
+        return size;
+    }
+};
 
 CreateContainerDialog::CreateContainerDialog(Backend *backend, QWidget *parent)
 : QDialog(parent), m_backend(backend), m_progressDialog(nullptr), m_createProcess(nullptr)
 {
+    // Window setup
     setWindowTitle("Create New Container");
-    resize(600, 400);
+    resize(700, 500);
+    setWindowIcon(QIcon::fromTheme("computer"));
 
-    // Setup form layout
-    QFormLayout *formLayout = new QFormLayout;
+    // Apply consistent styling
+    setStyleSheet(R"(
+        QDialog {
+            background: palette(window);
+        }
+        QLabel {
+            font-weight: bold;
+        }
+        QLineEdit, QListWidget {
+            border: 1px solid palette(mid);
+            border-radius: 4px;
+            padding: 6px;
+            background: palette(base);
+        }
+        QListWidget {
+            alternate-background-color: palette(alternate-base);
+        }
+        QPushButton {
+            padding: 8px 16px;
+            border-radius: 4px;
+            min-width: 100px;
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 palette(button), stop:1 palette(dark));
+            color: palette(button-text);
+            border: 1px solid palette(shadow);
+        }
+        QPushButton:hover {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                        stop:0 palette(light), stop:1 palette(button));
+        }
+        QPushButton:pressed {
+            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                        stop:0 palette(dark), stop:1 palette(button)));
+        }
+        QCheckBox {
+            spacing: 6px;
+        }
+        )");
 
-    m_nameEdit = new QLineEdit(this);
-    formLayout->addRow("Container Name:", m_nameEdit);
+        // Setup form layout
+        QFormLayout *formLayout = new QFormLayout;
+        formLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);
+        formLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+        formLayout->setLabelAlignment(Qt::AlignRight);
+        formLayout->setContentsMargins(8, 8, 8, 8);
+        formLayout->setSpacing(12);
 
-    m_searchEdit = new QLineEdit(this);
-    m_searchEdit->setPlaceholderText("Search images...");
-    connect(m_searchEdit, &QLineEdit::textChanged, this, &CreateContainerDialog::searchImages);
-    formLayout->addRow("Search:", m_searchEdit);
+        m_nameEdit = new QLineEdit(this);
+        m_nameEdit->setPlaceholderText("my-container");
+        formLayout->addRow("Container Name:", m_nameEdit);
 
-    m_imageList = new QListWidget(this);
-    m_imageList->setSelectionMode(QAbstractItemView::SingleSelection);
-    formLayout->addRow("Available Images:", m_imageList);
+        m_searchEdit = new QLineEdit(this);
+        m_searchEdit->setPlaceholderText("Search images...");
+        connect(m_searchEdit, &QLineEdit::textChanged, this, &CreateContainerDialog::searchImages);
+        formLayout->addRow("Search Images:", m_searchEdit);
 
-    m_homeEdit = new QLineEdit(this);
-    formLayout->addRow("Custom Home Path:", m_homeEdit);
+        m_imageList = new QListWidget(this);
+        m_imageList->setItemDelegate(new ImageListItemDelegate(this));
+        m_imageList->setIconSize(QSize(32, 32));
+        m_imageList->setSelectionMode(QAbstractItemView::SingleSelection);
+        m_imageList->setAlternatingRowColors(true);
+        formLayout->addRow("Available Images:", m_imageList);
 
-    m_volumesEdit = new QLineEdit(this);
-    m_volumesEdit->setPlaceholderText("e.g., /host/path:/container/path");
-    formLayout->addRow("Additional Volumes:", m_volumesEdit);
+        m_homeEdit = new QLineEdit(this);
+        m_homeEdit->setPlaceholderText("Leave empty for default");
+        formLayout->addRow("Custom Home Path:", m_homeEdit);
 
-    m_initCheckbox = new QCheckBox("Enable systemd init", this);
-    formLayout->addRow(m_initCheckbox);
+        m_volumesEdit = new QLineEdit(this);
+        m_volumesEdit->setPlaceholderText("e.g., /host/path:/container/path (comma separate multiple)");
+        formLayout->addRow("Additional Volumes:", m_volumesEdit);
 
-    // Setup buttons
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    QPushButton *refreshButton = new QPushButton("Refresh Images", this);
-    connect(refreshButton, &QPushButton::clicked, this, &CreateContainerDialog::refreshImages);
-    buttonLayout->addWidget(refreshButton);
+        m_initCheckbox = new QCheckBox("Enable systemd init", this);
+        m_initCheckbox->setToolTip("Enable systemd as init system inside the container");
+        formLayout->addRow("Init System:", m_initCheckbox);
 
-    QPushButton *createButton = new QPushButton("Create", this);
-    createButton->setDefault(true);
-    connect(createButton, &QPushButton::clicked, this, &CreateContainerDialog::startContainerCreation);
-    buttonLayout->addWidget(createButton);
+        // Setup buttons
+        QHBoxLayout *buttonLayout = new QHBoxLayout;
+        buttonLayout->setSpacing(10);
+        buttonLayout->setContentsMargins(0, 10, 0, 0);
 
-    QPushButton *cancelButton = new QPushButton("Cancel", this);
-    connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
-    buttonLayout->addWidget(cancelButton);
+        QPushButton *refreshButton = new QPushButton("Refresh Images", this);
+        refreshButton->setIcon(QIcon::fromTheme("view-refresh"));
+        connect(refreshButton, &QPushButton::clicked, this, &CreateContainerDialog::refreshImages);
+        buttonLayout->addWidget(refreshButton);
 
-    // Main layout
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->addLayout(formLayout);
-    mainLayout->addLayout(buttonLayout);
+        buttonLayout->addStretch();
 
-    refreshImages();
+        QPushButton *cancelButton = new QPushButton("Cancel", this);
+        cancelButton->setIcon(QIcon::fromTheme("dialog-cancel"));
+        connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
+        buttonLayout->addWidget(cancelButton);
+
+        QPushButton *createButton = new QPushButton("Create", this);
+        createButton->setIcon(QIcon::fromTheme("dialog-ok"));
+        createButton->setDefault(true);
+        connect(createButton, &QPushButton::clicked, this, &CreateContainerDialog::startContainerCreation);
+        buttonLayout->addWidget(createButton);
+
+        // Main layout
+        QVBoxLayout *mainLayout = new QVBoxLayout(this);
+        mainLayout->setContentsMargins(8, 8, 8, 8);
+        mainLayout->addLayout(formLayout);
+        mainLayout->addLayout(buttonLayout);
+
+        refreshImages();
 }
 
 CreateContainerDialog::~CreateContainerDialog()
@@ -84,9 +196,19 @@ void CreateContainerDialog::refreshImages()
 
     for (const auto &image : images) {
         QString url = image["url"];
-        QListWidgetItem *item = new QListWidgetItem(url, m_imageList); // Display full URL instead of name
+        QString distro = image["distro"];
+
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
         item->setData(Qt::UserRole, url);
         item->setToolTip(url);
+
+        // Set distro-specific icon if available
+        QString iconName = QString("distributor-logo-%1").arg(distro);
+        if (QIcon::hasThemeIcon(iconName)) {
+            item->setIcon(QIcon::fromTheme(iconName));
+        } else {
+            item->setIcon(QIcon::fromTheme("distributor-logo"));
+        }
     }
 }
 
@@ -102,9 +224,19 @@ void CreateContainerDialog::searchImages(const QString &query)
 
     for (const auto &image : images) {
         QString url = image["url"];
-        QListWidgetItem *item = new QListWidgetItem(url, m_imageList); // Display full URL instead of name
+        QString distro = image["distro"];
+
+        QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
         item->setData(Qt::UserRole, url);
         item->setToolTip(url);
+
+        // Set distro-specific icon if available
+        QString iconName = QString("distributor-logo-%1").arg(distro);
+        if (QIcon::hasThemeIcon(iconName)) {
+            item->setIcon(QIcon::fromTheme(iconName));
+        } else {
+            item->setIcon(QIcon::fromTheme("distributor-logo"));
+        }
     }
 }
 
