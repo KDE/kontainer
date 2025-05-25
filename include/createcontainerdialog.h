@@ -6,7 +6,6 @@
 #include <QCheckBox>
 #include <QListWidget>
 #include <QFormLayout>
-#include "backend.h"
 
 class Backend;
 

@@ -87,7 +87,14 @@ void Backend::enterContainer(const QString &name)
 
 void Backend::upgradeContainer(const QString &name)
 {
-    enterContainer(name + " -- distrobox upgrade");
+    QStringList terminals = {"gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
+    for (const QString &term : terminals) {
+        if (!QStandardPaths::findExecutable(term).isEmpty()) {
+            QProcess::startDetached(term, {"-e", "distrobox-upgrade", name});
+            return;
+        }
+    }
+    QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", name});
 }
 
 QStringList Backend::getAvailableApps(const QString &containerName)
@@ -135,22 +142,16 @@ QList<QMap<QString, QString>> Backend::getAvailableImages()
 {
     QList<QMap<QString, QString>> images;
     QString output = runCommand({"distrobox", "create", "-C"});
-    
-    QRegularExpression re("\\s+(\\S+)\\s+(\\S+)$");
+
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
-        QRegularExpressionMatch match = re.match(line);
-        if (match.hasMatch()) {
-            QMap<QString, QString> image;
-            QString url = match.captured(2);
-            image["url"] = url;
-            image["name"] = url.split('/').last();
-            image["distro"] = parseDistroFromImage(url);
-            images.append(image);
-        }
+        QMap<QString, QString> image;
+        image["line"] = line.trimmed();
+        images.append(image);
     }
-    
+
     return images;
 }
+
 
 QList<QMap<QString, QString>> Backend::searchImages(const QString &query)
 {

@@ -17,12 +17,14 @@ set(SOURCES
     src/mainwindow.cpp
     src/backend.cpp
     src/createcontainerdialog.cpp
+    src/appsdialog.cpp
 )
 
 set(HEADERS
     include/mainwindow.h
     include/backend.h
     include/createcontainerdialog.h
+    include/appsdialog.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})

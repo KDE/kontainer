@@ -3,11 +3,13 @@
 
 #include <QMainWindow>
 #include <QListWidget>
-#include <QApplication> 
+#include <QTabWidget>
+#include <QToolButton>
 
 class Backend;
-class QTreeWidget;
+class QListWidget;
 class QPushButton;
+class CreateContainerDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -19,21 +21,25 @@ public:
 
 private slots:
     void refreshContainers();
-    void showContainerContextMenu(const QPoint &pos);
-    void exportSelectedApp();
-    void unexportSelectedApp();
+    void enterContainer();
+    void deleteContainer();
+    void showAppsDialog();
+    void upgradeContainer();
     void createNewContainer();
 
 private:
     void setupUI();
     void setupContainerList();
     void setupActionButtons();
-    void showContainerDetails(const QString &name);
-    
+    void showAppsForContainer(const QString &name);
+
     Backend *backend;
-    QTreeWidget *containerList;
-    QListWidget *availableAppsList;
-    QListWidget *exportedAppsList;
+    QListWidget *containerList;
+    QPushButton *enterBtn;
+    QPushButton *deleteBtn;
+    QPushButton *appsBtn;
+    QPushButton *upgradeBtn;
+    QToolButton *addBtn;
     QString currentContainer;
 };
 
