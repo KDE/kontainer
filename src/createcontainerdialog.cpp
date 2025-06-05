@@ -70,45 +70,6 @@ CreateContainerDialog::CreateContainerDialog(Backend *backend, QWidget *parent)
     resize(700, 500);
     setWindowIcon(QIcon::fromTheme("computer"));
 
-    // Apply consistent styling
-    setStyleSheet(R"(
-        QDialog {
-            background: palette(window);
-        }
-        QLabel {
-            font-weight: bold;
-        }
-        QLineEdit, QListWidget {
-            border: 1px solid palette(mid);
-            border-radius: 4px;
-            padding: 6px;
-            background: palette(base);
-        }
-        QListWidget {
-            alternate-background-color: palette(alternate-base);
-        }
-        QPushButton {
-            padding: 8px 16px;
-            border-radius: 4px;
-            min-width: 100px;
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 palette(button), stop:1 palette(dark));
-            color: palette(button-text);
-            border: 1px solid palette(shadow);
-        }
-        QPushButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                        stop:0 palette(light), stop:1 palette(button));
-        }
-        QPushButton:pressed {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                        stop:0 palette(dark), stop:1 palette(button)));
-        }
-        QCheckBox {
-            spacing: 6px;
-        }
-        )");
-
         // Setup form layout
         QFormLayout *formLayout = new QFormLayout;
         formLayout->setRowWrapPolicy(QFormLayout::DontWrapRows);

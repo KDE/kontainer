@@ -71,53 +71,6 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     resize(600, 500);
     setWindowIcon(QIcon::fromTheme("applications-other"));
 
-    // Apply modern style
-    setStyleSheet(R"(
-        QDialog {
-            background: palette(window);
-        }
-        QTabWidget::pane {
-            border-top: 1px solid palette(mid);
-        }
-        QTabBar::tab {
-            padding: 8px 16px;
-            border: 1px solid palette(mid);
-            border-bottom: none;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            margin-right: 4px;
-            background: palette(button);
-        }
-        QTabBar::tab:selected {
-            background: palette(window);
-            border-bottom: 1px solid palette(window);
-            margin-bottom: -1px;
-        }
-        QListWidget {
-            border: 1px solid palette(mid);
-            border-radius: 4px;
-            background: palette(base);
-            alternate-background-color: palette(alternate-base);
-        }
-        QPushButton {
-            padding: 8px 16px;
-            border-radius: 4px;
-            min-width: 100px;
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                        stop:0 palette(button), stop:1 palette(dark));
-            color: palette(button-text);
-            border: 1px solid palette(shadow);
-        }
-        QPushButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                        stop:0 palette(light), stop:1 palette(button));
-        }
-        QPushButton:pressed {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                        stop:0 palette(dark), stop:1 palette(button)));
-        }
-        )");
-
         m_tabs = new QTabWidget(this);
         m_tabs->setTabPosition(QTabWidget::North);
         m_tabs->setDocumentMode(true);

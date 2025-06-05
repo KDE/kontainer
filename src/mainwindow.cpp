@@ -86,44 +86,6 @@ MainWindow::MainWindow(QWidget *parent)
     resize(600, 600);
     setWindowIcon(QIcon::fromTheme("package-x-generic"));
 
-    // Apply modern styling
-    setStyleSheet(R"(
-        QMainWindow {
-            background: palette(window);
-        }
-        QListWidget {
-            border: 1px solid palette(mid);
-            border-radius: 4px;
-            background: palette(base);
-            alternate-background-color: palette(alternate-base);
-        }
-        QPushButton {
-            padding: 10px 16px;
-            border-radius: 4px;
-            min-width: 120px;
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 palette(button), stop:1 palette(dark));
-            color: palette(button-text);
-            border: 1px solid palette(shadow);
-        }
-        QPushButton:hover {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 palette(light), stop:1 palette(button));
-        }
-        QPushButton:pressed {
-            background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                      stop:0 palette(dark), stop:1 palette(button));
-        }
-        QToolButton {
-            padding: 6px;
-            border-radius: 4px;
-            background: transparent;
-        }
-        QToolButton:hover {
-            background: rgba(0,0,0,20);
-        }
-    )");
-
     setupUI();
     refreshContainers();
 }
