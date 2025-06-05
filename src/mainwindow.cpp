@@ -16,6 +16,7 @@
 #include <QPainter>
 #include <QStyle>
 #include <QFontMetrics>
+#include <cctype>
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate {
@@ -163,7 +164,15 @@ void MainWindow::setupUI()
     addBtn->setToolTip("Create new container");
     connect(addBtn, &QToolButton::clicked, this, &MainWindow::createNewContainer);
 
+    aBtn = new QToolButton(toolBar);
+    aBtn->setIcon(QIcon::fromTheme("system-software-update"));
+    aBtn->setText("Upgrade all Containers");
+    aBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    aBtn->setToolTip("Upgrades all containers");
+    connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
+
     toolBar->addWidget(addBtn);
+    toolBar->addWidget(aBtn);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
     mainLayout->addWidget(containerList, 1);
@@ -263,4 +272,8 @@ void MainWindow::createNewContainer()
         QMessageBox::information(this, "Result", result);
         refreshContainers();
     }
+}
+
+void MainWindow::upgradeAllContainers(){
+    backend->upgradeAllContainers();
 }

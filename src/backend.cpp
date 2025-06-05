@@ -97,6 +97,18 @@ void Backend::upgradeContainer(const QString &name)
     QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", name});
 }
 
+void Backend::upgradeAllContainers()
+{
+    QStringList terminals = {"gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
+    for (const QString &term : terminals) {
+        if (!QStandardPaths::findExecutable(term).isEmpty()) {
+            QProcess::startDetached(term, {"-e", "distrobox-upgrade", "--all"});
+            return;
+        }
+    }
+    QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", "--all"});
+}
+
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
     QString output = runCommand({

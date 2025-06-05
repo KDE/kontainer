@@ -25,6 +25,7 @@ private slots:
     void deleteContainer();
     void showAppsDialog();
     void upgradeContainer();
+    void upgradeAllContainers();
     void createNewContainer();
 
 private:
@@ -42,6 +43,7 @@ private:
     QPushButton *appsBtn;
     QPushButton *upgradeBtn;
     QToolButton *addBtn;
+    QToolButton *aBtn;
     QString currentContainer;
 };
 

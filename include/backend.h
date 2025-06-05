@@ -20,6 +20,7 @@ public:
     QString deleteContainer(const QString &name);
     void enterContainer(const QString &name);
     void upgradeContainer(const QString &name);
+    void upgradeAllContainers();
 
     // App operations
     QStringList getAvailableApps(const QString &containerName);
