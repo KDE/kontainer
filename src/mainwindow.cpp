@@ -17,6 +17,9 @@
 #include <QStyle>
 #include <QFontMetrics>
 #include <cctype>
+#include <QComboBox>
+#include <QSettings>
+
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate {
@@ -81,8 +84,12 @@ public:
 };
 
 MainWindow::MainWindow(QWidget *parent)
-: QMainWindow(parent), backend(new Backend(this))
+    : QMainWindow(parent), backend(new Backend(this)), preferredTerminal("xterm")
 {
+    // Load saved terminal preference
+    QSettings settings;
+    preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
+
     setWindowTitle("Kontainer");
     resize(600, 600);
     setWindowIcon(QIcon::fromTheme("package-x-generic"));
@@ -91,7 +98,11 @@ MainWindow::MainWindow(QWidget *parent)
     refreshContainers();
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() {
+    // Save terminal preference
+    QSettings settings;
+    settings.setValue("terminal/preferred", preferredTerminal);
+}
 
 void MainWindow::setupUI()
 {
@@ -171,8 +182,37 @@ void MainWindow::setupUI()
     aBtn->setToolTip("Upgrades all containers");
     connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
 
+    // Right-align terminal selection
+    QWidget *spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    toolBar->addWidget(spacer);
+
+    // Terminal selector
+    QComboBox *terminalSelector = new QComboBox(toolBar);
+    QStringList terminalOptions = {"gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
+
+    for (const QString &term : terminalOptions) {
+        if (!QStandardPaths::findExecutable(term).isEmpty()) {
+            terminalSelector->addItem(term);
+        }
+    }
+
+    // Set current terminal to saved preference or first available
+    int index = terminalSelector->findText(preferredTerminal);
+    if (index >= 0) {
+        terminalSelector->setCurrentIndex(index);
+    } else if (terminalSelector->count() > 0) {
+        preferredTerminal = terminalSelector->itemText(0);
+    }
+
+    connect(terminalSelector, &QComboBox::currentTextChanged, this, [this](const QString &term) {
+        preferredTerminal = term;
+    });
+
+    toolBar->addWidget(terminalSelector);
     toolBar->addWidget(addBtn);
     toolBar->addWidget(aBtn);
+
     addToolBar(Qt::TopToolBarArea, toolBar);
 
     mainLayout->addWidget(containerList, 1);
@@ -211,12 +251,6 @@ void MainWindow::refreshContainers()
     updateButtonStates();
 }
 
-void MainWindow::enterContainer()
-{
-    if (currentContainer.isEmpty()) return;
-    backend->enterContainer(currentContainer);
-}
-
 void MainWindow::deleteContainer()
 {
     if (currentContainer.isEmpty()) return;
@@ -244,15 +278,9 @@ void MainWindow::showAppsDialog()
     dialog.exec();
 }
 
-void MainWindow::upgradeContainer()
-{
-    if (currentContainer.isEmpty()) return;
-    backend->upgradeContainer(currentContainer);
-}
-
 void MainWindow::createNewContainer()
 {
-    CreateContainerDialog dialog(backend, this);
+    CreateContainerDialog dialog(backend, preferredTerminal, this);
     if (dialog.exec() == QDialog::Accepted) {
         QProgressDialog progress("Creating container...", "Cancel", 0, 0, this);
         progress.setWindowModality(Qt::WindowModal);
@@ -274,6 +302,20 @@ void MainWindow::createNewContainer()
     }
 }
 
-void MainWindow::upgradeAllContainers(){
-    backend->upgradeAllContainers();
+void MainWindow::enterContainer()
+{
+    if (currentContainer.isEmpty()) return;
+    backend->enterContainer(currentContainer, preferredTerminal);
 }
+
+void MainWindow::upgradeContainer()
+{
+    if (currentContainer.isEmpty()) return;
+    backend->upgradeContainer(currentContainer, preferredTerminal);
+}
+
+void MainWindow::upgradeAllContainers()
+{
+    backend->upgradeAllContainers(preferredTerminal);
+}
+

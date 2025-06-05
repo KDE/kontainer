@@ -18,9 +18,9 @@ public:
                           const QString &home = "", bool init = false,
                           const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
-    void enterContainer(const QString &name);
-    void upgradeContainer(const QString &name);
-    void upgradeAllContainers();
+    void enterContainer(const QString &name, const QString &terminal);
+    void upgradeContainer(const QString &name, const QString &terminal);
+    void upgradeAllContainers(const QString &terminal);
 
     // App operations
     QStringList getAvailableApps(const QString &containerName);

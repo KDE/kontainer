@@ -15,7 +15,7 @@ class CreateContainerDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CreateContainerDialog(Backend *backend, QWidget *parent = nullptr);
+    explicit CreateContainerDialog(Backend *backend, const QString &terminal, QWidget *parent = nullptr);
     ~CreateContainerDialog();
 
     QString containerName() const;
@@ -34,6 +34,7 @@ private slots:
 
 private:
     Backend *m_backend;
+    QString m_terminal;
     QLineEdit *m_nameEdit;
     QLineEdit *m_searchEdit;
     QListWidget *m_imageList;

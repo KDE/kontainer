@@ -62,8 +62,8 @@ public:
     }
 };
 
-CreateContainerDialog::CreateContainerDialog(Backend *backend, QWidget *parent)
-: QDialog(parent), m_backend(backend), m_progressDialog(nullptr), m_createProcess(nullptr)
+CreateContainerDialog::CreateContainerDialog(Backend *backend, const QString &terminal, QWidget *parent)
+: QDialog(parent), m_backend(backend), m_terminal(terminal), m_progressDialog(nullptr), m_createProcess(nullptr)
 {
     // Window setup
     setWindowTitle("Create New Container");
@@ -294,7 +294,7 @@ void CreateContainerDialog::handleCreateFinished(int exitCode, QProcess::ExitSta
         QString successMsg = QString("Container '%1' created successfully!").arg(containerName());
         m_progressDialog->setLabelText(successMsg);
         QMessageBox::information(this, "Success", successMsg);
-        m_backend->enterContainer(containerName());
+        m_backend->enterContainer(containerName(), m_terminal);
         accept();
     } else {
         QString errorOutput = QString::fromUtf8(m_createProcess->readAll());
