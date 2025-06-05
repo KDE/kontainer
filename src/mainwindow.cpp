@@ -19,6 +19,8 @@
 #include <cctype>
 #include <QComboBox>
 #include <QSettings>
+#include <QLabel>
+
 
 
 // Custom delegate for container list items
@@ -163,17 +165,19 @@ void MainWindow::setupUI()
     rightLayout->addWidget(refreshBtn);
     rightLayout->addStretch();
 
-    // Add button in toolbar
+    // Create toolbar
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setMovable(false);
     toolBar->setIconSize(QSize(24, 24));
 
+    // Left side buttons (create and upgrade all)
     addBtn = new QToolButton(toolBar);
     addBtn->setIcon(QIcon::fromTheme("list-add"));
     addBtn->setText("New Container");
     addBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     addBtn->setToolTip("Create new container");
     connect(addBtn, &QToolButton::clicked, this, &MainWindow::createNewContainer);
+    toolBar->addWidget(addBtn);
 
     aBtn = new QToolButton(toolBar);
     aBtn->setIcon(QIcon::fromTheme("system-software-update"));
@@ -181,13 +185,17 @@ void MainWindow::setupUI()
     aBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     aBtn->setToolTip("Upgrades all containers");
     connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
+    toolBar->addWidget(aBtn);
 
-    // Right-align terminal selection
+    // Add expanding spacer between left and right sections
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     toolBar->addWidget(spacer);
 
-    // Terminal selector
+    // Right side - terminal selection
+    QLabel *terminalLabel = new QLabel("Terminal:", toolBar);
+    toolBar->addWidget(terminalLabel);
+
     QComboBox *terminalSelector = new QComboBox(toolBar);
     QStringList terminalOptions = {"gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
 
@@ -210,11 +218,9 @@ void MainWindow::setupUI()
     });
 
     toolBar->addWidget(terminalSelector);
-    toolBar->addWidget(addBtn);
-    toolBar->addWidget(aBtn);
-
     addToolBar(Qt::TopToolBarArea, toolBar);
 
+    // Main layout
     mainLayout->addWidget(containerList, 1);
     mainLayout->addWidget(rightPanel);
     setCentralWidget(centralWidget);
