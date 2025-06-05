@@ -1,5 +1,6 @@
 #include "appsdialog.h"
 #include "backend.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QPushButton>

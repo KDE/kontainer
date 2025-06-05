@@ -2,6 +2,8 @@
 #include "backend.h"
 #include "createcontainerdialog.h"
 #include "appsdialog.h"
+#include "terminalutils.h"
+
 #include <QListWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
@@ -197,11 +199,15 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalLabel);
 
     QComboBox *terminalSelector = new QComboBox(toolBar);
-    QStringList terminalOptions = {"gnome-terminal", "konsole", "xfce4-terminal", "xterm"};
+
+    QMap<QString, QString> terminalIconMap = getTerminalIconMap();
+    QStringList terminalOptions = terminalIconMap.keys();
 
     for (const QString &term : terminalOptions) {
         if (!QStandardPaths::findExecutable(term).isEmpty()) {
-            terminalSelector->addItem(term);
+            QString iconName = terminalIconMap.value(term, term);
+            QIcon icon = QIcon::fromTheme(iconName);
+            terminalSelector->addItem(icon, term);
         }
     }
 
