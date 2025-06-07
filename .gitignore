@@ -5,3 +5,6 @@ cmake_install.cmake
 Kontainer
 Kontainer_autogen/
 .qt/
+compile_commands.json
+.kdev4/
+build/
