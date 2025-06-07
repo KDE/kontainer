@@ -199,16 +199,37 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalLabel);
 
     QComboBox *terminalSelector = new QComboBox(toolBar);
+    auto terminalInfoMap = getTerminalInfoMap();
 
-    QMap<QString, QString> terminalIconMap = getTerminalIconMap();
-    QStringList terminalOptions = terminalIconMap.keys();
-
-    for (const QString &term : terminalOptions) {
-        if (!QStandardPaths::findExecutable(term).isEmpty()) {
-            QString iconName = terminalIconMap.value(term, term);
-            QIcon icon = QIcon::fromTheme(iconName);
-            terminalSelector->addItem(icon, term);
+    // Check for regular terminals
+    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+        if (!isFlatpakTerminal(term)) {
+            if (!QStandardPaths::findExecutable(term).isEmpty()) {
+                QIcon icon = QIcon::fromTheme(info.icon);
+                terminalSelector->addItem(icon, term);
+            }
         }
+    }
+
+    // Check for Flatpak terminals
+    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+        if (isFlatpakTerminal(term)) {
+            QProcess process;
+            process.start("flatpak", {"list", "--app", "--columns=application"});
+            if (process.waitForFinished() && 
+                process.readAllStandardOutput().contains(term.toUtf8())) {
+                QIcon icon = QIcon::fromTheme(info.icon);
+                terminalSelector->addItem(icon, term);
+            }
+        }
+    }
+
+    // Add separator if we have both types
+    if (terminalSelector->count() > 0 && 
+        (terminalSelector->findText("org.") != -1 || 
+         terminalSelector->findText("com.") != -1 ||
+         terminalSelector->findText("app.") != -1)) {
+        terminalSelector->insertSeparator(terminalSelector->count());
     }
 
     // Set current terminal to saved preference or first available
@@ -221,6 +242,9 @@ void MainWindow::setupUI()
 
     connect(terminalSelector, &QComboBox::currentTextChanged, this, [this](const QString &term) {
         preferredTerminal = term;
+        // Save preference immediately
+        QSettings settings;
+        settings.setValue("terminal/preferred", preferredTerminal);
     });
 
     toolBar->addWidget(terminalSelector);

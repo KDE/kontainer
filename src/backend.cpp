@@ -1,4 +1,5 @@
 #include "backend.h"
+#include "terminalutils.h"
 
 #include <QProcess>
 #include <QDir>
@@ -75,82 +76,50 @@ QString Backend::deleteContainer(const QString &name)
     return runCommand({"distrobox", "rm", name, "--force"});
 }
 
-void Backend::enterContainer(const QString &name, const QString &terminal)
-{
-    QString terminalCmd = terminal;
-    QStringList args;
-
-    if (terminal == "gnome-terminal" || terminal == "xfce4-terminal") {
-        args << "--" << "distrobox" << "enter" << name;
-    } 
-    else if (terminal == "konsole") {
-        args << "-e" << "distrobox" << "enter" << name;
-    }
-    else { // xterm and others
-        args << "-e" << "distrobox" << "enter" << name;
+void Backend::executeInTerminal(const QString &terminal, const QString &command) {
+    auto terminalInfoMap = getTerminalInfoMap();
+    if (!terminalInfoMap.contains(terminal)) {
+        qWarning() << "Unknown terminal:" << terminal;
+        QProcess::startDetached("xterm", {"-e", command});
+        return;
     }
 
-    if (!QStandardPaths::findExecutable(terminalCmd).isEmpty()) {
-        bool success = QProcess::startDetached(terminalCmd, args);
+    TerminalInfo info = terminalInfoMap[terminal];
+    QStringList args = info.commandFormat;
+    QString executable = terminal;
+
+    // Replace placeholders
+    for (int i = 0; i < args.size(); ++i) {
+        args[i].replace("$terminal", terminal);
+        args[i].replace("$command", command);
+    }
+
+    // For Flatpak terminals, we use flatpak as the executable
+    if (isFlatpakTerminal(terminal)) {
+        executable = "flatpak";
+    }
+
+    if (!QStandardPaths::findExecutable(executable).isEmpty()) {
+        bool success = QProcess::startDetached(executable, args);
         if (!success) {
-            qWarning() << "Failed to start terminal" << terminalCmd << "with args" << args;
-            QProcess::startDetached("xterm", {"-e", "distrobox", "enter", name});
+            qWarning() << "Failed to start terminal" << executable << "with args" << args;
+            QProcess::startDetached("xterm", {"-e", command});
         }
     } else {
-        QProcess::startDetached("xterm", {"-e", "distrobox", "enter", name});
+        QProcess::startDetached("xterm", {"-e", command});
     }
 }
 
-void Backend::upgradeContainer(const QString &name, const QString &terminal)
-{
-    QString terminalCmd = terminal;
-    QStringList args;
-
-    if (terminal == "gnome-terminal" || terminal == "xfce4-terminal") {
-        args << "--" << "distrobox-upgrade" << name;
-    }
-    else if (terminal == "konsole") {
-        args << "-e" << "distrobox-upgrade" << name;
-    }
-    else {
-        args << "-e" << "distrobox-upgrade" << name;
-    }
-
-    if (!QStandardPaths::findExecutable(terminalCmd).isEmpty()) {
-        bool success = QProcess::startDetached(terminalCmd, args);
-        if (!success) {
-            qWarning() << "Failed to start terminal" << terminalCmd << "with args" << args;
-            QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", name});
-        }
-    } else {
-        QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", name});
-    }
+void Backend::enterContainer(const QString &name, const QString &terminal) {
+    executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
 }
 
-void Backend::upgradeAllContainers(const QString &terminal)
-{
-    QString terminalCmd = terminal;
-    QStringList args;
+void Backend::upgradeContainer(const QString &name, const QString &terminal) {
+    executeInTerminal(terminal, QString("distrobox-upgrade %1").arg(name));
+}
 
-    if (terminal == "gnome-terminal" || terminal == "xfce4-terminal") {
-        args << "--" << "distrobox-upgrade" << "--all";
-    }
-    else if (terminal == "konsole") {
-        args << "-e" << "distrobox-upgrade" << "--all";
-    }
-    else {
-        args << "-e" << "distrobox-upgrade" << "--all";
-    }
-
-    if (!QStandardPaths::findExecutable(terminalCmd).isEmpty()) {
-        bool success = QProcess::startDetached(terminalCmd, args);
-        if (!success) {
-            qWarning() << "Failed to start terminal" << terminalCmd << "with args" << args;
-            QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", "--all"});
-        }
-    } else {
-        QProcess::startDetached("xterm", {"-e", "distrobox-upgrade", "--all"});
-    }
+void Backend::upgradeAllContainers(const QString &terminal) {
+    executeInTerminal(terminal, "distrobox-upgrade --all");
 }
 
 QStringList Backend::getAvailableApps(const QString &containerName)

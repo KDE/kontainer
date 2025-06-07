@@ -21,7 +21,7 @@ public:
     void enterContainer(const QString &name, const QString &terminal);
     void upgradeContainer(const QString &name, const QString &terminal);
     void upgradeAllContainers(const QString &terminal);
-
+    void executeInTerminal(const QString &terminal, const QString &command);
     // App operations
     QStringList getAvailableApps(const QString &containerName);
     QStringList getExportedApps(const QString &containerName);
