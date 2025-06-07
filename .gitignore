@@ -8,3 +8,5 @@ Kontainer_autogen/
 compile_commands.json
 .kdev4/
 build/
+CMakeLists.txt.user
+
