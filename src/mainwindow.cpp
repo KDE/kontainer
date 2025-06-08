@@ -53,7 +53,7 @@ public:
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        QIcon icon = QIcon::fromTheme("package-x-generic");
+        QIcon icon = QIcon::fromTheme("preferences-virtualization-container");
         icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
 
         // Draw container name with accent color
@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle("Kontainer");
     resize(600, 600);
-    setWindowIcon(QIcon::fromTheme("package-x-generic"));
+    setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
 
     setupUI();
     refreshContainers();
@@ -170,7 +170,7 @@ void MainWindow::setupUI()
     installRpmBtn->setToolTip("Install Fedora/OpenSUSE package");
     connect(installRpmBtn, &QPushButton::clicked, this, &MainWindow::installRpmPackage);
 
-    installArchBtn = new QPushButton(QIcon::fromTheme("application-x-zst"), "Install .pkg", rightPanel);
+    installArchBtn = new QPushButton(QIcon::fromTheme("application-x-tarz"), "Install .pkg", rightPanel);
     installArchBtn->setToolTip("Install Arch Linux package");
     connect(installArchBtn, &QPushButton::clicked, this, &MainWindow::installArchPackage);
 
@@ -375,10 +375,10 @@ void MainWindow::createNewContainer()
 
         QString result = backend->createContainer(
             dialog.containerName(),
-                                                  dialog.imageUrl(),
-                                                  dialog.homePath(),
-                                                  dialog.useInit(),
-                                                  dialog.volumes()
+            dialog.imageUrl(),
+            dialog.homePath(),
+            dialog.useInit(),
+            dialog.volumes()
         );
 
         progress.close();
