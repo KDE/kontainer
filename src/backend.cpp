@@ -156,7 +156,7 @@ void Backend::installDebPackage(const QString &terminal, const QString &containe
 }
 
 void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
-    QString command = QString("(sudo dnf install -y %1 || sudo zypper install -y %1 || sudo yum install -y %1)").arg(filePath);
+    QString command = QString("sudo dnf install -y %1").arg(filePath);
     executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
 }
 
