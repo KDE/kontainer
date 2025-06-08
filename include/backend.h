@@ -13,7 +13,7 @@ public:
     explicit Backend(QObject *parent = nullptr);
 
     // Container operations
-    QList<QMap<QString, QString>> getContainers();
+    QList<QMap<QString, QString>> getContainers() const;
     QString createContainer(const QString &name, const QString &image, 
                           const QString &home = "", bool init = false,
                           const QStringList &volumes = QStringList());
@@ -27,6 +27,7 @@ public:
     QStringList getExportedApps(const QString &containerName);
     QString exportApp(const QString &appName, const QString &containerName);
     QString unexportApp(const QString &appName, const QString &containerName);
+    QString getContainerDistro(const QString &containerName) const;
 
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
@@ -42,8 +43,8 @@ public slots:
     void installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath);
 
 private:
-    QString runCommand(const QStringList &command);
-    QString parseDistroFromImage(const QString &imageUrl);
+    QString runCommand(const QStringList &command) const;
+    QString parseDistroFromImage(const QString &imageUrl) const;
 
     const QStringList DISTROS = {
         "alma", "alpine", "amazon", "bazzite", "arch", "centos", "clearlinux", 

@@ -1,5 +1,6 @@
 #include "backend.h"
 #include "terminalutils.h"
+#include "packagemanager.h"
 
 #include <QProcess>
 #include <QDir>
@@ -9,7 +10,7 @@
 
 Backend::Backend(QObject *parent) : QObject(parent) {}
 
-QString Backend::runCommand(const QStringList &command)
+QString Backend::runCommand(const QStringList &command) const
 {
     QProcess process;
     process.start(command[0], command.mid(1));
@@ -19,7 +20,7 @@ QString Backend::runCommand(const QStringList &command)
     return process.readAllStandardOutput().trimmed();
 }
 
-QString Backend::parseDistroFromImage(const QString &imageUrl)
+QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString last = imageUrl.split('/').last().toLower();
     for (const QString &d : DISTROS) {
@@ -28,7 +29,19 @@ QString Backend::parseDistroFromImage(const QString &imageUrl)
     return "unknown";
 }
 
-QList<QMap<QString, QString>> Backend::getContainers()
+QString Backend::getContainerDistro(const QString &containerName) const {
+    if (containerName.isEmpty()) return "";
+
+    QList<QMap<QString, QString>> containers = getContainers();
+    for (const auto &container : containers) {
+        if (container["name"] == containerName) {
+            return PackageManager::getDistroFromImage(container["image"]);
+        }
+    }
+    return "";
+}
+
+QList<QMap<QString, QString>> Backend::getContainers() const
 {
     QString output = runCommand({"distrobox", "list", "--no-color"});
     QStringList lines = output.split('\n', Qt::SkipEmptyParts);

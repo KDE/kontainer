@@ -388,25 +388,8 @@ void MainWindow::createNewContainer()
 }
 
 QString MainWindow::getContainerDistro() const {
-    if (currentContainer.isEmpty()) return "";
-
-    for (int i = 0; i < containerList->count(); ++i) {
-        QListWidgetItem *item = containerList->item(i);
-        if (item->text() == currentContainer) {
-            QString image = item->data(Qt::UserRole + 3).toString().toLower();
-            if (image.contains("debian") || image.contains("ubuntu") || image.contains("mint")) {
-                return "deb";
-            } else if (image.contains("fedora") || image.contains("rhel") || image.contains("centos")) {
-                return "rpm";
-            } else if (image.contains("opensuse") || image.contains("suse")) {
-                return "rpm";
-            } else if (image.contains("arch") || image.contains("manjaro") || image.contains("endeavouros")) {
-                return "arch";
-            }
-            break;
-        }
-    }
-    return "";
+    QString distro = backend->getContainerDistro(currentContainer);
+    return distro;
 }
 
 void MainWindow::installDebPackage() {
