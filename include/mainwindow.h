@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QTabWidget>
 #include <QToolButton>
+#include <QProgressDialog>
 
 class Backend;
 class QListWidget;
@@ -28,6 +29,8 @@ private slots:
     void upgradeContainer();
     void upgradeAllContainers();
     void createNewContainer();
+    void assembleContainer();
+    void onAssembleFinished(const QString &result);
 
 private:
     void setupUI();
@@ -35,6 +38,8 @@ private:
     void setupActionButtons();
     void showAppsForContainer(const QString &name);
     void updateButtonStates();
+    QToolButton *assembleBtn;
+    QProgressDialog *progressDialog = nullptr;
 
 
     Backend *backend;

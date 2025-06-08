@@ -22,7 +22,8 @@
 #include <QComboBox>
 #include <QSettings>
 #include <QLabel>
-
+#include <QFileDialog>  // For file dialogs
+#include <QDir>         // For directory handling
 
 
 // Custom delegate for container list items
@@ -93,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Load saved terminal preference
     QSettings settings;
     preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
+    connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
     setWindowTitle("Kontainer");
     resize(600, 600);
@@ -188,6 +190,14 @@ void MainWindow::setupUI()
     aBtn->setToolTip("Upgrades all containers");
     connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
     toolBar->addWidget(aBtn);
+    
+    assembleBtn = new QToolButton(toolBar);
+    assembleBtn->setIcon(QIcon::fromTheme("applications-development"));
+    assembleBtn->setText("Assemble");
+    assembleBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    assembleBtn->setToolTip("Create container from INI file");
+    connect(assembleBtn, &QToolButton::clicked, this, &MainWindow::assembleContainer);
+    toolBar->addWidget(assembleBtn);
 
     // Add expanding spacer between left and right sections
     QWidget *spacer = new QWidget();
@@ -256,6 +266,17 @@ void MainWindow::setupUI()
     setCentralWidget(centralWidget);
 
     updateButtonStates();
+}
+
+void MainWindow::onAssembleFinished(const QString &result)
+{
+    if (progressDialog) {
+        progressDialog->close();
+        progressDialog->deleteLater();
+        progressDialog = nullptr;
+    }
+    QMessageBox::information(this, tr("Assemble Result"), result);
+    refreshContainers();
 }
 
 void MainWindow::updateButtonStates()
@@ -335,6 +356,30 @@ void MainWindow::createNewContainer()
         progress.close();
         QMessageBox::information(this, "Result", result);
         refreshContainers();
+    }
+}
+
+void MainWindow::assembleContainer()
+{
+    QString iniFile = QFileDialog::getOpenFileName(
+        this,
+        tr("Select Distrobox INI File"),
+        QDir::homePath(),
+        tr("INI Files (*.ini);;All Files (*)")
+    );
+
+    if (!iniFile.isEmpty()) {
+        progressDialog = new QProgressDialog(
+        tr("Assembling container..."),
+        tr("Cancel"),
+        0, 0,
+        this
+        );
+        progressDialog->setWindowModality(Qt::WindowModal);
+        progressDialog->setCancelButton(nullptr); // Remove cancel button
+        progressDialog->show();
+
+        backend->assembleContainer(iniFile);
     }
 }
 

@@ -31,6 +31,12 @@ public:
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
     QList<QMap<QString, QString>> searchImages(const QString &query);
+    
+signals:
+    void assembleFinished(const QString &result);
+    
+public slots:
+    void assembleContainer(const QString &iniFile);
 
 private:
     QString runCommand(const QStringList &command);

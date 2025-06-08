@@ -110,6 +110,21 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
     }
 }
 
+void Backend::assembleContainer(const QString &iniFile)
+{
+    QProcess *process = new QProcess(this);
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString result = process->readAllStandardOutput();
+        if (exitCode != 0) {
+            result = "Error: " + process->readAllStandardError();
+        }
+        emit assembleFinished(result);
+        process->deleteLater();
+    });
+
+    process->start("distrobox", {"assemble", "create", "--file", iniFile});
+}
+
 void Backend::enterContainer(const QString &name, const QString &terminal) {
     executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
 }
