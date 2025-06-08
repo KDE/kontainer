@@ -137,6 +137,21 @@ void Backend::upgradeAllContainers(const QString &terminal) {
     executeInTerminal(terminal, "distrobox-upgrade --all");
 }
 
+void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+    QString command = QString("sudo apt install -y %1").arg(filePath);
+    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+}
+
+void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+    QString command = QString("(sudo dnf install -y %1 || sudo zypper install -y %1 || sudo yum install -y %1)").arg(filePath);
+    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+}
+
+void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+    QString command = QString("sudo pacman -U --noconfirm %1").arg(filePath);
+    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+}
+
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
     QString output = runCommand({

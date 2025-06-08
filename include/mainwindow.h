@@ -31,6 +31,10 @@ private slots:
     void createNewContainer();
     void assembleContainer();
     void onAssembleFinished(const QString &result);
+    void installDebPackage();
+    void installRpmPackage();
+    void installArchPackage();
+
 
 private:
     void setupUI();
@@ -40,6 +44,11 @@ private:
     void updateButtonStates();
     QToolButton *assembleBtn;
     QProgressDialog *progressDialog = nullptr;
+    QPushButton *installDebBtn;
+    QPushButton *installRpmBtn;
+    QPushButton *installArchBtn;
+    QString getContainerDistro() const;
+
 
 
     Backend *backend;

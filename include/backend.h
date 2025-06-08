@@ -37,6 +37,9 @@ signals:
     
 public slots:
     void assembleContainer(const QString &iniFile);
+    void installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath);
+    void installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath);
+    void installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath);
 
 private:
     QString runCommand(const QStringList &command);

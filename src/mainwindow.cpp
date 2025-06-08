@@ -161,6 +161,24 @@ void MainWindow::setupUI()
     refreshBtn->setToolTip("Refresh container list");
     connect(refreshBtn, &QPushButton::clicked, this, &MainWindow::refreshContainers);
 
+    // Package installation buttons
+    installDebBtn = new QPushButton(QIcon::fromTheme("application-x-deb"), "Install .deb", rightPanel);
+    installDebBtn->setToolTip("Install Debian/Ubuntu package");
+    connect(installDebBtn, &QPushButton::clicked, this, &MainWindow::installDebPackage);
+
+    installRpmBtn = new QPushButton(QIcon::fromTheme("application-x-rpm"), "Install .rpm", rightPanel);
+    installRpmBtn->setToolTip("Install Fedora/OpenSUSE package");
+    connect(installRpmBtn, &QPushButton::clicked, this, &MainWindow::installRpmPackage);
+
+    installArchBtn = new QPushButton(QIcon::fromTheme("application-x-zst"), "Install .pkg", rightPanel);
+    installArchBtn->setToolTip("Install Arch Linux package");
+    connect(installArchBtn, &QPushButton::clicked, this, &MainWindow::installArchPackage);
+
+    rightLayout->addWidget(installDebBtn);
+    rightLayout->addWidget(installRpmBtn);
+    rightLayout->addWidget(installArchBtn);
+    rightLayout->addWidget(separator);
+
     rightLayout->addWidget(enterBtn);
     rightLayout->addWidget(deleteBtn);
     rightLayout->addWidget(appsBtn);
@@ -279,13 +297,23 @@ void MainWindow::onAssembleFinished(const QString &result)
     refreshContainers();
 }
 
-void MainWindow::updateButtonStates()
-{
+void MainWindow::updateButtonStates() {
     bool hasSelection = !currentContainer.isEmpty();
     enterBtn->setEnabled(hasSelection);
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
     upgradeBtn->setEnabled(hasSelection);
+
+    if (hasSelection) {
+        QString distro = getContainerDistro();
+        installDebBtn->setVisible(distro == "deb");
+        installRpmBtn->setVisible(distro == "rpm");
+        installArchBtn->setVisible(distro == "arch");
+    } else {
+        installDebBtn->setVisible(false);
+        installRpmBtn->setVisible(false);
+        installArchBtn->setVisible(false);
+    }
 }
 
 void MainWindow::refreshContainers()
@@ -356,6 +384,55 @@ void MainWindow::createNewContainer()
         progress.close();
         QMessageBox::information(this, "Result", result);
         refreshContainers();
+    }
+}
+
+QString MainWindow::getContainerDistro() const {
+    if (currentContainer.isEmpty()) return "";
+
+    for (int i = 0; i < containerList->count(); ++i) {
+        QListWidgetItem *item = containerList->item(i);
+        if (item->text() == currentContainer) {
+            QString image = item->data(Qt::UserRole + 3).toString().toLower();
+            if (image.contains("debian") || image.contains("ubuntu") || image.contains("mint")) {
+                return "deb";
+            } else if (image.contains("fedora") || image.contains("rhel") || image.contains("centos")) {
+                return "rpm";
+            } else if (image.contains("opensuse") || image.contains("suse")) {
+                return "rpm";
+            } else if (image.contains("arch") || image.contains("manjaro") || image.contains("endeavouros")) {
+                return "arch";
+            }
+            break;
+        }
+    }
+    return "";
+}
+
+void MainWindow::installDebPackage() {
+    if (currentContainer.isEmpty()) return;
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Select .deb Package", QDir::homePath(), "Debian Packages (*.deb)");
+    if (!filePath.isEmpty()) {
+        backend->installDebPackage(preferredTerminal, currentContainer, filePath);
+    }
+}
+
+void MainWindow::installRpmPackage() {
+    if (currentContainer.isEmpty()) return;
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Select .rpm Package", QDir::homePath(), "RPM Packages (*.rpm)");
+    if (!filePath.isEmpty()) {
+        backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
+    }
+}
+
+void MainWindow::installArchPackage() {
+    if (currentContainer.isEmpty()) return;
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Select Arch Package", QDir::homePath(), "Arch Packages (*.pkg.tar.*)");
+    if (!filePath.isEmpty()) {
+        backend->installArchPackage(preferredTerminal, currentContainer, filePath);
     }
 }
 
