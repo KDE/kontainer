@@ -1,35 +1,38 @@
-# Distrobox Qt GUI (Work in Progress)
+# Distrobox Qt GUI
 
-This is a **work-in-progress** graphical user interface for [Distrobox](https://github.com/89luca89/distrobox), now rewritten in **C++** using **Qt 6.9**. The UI skeleton is completed, but a refactor is planned to improve structure and maintainability.
+This is a **fully-featured** graphical user interface for [Distrobox](https://github.com/89luca89/distrobox), written in **C++** using **Qt 6.9**.
 
-The goal remains to provide a native, clean, and powerful GUI for managing your Distrobox containers — creating, entering, exporting apps, and more — with seamless integration into KDE Plasma and adherence to KDE development standards.
+Inspired by [BoxBuddy](https://github.com/feaneron/boxbuddy), this application now reaches **feature parity**, providing a clean, native, and powerful GUI for managing your Distrobox containers — with seamless integration into KDE Plasma and adherence to KDE development standards.
 
 ## Project Status
 
-- **Backend:** Fully implemented  
-- **UI:** Basic skeleton completed in Qt 6.9 (C++)  
-- **Refactoring:** Planned to improve code quality and modularity  
-- **Configuration:** Planned — will support dynamic settings to reduce hardcoding  
-- **Quality-of-life:** KDE coding standards, system integration, and internationalization (i18n) support ongoing  
-- **Packaging:** Flatpak packaging planned for portable, sandboxed deployment
+- ✅ **Backend:** Fully implemented, including container and app management  
+- ✅ **UI:** Functional and stable, built with Qt 6.9 (C++)  
+- ✅ **Features:** Parity with BoxBuddy (create, delete, enter, upgrade, export/unexport apps)  
+- ⏳ **Refactoring:** Planned to improve modularity and maintainability  
+- ⏳ **Configuration system:** Planned — support for dynamic user preferences  
+- ⏳ **i18n and KDE system integration:** Ongoing work  
+- ⏳ **Packaging:** Flatpak support planned
 
 ## Features
 
 - ✅ View all Distrobox containers  
 - ✅ Create new containers  
-- ✅ Enter, export, delete, and upgrade containers  
-- ✅ Manage apps from host or container filesystem  
-- ⏳ KDE-style UI and full translation/i18n integration in progress  
-- ⏳ Dynamic configuration and user preferences  
-- ❌ No automatic Flatpak manifest generation yet
+- ✅ Enter containers (interactive shell)  
+- ✅ Delete containers  
+- ✅ Export and unexport container apps  
+- ✅ Upgrade all containers  
+- ✅ Manage apps via host or container context  
+- ⏳ KDE-style UI polish and full i18n (using `KLocalizedString`)  
+- ❌ No automatic Flatpak manifest generation (yet)
 
 ## Goals
 
-- Follow [KDE Coding Style](https://community.kde.org/Policies/Frameworks_Coding_Style)  
+- Adhere to [KDE Coding Style](https://community.kde.org/Policies/Frameworks_Coding_Style)  
 - Use KDE’s **KLocalizedString** or Qt-compatible i18n tooling  
-- Integrate with system icon themes and KDE color schemes  
-- Offer user-driven configuration for images, volumes, and preferences  
-- Package as a **Flatpak** for sandboxed and portable use
+- Integrate with KDE system themes, icons, and color schemes  
+- Enable user-friendly configuration and customization  
+- Package as a **Flatpak** for sandboxed deployment
 
 ## Requirements
 
@@ -38,15 +41,16 @@ The goal remains to provide a native, clean, and powerful GUI for managing your 
 
 ## Build Instructions
 
-1. Make sure Qt 6.9 (or newer) is installed on your system.  
-2. Inside the project directory, run:
+1. Ensure Qt 6.9+ is installed  
+2. Clone and enter the project directory  
+3. Build the project:
 
 ```bash
 cmake .
 make
 ```
 
-3. This will build the project completely and produce the executable.
+4. This will build the project completely and produce the executable.
 
 ## License
 
