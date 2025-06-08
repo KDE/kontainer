@@ -359,8 +359,14 @@ void MainWindow::showAppsDialog()
 {
     if (currentContainer.isEmpty()) return;
 
-    AppsDialog dialog(backend, currentContainer, this);
-    dialog.exec();
+    // Set Busy Cursor
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+    
+    AppsDialog *dlg = new AppsDialog(backend, currentContainer, this);
+    dlg->show();
+
+    // Restore Cursor
+    QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::createNewContainer()
