@@ -9,9 +9,9 @@ Inspired by [BoxBuddy](https://github.com/feaneron/boxbuddy), this application n
 - ✅ **Backend:** Fully implemented, including container and app management  
 - ✅ **UI:** Functional and stable, built with Qt 6.9 (C++)  
 - ✅ **Features:** Parity with BoxBuddy (create, delete, enter, upgrade, export/unexport apps)  
-- ⏳ **Refactoring:** Planned to improve modularity and maintainability  
-- ⏳ **Configuration system:** Planned — support for dynamic user preferences  
-- ⏳ **i18n and KDE system integration:** Ongoing work  
+- ✅ **Refactoring:** Planned to improve modularity and maintainability    
+- ✅ **Configuration system:** Planned — support for dynamic user preferences  
+- ⏳ **i18n:** Ongoing work  
 - ⏳ **Packaging:** Flatpak support planned
 
 ## Features
@@ -23,7 +23,7 @@ Inspired by [BoxBuddy](https://github.com/feaneron/boxbuddy), this application n
 - ✅ Export and unexport container apps  
 - ✅ Upgrade all containers  
 - ✅ Manage apps via host or container context  
-- ⏳ KDE-style UI polish and full i18n (using `KLocalizedString`)  
+- ⏳ KDE-style full i18n (using `KLocalizedString`)  
 - ❌ No automatic Flatpak manifest generation (yet)
 
 ## Goals
