@@ -2,7 +2,7 @@
 
 This is a **fully-featured** graphical user interface for [Distrobox](https://github.com/89luca89/distrobox), written in **C++** using **Qt 6.9**.
 
-Inspired by [BoxBuddy](https://github.com/feaneron/boxbuddy), this application now reaches **feature parity**, providing a clean, native, and powerful GUI for managing your Distrobox containers — with seamless integration into KDE Plasma and adherence to KDE development standards.
+Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application now reaches **feature parity**, providing a clean, native, and powerful GUI for managing your Distrobox containers — with seamless integration into KDE Plasma and adherence to KDE development standards.
 
 ## Project Status
 
