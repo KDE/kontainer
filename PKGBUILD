@@ -1,16 +1,16 @@
-# Maintainer: Hadi Chokr <you@example.com>
+# Maintainer: Hadi Chokr <hadichokr@icloud.com>
 pkgname=kontainer-git
 pkgver=Beta.9.g2a1a4ae
 pkgrel=1
 pkgdesc="A KDE-style Qt GUI to manage Distrobox containers"
-arch=('x86_64')
+arch=('any')
 url="https://invent.kde.org/silverhadch/k-box"
-license=('GPL2')
-depends=('qt6-base' 'qt6-tools')
-makedepends=('cmake' 'git')
+license=('GPL-2.0-or-later')
+depends=('qt6-base' 'qt6-tools' 'qt6-declarative' 'distrobox')
+makedepends=('cmake' 'git' 'extra-cmake-modules')
 provides=('kontainer')
 conflicts=('kontainer')
-source=("git+ssh://git@invent.kde.org/silverhadch/k-box.git")
+source=("https://invent.kde.org/silverhadch/k-box.git")
 sha256sums=('SKIP')
 
 pkgver() {
