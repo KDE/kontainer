@@ -1,16 +1,16 @@
 #ifndef BACKEND_H
 #define BACKEND_H
 
-#include <QObject>
-#include <QStringList>
-#include <QMap>
-#include <QStandardPaths>
-#include <QProcess>
-#include <QString>
+#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QMap>
+#include <QObject>
+#include <QProcess>
 #include <QRegularExpression>
-#include <QDebug>
+#include <QStandardPaths>
+#include <QString>
+#include <QStringList>
 
 class Backend : public QObject
 {
@@ -20,9 +20,7 @@ public:
 
     // Container operations
     QList<QMap<QString, QString>> getContainers() const;
-    QString createContainer(const QString &name, const QString &image, 
-                          const QString &home = "", bool init = false,
-                          const QStringList &volumes = QStringList());
+    QString createContainer(const QString &name, const QString &image, const QString &home = "", bool init = false, const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
     void enterContainer(const QString &name, const QString &terminal);
     void upgradeContainer(const QString &name, const QString &terminal);
@@ -38,10 +36,10 @@ public:
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
     QList<QMap<QString, QString>> searchImages(const QString &query);
-    
+
 signals:
     void assembleFinished(const QString &result);
-    
+
 public slots:
     void assembleContainer(const QString &iniFile);
     void installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath);
@@ -52,12 +50,9 @@ private:
     QString runCommand(const QStringList &command) const;
     QString parseDistroFromImage(const QString &imageUrl) const;
 
-    const QStringList DISTROS = {
-        "alma", "alpine", "amazon", "bazzite", "arch", "centos", "clearlinux", 
-        "crystal", "debian", "deepin", "fedora", "gentoo", "kali", "mageia", 
-        "mint", "neon", "opensuse", "oracle", "redhat", "rhel", "rocky", 
-        "slackware", "steamos", "ubuntu", "ublue", "vanilla", "void"
-    };
+    const QStringList DISTROS = {"alma",   "alpine", "amazon", "bazzite",   "arch",    "centos", "clearlinux", "crystal",  "debian",
+                                 "deepin", "fedora", "gentoo", "kali",      "mageia",  "mint",   "neon",       "opensuse", "oracle",
+                                 "redhat", "rhel",   "rocky",  "slackware", "steamos", "ubuntu", "ublue",      "vanilla",  "void"};
 };
 
 #endif // BACKEND_H

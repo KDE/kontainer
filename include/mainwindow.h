@@ -1,28 +1,28 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <QApplication>
+#include <QComboBox>
+#include <QDir>
+#include <QFileDialog>
+#include <QFontMetrics>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QLabel>
 #include <QListWidget>
-#include <QTabWidget>
-#include <QToolButton>
+#include <QMainWindow>
+#include <QMessageBox>
+#include <QPainter>
 #include <QProgressDialog>
 #include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QMessageBox>
-#include <QApplication>
-#include <QIcon>
-#include <QToolBar>
-#include <QStyledItemDelegate>
-#include <QPainter>
-#include <QStyle>
-#include <QFontMetrics>
-#include <cctype>
-#include <QComboBox>
 #include <QSettings>
-#include <QLabel>
-#include <QFileDialog>
-#include <QDir>
+#include <QStyle>
+#include <QStyledItemDelegate>
+#include <QTabWidget>
+#include <QToolBar>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <cctype>
 
 class Backend;
 class QListWidget;
@@ -52,7 +52,6 @@ private slots:
     void installRpmPackage();
     void installArchPackage();
 
-
 private:
     void setupUI();
     void setupContainerList();
@@ -65,8 +64,6 @@ private:
     QPushButton *installRpmBtn;
     QPushButton *installArchBtn;
     QString getContainerDistro() const;
-
-
 
     Backend *backend;
     QListWidget *containerList;

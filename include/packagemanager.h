@@ -4,9 +4,11 @@
 
 #include <QString>
 
-class PackageManager {
+class PackageManager
+{
 public:
-    static QString getDistroFromImage(const QString &image) {
+    static QString getDistroFromImage(const QString &image)
+    {
         QString lowerImage = image.toLower();
         if (lowerImage.contains("debian") || lowerImage.contains("ubuntu") || lowerImage.contains("mint")) {
             return "deb";

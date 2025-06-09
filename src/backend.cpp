@@ -1,8 +1,11 @@
 #include "backend.h"
-#include "terminalutils.h"
 #include "packagemanager.h"
+#include "terminalutils.h"
 
-Backend::Backend(QObject *parent) : QObject(parent) {}
+Backend::Backend(QObject *parent)
+    : QObject(parent)
+{
+}
 
 QString Backend::runCommand(const QStringList &command) const
 {
@@ -18,13 +21,16 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString last = imageUrl.split('/').last().toLower();
     for (const QString &d : DISTROS) {
-        if (last.contains(d)) return d;
+        if (last.contains(d))
+            return d;
     }
     return "unknown";
 }
 
-QString Backend::getContainerDistro(const QString &containerName) const {
-    if (containerName.isEmpty()) return "";
+QString Backend::getContainerDistro(const QString &containerName) const
+{
+    if (containerName.isEmpty())
+        return "";
 
     QList<QMap<QString, QString>> containers = getContainers();
     for (const auto &container : containers) {
@@ -39,7 +45,8 @@ QList<QMap<QString, QString>> Backend::getContainers() const
 {
     QString output = runCommand({"distrobox", "list", "--no-color"});
     QStringList lines = output.split('\n', Qt::SkipEmptyParts);
-    if (lines.isEmpty()) return {};
+    if (lines.isEmpty())
+        return {};
 
     QStringList headers;
     for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
@@ -65,13 +72,13 @@ QList<QMap<QString, QString>> Backend::getContainers() const
     return containers;
 }
 
-QString Backend::createContainer(const QString &name, const QString &image,
-                                const QString &home, bool init,
-                                const QStringList &volumes)
+QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
     QStringList args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
-    if (init) args << "--init" << "--additional-packages" << "systemd";
-    if (!home.isEmpty()) args << "--home" << home;
+    if (init)
+        args << "--init" << "--additional-packages" << "systemd";
+    if (!home.isEmpty())
+        args << "--home" << home;
     for (const QString &v : volumes) {
         args << "--volume" << v;
     }
@@ -83,7 +90,8 @@ QString Backend::deleteContainer(const QString &name)
     return runCommand({"distrobox", "rm", name, "--force"});
 }
 
-void Backend::executeInTerminal(const QString &terminal, const QString &command) {
+void Backend::executeInTerminal(const QString &terminal, const QString &command)
+{
     auto terminalInfoMap = getTerminalInfoMap();
     if (!terminalInfoMap.contains(terminal)) {
         qWarning() << "Unknown terminal:" << terminal;
@@ -132,39 +140,42 @@ void Backend::assembleContainer(const QString &iniFile)
     process->start("distrobox", {"assemble", "create", "--file", iniFile});
 }
 
-void Backend::enterContainer(const QString &name, const QString &terminal) {
+void Backend::enterContainer(const QString &name, const QString &terminal)
+{
     executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
 }
 
-void Backend::upgradeContainer(const QString &name, const QString &terminal) {
+void Backend::upgradeContainer(const QString &name, const QString &terminal)
+{
     executeInTerminal(terminal, QString("distrobox-upgrade %1").arg(name));
 }
 
-void Backend::upgradeAllContainers(const QString &terminal) {
+void Backend::upgradeAllContainers(const QString &terminal)
+{
     executeInTerminal(terminal, "distrobox-upgrade --all");
 }
 
-void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath)
+{
     QString command = QString("sudo apt install -y %1").arg(filePath);
     executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
 }
 
-void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath)
+{
     QString command = QString("sudo dnf install -y %1").arg(filePath);
     executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
 }
 
-void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath) {
+void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath)
+{
     QString command = QString("sudo pacman -U --noconfirm %1").arg(filePath);
     executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
 }
 
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
-    QString output = runCommand({
-        "distrobox", "enter", containerName, "--",
-        "find", "/usr/share/applications", "-name", "*.desktop"
-    });
+    QString output = runCommand({"distrobox", "enter", containerName, "--", "find", "/usr/share/applications", "-name", "*.desktop"});
     QStringList apps;
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
         apps << line.split('/').last().replace(".desktop", "");
@@ -186,18 +197,12 @@ QStringList Backend::getExportedApps(const QString &containerName)
 
 QString Backend::exportApp(const QString &appName, const QString &containerName)
 {
-    return runCommand({
-        "distrobox", "enter", containerName, "--",
-        "distrobox-export", "--app", appName
-    });
+    return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName});
 }
 
 QString Backend::unexportApp(const QString &appName, const QString &containerName)
 {
-    return runCommand({
-        "distrobox", "enter", containerName, "--",
-        "distrobox-export", "--app", appName, "--delete"
-    });
+    return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName, "--delete"});
 }
 
 QList<QMap<QString, QString>> Backend::getAvailableImages()
@@ -224,9 +229,8 @@ QList<QMap<QString, QString>> Backend::searchImages(const QString &query)
     QList<QMap<QString, QString>> filteredImages;
 
     for (const auto &image : allImages) {
-        if (image["name"].contains(query, Qt::CaseInsensitive) ||
-            image["distro"].contains(query, Qt::CaseInsensitive) ||
-            image["url"].contains(query, Qt::CaseInsensitive)) {
+        if (image["name"].contains(query, Qt::CaseInsensitive) || image["distro"].contains(query, Qt::CaseInsensitive)
+            || image["url"].contains(query, Qt::CaseInsensitive)) {
             filteredImages.append(image);
         }
     }

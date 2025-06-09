@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 project(Kontainer)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -6,8 +6,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
+# === ECM & KDEClangFormat ===
+find_package(ECM REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+include(KDEClangFormat)
+
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Concurrent)
-# Set include directory before adding executable
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
@@ -37,3 +42,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Widgets
     Qt6::Gui
 )
+
+# === clang-format Target ===
+file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h
+)
+
+kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})

@@ -1,19 +1,19 @@
 #ifndef APPSDIALOG_H
 #define APPSDIALOG_H
 
-#include <QDialog>
-#include <QTabWidget>
-#include <QListWidget>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QIcon>
-#include <QStyledItemDelegate>
-#include <QPainter>
 #include <QApplication>
-#include <QStyle>
+#include <QDialog>
 #include <QFontMetrics>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPushButton>
+#include <QStyle>
+#include <QStyledItemDelegate>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 class Backend;
 

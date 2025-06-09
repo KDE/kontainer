@@ -1,16 +1,20 @@
 #include "mainwindow.h"
+#include "appsdialog.h"
 #include "backend.h"
 #include "createcontainerdialog.h"
-#include "appsdialog.h"
 #include "terminalutils.h"
 
-
 // Custom delegate for container list items
-class ContainerItemDelegate : public QStyledItemDelegate {
+class ContainerItemDelegate : public QStyledItemDelegate
+{
 public:
-    explicit ContainerItemDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
+    explicit ContainerItemDelegate(QObject *parent = nullptr)
+        : QStyledItemDelegate(parent)
+    {
+    }
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    {
         painter->save();
 
         QStyleOptionViewItem opt = option;
@@ -36,11 +40,9 @@ public:
         icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
 
         // Draw container name with accent color
-        painter->setPen(opt.state & QStyle::State_Selected ?
-        opt.palette.highlightedText().color() :
-        opt.palette.text().color());
+        painter->setPen(opt.state & QStyle::State_Selected ? opt.palette.highlightedText().color() : opt.palette.text().color());
 
-        QRect nameRect = opt.rect.adjusted(iconSize + 12, 0, -30, -opt.rect.height()/2);
+        QRect nameRect = opt.rect.adjusted(iconSize + 12, 0, -30, -opt.rect.height() / 2);
         QString elidedName = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, nameRect.width());
         painter->drawText(nameRect, Qt::AlignLeft | Qt::AlignVCenter, elidedName);
 
@@ -53,14 +55,15 @@ public:
         textColor.setAlpha(180); // Slightly muted color
         painter->setPen(textColor);
 
-        QRect imageRect = opt.rect.adjusted(iconSize + 12, opt.rect.height()/2, -30, 0);
+        QRect imageRect = opt.rect.adjusted(iconSize + 12, opt.rect.height() / 2, -30, 0);
         QString elidedImage = opt.fontMetrics.elidedText(image, Qt::ElideRight, imageRect.width());
         painter->drawText(imageRect, Qt::AlignLeft | Qt::AlignVCenter, elidedImage);
 
         painter->restore();
     }
 
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size.setHeight(qMax(size.height(), 48)); // Enough space for two lines
         return size;
@@ -68,7 +71,9 @@ public:
 };
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), backend(new Backend(this)), preferredTerminal("xterm")
+    : QMainWindow(parent)
+    , backend(new Backend(this))
+    , preferredTerminal("xterm")
 {
     // Load saved terminal preference
     QSettings settings;
@@ -83,7 +88,8 @@ MainWindow::MainWindow(QWidget *parent)
     refreshContainers();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     // Save terminal preference
     QSettings settings;
     settings.setValue("terminal/preferred", preferredTerminal);
@@ -187,7 +193,7 @@ void MainWindow::setupUI()
     aBtn->setToolTip("Upgrades all containers");
     connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
     toolBar->addWidget(aBtn);
-    
+
     assembleBtn = new QToolButton(toolBar);
     assembleBtn->setIcon(QIcon::fromTheme("applications-development"));
     assembleBtn->setText("Assemble");
@@ -223,8 +229,7 @@ void MainWindow::setupUI()
         if (isFlatpakTerminal(term)) {
             QProcess process;
             process.start("flatpak", {"list", "--app", "--columns=application"});
-            if (process.waitForFinished() && 
-                process.readAllStandardOutput().contains(term.toUtf8())) {
+            if (process.waitForFinished() && process.readAllStandardOutput().contains(term.toUtf8())) {
                 QIcon icon = QIcon::fromTheme(info.icon);
                 terminalSelector->addItem(icon, term);
             }
@@ -232,10 +237,8 @@ void MainWindow::setupUI()
     }
 
     // Add separator if we have both types
-    if (terminalSelector->count() > 0 && 
-        (terminalSelector->findText("org.") != -1 || 
-         terminalSelector->findText("com.") != -1 ||
-         terminalSelector->findText("app.") != -1)) {
+    if (terminalSelector->count() > 0
+        && (terminalSelector->findText("org.") != -1 || terminalSelector->findText("com.") != -1 || terminalSelector->findText("app.") != -1)) {
         terminalSelector->insertSeparator(terminalSelector->count());
     }
 
@@ -276,7 +279,8 @@ void MainWindow::onAssembleFinished(const QString &result)
     refreshContainers();
 }
 
-void MainWindow::updateButtonStates() {
+void MainWindow::updateButtonStates()
+{
     bool hasSelection = !currentContainer.isEmpty();
     enterBtn->setEnabled(hasSelection);
     deleteBtn->setEnabled(hasSelection);
@@ -317,7 +321,8 @@ void MainWindow::refreshContainers()
 
 void MainWindow::deleteContainer()
 {
-    if (currentContainer.isEmpty()) return;
+    if (currentContainer.isEmpty())
+        return;
 
     QMessageBox msgBox(this);
     msgBox.setWindowTitle("Confirm Deletion");
@@ -336,11 +341,12 @@ void MainWindow::deleteContainer()
 
 void MainWindow::showAppsDialog()
 {
-    if (currentContainer.isEmpty()) return;
+    if (currentContainer.isEmpty())
+        return;
 
     // Set Busy Cursor
     QApplication::setOverrideCursor(Qt::BusyCursor);
-    
+
     AppsDialog *dlg = new AppsDialog(backend, currentContainer, this);
     dlg->show();
 
@@ -358,13 +364,7 @@ void MainWindow::createNewContainer()
 
         QApplication::processEvents();
 
-        QString result = backend->createContainer(
-            dialog.containerName(),
-            dialog.imageUrl(),
-            dialog.homePath(),
-            dialog.useInit(),
-            dialog.volumes()
-        );
+        QString result = backend->createContainer(dialog.containerName(), dialog.imageUrl(), dialog.homePath(), dialog.useInit(), dialog.volumes());
 
         progress.close();
         QMessageBox::information(this, "Result", result);
@@ -372,13 +372,16 @@ void MainWindow::createNewContainer()
     }
 }
 
-QString MainWindow::getContainerDistro() const {
+QString MainWindow::getContainerDistro() const
+{
     QString distro = backend->getContainerDistro(currentContainer);
     return distro;
 }
 
-void MainWindow::installDebPackage() {
-    if (currentContainer.isEmpty()) return;
+void MainWindow::installDebPackage()
+{
+    if (currentContainer.isEmpty())
+        return;
 
     QString filePath = QFileDialog::getOpenFileName(this, "Select .deb Package", QDir::homePath(), "Debian Packages (*.deb)");
     if (!filePath.isEmpty()) {
@@ -386,8 +389,10 @@ void MainWindow::installDebPackage() {
     }
 }
 
-void MainWindow::installRpmPackage() {
-    if (currentContainer.isEmpty()) return;
+void MainWindow::installRpmPackage()
+{
+    if (currentContainer.isEmpty())
+        return;
 
     QString filePath = QFileDialog::getOpenFileName(this, "Select .rpm Package", QDir::homePath(), "RPM Packages (*.rpm)");
     if (!filePath.isEmpty()) {
@@ -395,8 +400,10 @@ void MainWindow::installRpmPackage() {
     }
 }
 
-void MainWindow::installArchPackage() {
-    if (currentContainer.isEmpty()) return;
+void MainWindow::installArchPackage()
+{
+    if (currentContainer.isEmpty())
+        return;
 
     QString filePath = QFileDialog::getOpenFileName(this, "Select Arch Package", QDir::homePath(), "Arch Packages (*.pkg.tar.*)");
     if (!filePath.isEmpty()) {
@@ -406,20 +413,10 @@ void MainWindow::installArchPackage() {
 
 void MainWindow::assembleContainer()
 {
-    QString iniFile = QFileDialog::getOpenFileName(
-        this,
-        tr("Select Distrobox INI File"),
-        QDir::homePath(),
-        tr("INI Files (*.ini);;All Files (*)")
-    );
+    QString iniFile = QFileDialog::getOpenFileName(this, tr("Select Distrobox INI File"), QDir::homePath(), tr("INI Files (*.ini);;All Files (*)"));
 
     if (!iniFile.isEmpty()) {
-        progressDialog = new QProgressDialog(
-        tr("Assembling container..."),
-        tr("Cancel"),
-        0, 0,
-        this
-        );
+        progressDialog = new QProgressDialog(tr("Assembling container..."), tr("Cancel"), 0, 0, this);
         progressDialog->setWindowModality(Qt::WindowModal);
         progressDialog->setCancelButton(nullptr); // Remove cancel button
         progressDialog->show();
@@ -430,13 +427,15 @@ void MainWindow::assembleContainer()
 
 void MainWindow::enterContainer()
 {
-    if (currentContainer.isEmpty()) return;
+    if (currentContainer.isEmpty())
+        return;
     backend->enterContainer(currentContainer, preferredTerminal);
 }
 
 void MainWindow::upgradeContainer()
 {
-    if (currentContainer.isEmpty()) return;
+    if (currentContainer.isEmpty())
+        return;
     backend->upgradeContainer(currentContainer, preferredTerminal);
 }
 
@@ -444,4 +443,3 @@ void MainWindow::upgradeAllContainers()
 {
     backend->upgradeAllContainers(preferredTerminal);
 }
-
