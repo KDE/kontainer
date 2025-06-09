@@ -4,6 +4,16 @@
 #include <QDialog>
 #include <QTabWidget>
 #include <QListWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QIcon>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QApplication>
+#include <QStyle>
+#include <QFontMetrics>
 
 class Backend;
 

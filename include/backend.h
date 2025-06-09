@@ -4,7 +4,13 @@
 #include <QObject>
 #include <QStringList>
 #include <QMap>
-#include <QStandardPaths>	
+#include <QStandardPaths>
+#include <QProcess>
+#include <QString>
+#include <QDir>
+#include <QFileInfo>
+#include <QRegularExpression>
+#include <QDebug>
 
 class Backend : public QObject
 {

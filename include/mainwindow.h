@@ -6,6 +6,23 @@
 #include <QTabWidget>
 #include <QToolButton>
 #include <QProgressDialog>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QMessageBox>
+#include <QApplication>
+#include <QIcon>
+#include <QToolBar>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QStyle>
+#include <QFontMetrics>
+#include <cctype>
+#include <QComboBox>
+#include <QSettings>
+#include <QLabel>
+#include <QFileDialog>
+#include <QDir>
 
 class Backend;
 class QListWidget;

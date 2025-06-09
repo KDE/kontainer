@@ -4,27 +4,6 @@
 #include "appsdialog.h"
 #include "terminalutils.h"
 
-#include <QListWidget>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QToolButton>
-#include <QMessageBox>
-#include <QProgressDialog>
-#include <QApplication>
-#include <QIcon>
-#include <QToolBar>
-#include <QStyledItemDelegate>
-#include <QPainter>
-#include <QStyle>
-#include <QFontMetrics>
-#include <cctype>
-#include <QComboBox>
-#include <QSettings>
-#include <QLabel>
-#include <QFileDialog>  // For file dialogs
-#include <QDir>         // For directory handling
-
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate {

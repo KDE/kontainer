@@ -1,17 +1,6 @@
 #include "appsdialog.h"
 #include "backend.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QIcon>
-#include <QStyledItemDelegate>
-#include <QPainter>
-#include <QApplication>
-#include <QStyle>
-#include <QFontMetrics>
-
 // Custom item delegate for better looking list items
 class AppListItemDelegate : public QStyledItemDelegate {
 public:

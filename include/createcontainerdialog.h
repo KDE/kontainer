@@ -4,6 +4,22 @@
 #include <QDialog>
 #include <QProgressDialog>
 #include <QProcess>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QMessageBox>
+#include <QListWidgetItem>
+#include <QDebug>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QIcon>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QApplication>
+#include <QStyle>
+#include <QFontMetrics>
 
 class Backend;
 class QLineEdit;

@@ -1,23 +1,6 @@
 #include "createcontainerdialog.h"
 #include "backend.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QFormLayout>
-#include <QPushButton>
-#include <QLabel>
-#include <QMessageBox>
-#include <QListWidgetItem>
-#include <QDebug>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QIcon>
-#include <QStyledItemDelegate>
-#include <QPainter>
-#include <QApplication>
-#include <QStyle>
-#include <QFontMetrics>
-
 // Custom item delegate for image list
 class ImageListItemDelegate : public QStyledItemDelegate {
 public:

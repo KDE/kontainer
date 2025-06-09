@@ -2,12 +2,6 @@
 #include "terminalutils.h"
 #include "packagemanager.h"
 
-#include <QProcess>
-#include <QDir>
-#include <QFileInfo>
-#include <QRegularExpression>
-#include <QDebug>
-
 Backend::Backend(QObject *parent) : QObject(parent) {}
 
 QString Backend::runCommand(const QStringList &command) const

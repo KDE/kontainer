@@ -13,18 +13,21 @@ include_directories(
 )
 
 set(SOURCES
-    src/main.cpp
-    src/mainwindow.cpp
+    src/appsdialog.cpp
     src/backend.cpp
     src/createcontainerdialog.cpp
-    src/appsdialog.cpp
+    src/main.cpp
+    src/mainwindow.cpp
 )
 
 set(HEADERS
-    include/mainwindow.h
+    include/appsdialog.h
     include/backend.h
     include/createcontainerdialog.h
-    include/appsdialog.h
+    include/main.h
+    include/mainwindow.h
+    include/packagemanager.h
+    include/terminalutils.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
