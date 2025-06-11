@@ -30,46 +30,14 @@ public:
         }
 
         // Get container data
-        QString image = index.data(Qt::UserRole + 3).toString(); // Get image name
-        QString distro = index.data(Qt::UserRole + 4).toString(); // Get distro name
+        QString image = index.data(Qt::UserRole + 3).toString();
+        QString distro = index.data(Qt::UserRole + 4).toString();
 
         // Draw icon with fallback logic
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        // Try to find the best icon
-        QIcon icon;
-        QString iconName;
-
-        // First try distributor-logo
-        if (!distro.isEmpty() && distro != "unknown") {
-            iconName = "distributor-logo-" + distro;
-            icon = QIcon::fromTheme(iconName);
-            qDebug() << "Trying icon:" << iconName << "found:" << !icon.isNull();
-
-            if (icon.isNull()) {
-                // Try custom path
-                QString customPath = QString("/usr/share/icons/char-white/apps/symbolic/%1.svg").arg(distro);
-                if (QFile::exists(customPath)) {
-                    icon = QIcon(customPath);
-                    qDebug() << "Using custom icon from:" << customPath;
-                }
-            }
-        }
-
-        // Fallback to virtualization icon if still not found
-        if (icon.isNull()) {
-            iconName = "preferences-virtualization-container";
-            icon = QIcon::fromTheme(iconName);
-            qDebug() << "Using fallback icon:" << iconName;
-        }
-
-        // Final fallback to system default icon
-        if (icon.isNull()) {
-            icon = QIcon::fromTheme("application-x-executable");
-            qDebug() << "Using ultimate fallback icon";
-        }
-
+        QIcon icon = findBestIcon(distro);
         icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
 
         // Draw container name with accent color
@@ -85,7 +53,7 @@ public:
         painter->setFont(smallFont);
 
         QColor textColor = opt.palette.text().color();
-        textColor.setAlpha(180); // Slightly muted color
+        textColor.setAlpha(180);
         painter->setPen(textColor);
 
         QRect imageRect = opt.rect.adjusted(iconSize + 12, opt.rect.height() / 2, -30, 0);
@@ -98,8 +66,89 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
-        size.setHeight(qMax(size.height(), 48)); // Enough space for two lines
+        size.setHeight(qMax(size.height(), 48));
         return size;
+    }
+
+private:
+    QIcon findBestIcon(const QString &distro) const
+    {
+        if (distro.isEmpty() || distro == "unknown") {
+            qDebug() << "No distro specified, using fallback icon";
+            return getFallbackIcon();
+        }
+
+        // First try the exact symbolic icon path we know exists
+        QString symbolicPath = QString("/usr/share/icons/char-white/apps/symbolic/distributor-logo-%1-symbolic.svg").arg(distro);
+        if (QFile::exists(symbolicPath)) {
+            qDebug() << "Found exact symbolic icon:" << symbolicPath;
+            return QIcon(symbolicPath);
+        }
+
+        // Try alternative naming variations for symbolic icons
+        QStringList symbolicVariations = {
+            QString("/usr/share/icons/char-white/apps/symbolic/%1-symbolic.svg").arg(distro),
+            QString("/usr/share/icons/char-white/apps/symbolic/%1-logo-symbolic.svg").arg(distro),
+            QString("/usr/share/icons/char-white/apps/symbolic/%1linux-symbolic.svg").arg(distro),
+            QString("/usr/share/icons/char-white/apps/symbolic/linux-%1-symbolic.svg").arg(distro)
+        };
+
+        for (const QString &path : symbolicVariations) {
+            if (QFile::exists(path)) {
+                qDebug() << "Found symbolic icon variation:" << path;
+                return QIcon(path);
+            }
+        }
+
+        // List of possible theme icon names to try (with and without -symbolic suffix)
+        QStringList iconNames = {
+            "distributor-logo-" + distro + "-symbolic",
+            "distributor-logo-" + distro,
+            distro + "-logo-symbolic",
+            distro + "-logo",
+            distro + "-symbolic",
+            distro,
+            "linux-" + distro + "-symbolic",
+            "linux-" + distro,
+            distro + "linux-symbolic",
+            distro + "linux"
+        };
+
+        // First try theme icons
+        for (const QString &iconName : iconNames) {
+            QIcon icon = QIcon::fromTheme(iconName);
+            if (!icon.isNull()) {
+                qDebug() << "Found theme icon:" << iconName;
+                return icon;
+            }
+            qDebug() << "Theme icon not found:" << iconName;
+        }
+
+        qDebug() << "No distro-specific icon found for" << distro << "- using fallback";
+        return getFallbackIcon();
+    }
+
+    QIcon getFallbackIcon() const
+    {
+        // Try several fallback options
+        QStringList fallbacks = {
+            "preferences-virtualization-container",
+            "virtualbox",
+            "docker",
+            "application-x-executable",
+            "system-run"
+        };
+
+        for (const QString &fallback : fallbacks) {
+            QIcon icon = QIcon::fromTheme(fallback);
+            if (!icon.isNull()) {
+                qDebug() << "Using fallback icon:" << fallback;
+                return icon;
+            }
+        }
+
+        qDebug() << "No fallback icons found - using default";
+        return QIcon::fromTheme("application-x-executable");
     }
 };
 

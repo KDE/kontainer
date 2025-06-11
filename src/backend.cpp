@@ -19,13 +19,30 @@ QString Backend::runCommand(const QStringList &command) const
 
 QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
-    QString last = imageUrl.split('/').last().toLower();
-    for (const QString &d : DISTROS) {
-        if (last.contains(d))
-            return d;
+    QString image = imageUrl.toLower();
+
+    // Normalize separators
+    image.replace('-', '_');
+    image.replace('.', '_');
+
+    // Prefer strong prefix matches in any path segment
+    for (const QString &distro : DISTROS) {
+        QRegularExpression rx("(^|/)" + QRegularExpression::escape(distro) + "([:/]|_)");
+        if (rx.match(image).hasMatch()) {
+            return distro;
+        }
     }
+
+    // Fallback: check for substring
+    for (const QString &distro : DISTROS) {
+        if (image.contains(distro)) {
+            return distro;
+        }
+    }
+
     return "unknown";
 }
+
 
 QString Backend::getContainerDistro(const QString &containerName) const
 {
