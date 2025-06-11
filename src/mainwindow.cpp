@@ -9,7 +9,7 @@ class ContainerItemDelegate : public QStyledItemDelegate
 {
 public:
     explicit ContainerItemDelegate(QObject *parent = nullptr)
-        : QStyledItemDelegate(parent)
+    : QStyledItemDelegate(parent)
     {
     }
 
@@ -31,12 +31,45 @@ public:
 
         // Get container data
         QString image = index.data(Qt::UserRole + 3).toString(); // Get image name
+        QString distro = index.data(Qt::UserRole + 4).toString(); // Get distro name
 
-        // Draw icon using system theme's box icon
+        // Draw icon with fallback logic
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        QIcon icon = QIcon::fromTheme("preferences-virtualization-container");
+        // Try to find the best icon
+        QIcon icon;
+        QString iconName;
+
+        // First try distributor-logo
+        if (!distro.isEmpty() && distro != "unknown") {
+            iconName = "distributor-logo-" + distro;
+            icon = QIcon::fromTheme(iconName);
+            qDebug() << "Trying icon:" << iconName << "found:" << !icon.isNull();
+
+            if (icon.isNull()) {
+                // Try custom path
+                QString customPath = QString("/usr/share/icons/char-white/apps/symbolic/%1.svg").arg(distro);
+                if (QFile::exists(customPath)) {
+                    icon = QIcon(customPath);
+                    qDebug() << "Using custom icon from:" << customPath;
+                }
+            }
+        }
+
+        // Fallback to virtualization icon if still not found
+        if (icon.isNull()) {
+            iconName = "preferences-virtualization-container";
+            icon = QIcon::fromTheme(iconName);
+            qDebug() << "Using fallback icon:" << iconName;
+        }
+
+        // Final fallback to system default icon
+        if (icon.isNull()) {
+            icon = QIcon::fromTheme("application-x-executable");
+            qDebug() << "Using ultimate fallback icon";
+        }
+
         icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
 
         // Draw container name with accent color
@@ -307,12 +340,15 @@ void MainWindow::refreshContainers()
     for (const auto &container : containers) {
         QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
         item->setData(Qt::UserRole + 3, container["image"]); // Store image name
+        item->setData(Qt::UserRole + 4, container["distro"]); // Store distro name
+        qDebug() << "Container:" << container["name"] << "Distro:" << container["distro"];
     }
 
     if (containers.isEmpty()) {
         QListWidgetItem *item = new QListWidgetItem("No containers found", containerList);
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
         item->setIcon(QIcon::fromTheme("dialog-information"));
+        qDebug() << "No containers found";
     }
 
     currentContainer.clear();
