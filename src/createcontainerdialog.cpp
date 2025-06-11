@@ -10,7 +10,7 @@ public:
     {
     }
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
     {
         painter->save();
 
@@ -26,15 +26,25 @@ public:
             painter->fillRect(opt.rect, hoverColor);
         }
 
-        // Get distro from item data
-        QString distro = index.data(Qt::UserRole + 1).toString(); // Assuming distro is stored in UserRole + 1
+        // Get icon path and distro from item data
+        QString iconPath = index.data(Qt::UserRole + 2).toString(); // Let's assume you store icon path here
+        QString distro = index.data(Qt::UserRole + 1).toString();
 
-        // Draw icon
+        // Icon drawing
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        QIcon icon = findBestIcon(distro);
-        icon.paint(painter, iconRect, Qt::AlignCenter, opt.state & QStyle::State_Selected ? QIcon::Selected : QIcon::Normal);
+        QPixmap icon;
+        if (!iconPath.isEmpty()) {
+            icon.load(iconPath); // Load from given path
+        }
+
+        if (icon.isNull()) {
+            icon.load(":/icons/tux.svg"); // Fallback icon, similar to main UI
+        }
+
+        icon = icon.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        painter->drawPixmap(iconRect, icon);
 
         // Draw text
         painter->setPen(opt.state & QStyle::State_Selected ? opt.palette.highlightedText().color() : opt.palette.text().color());
@@ -45,93 +55,12 @@ public:
         painter->restore();
     }
 
+
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size.setHeight(qMax(size.height(), 36)); // Minimum row height
         return size;
-    }
-
-private:
-    QIcon findBestIcon(const QString &distro) const
-    {
-        if (distro.isEmpty() || distro == "unknown") {
-            qDebug() << "No distro specified, using fallback icon";
-            return getFallbackIcon();
-        }
-
-        // First try the exact symbolic icon path we know exists
-        QString symbolicPath = QString("/usr/share/icons/char-white/apps/symbolic/distributor-logo-%1-symbolic.svg").arg(distro);
-        if (QFile::exists(symbolicPath)) {
-            qDebug() << "Found exact symbolic icon:" << symbolicPath;
-            return QIcon(symbolicPath);
-        }
-
-        // Try alternative naming variations for symbolic icons
-        QStringList symbolicVariations = {
-            QString("/usr/share/icons/char-white/apps/symbolic/%1-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/%1-logo-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/%1linux-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/linux-%1-symbolic.svg").arg(distro)
-        };
-
-        for (const QString &path : symbolicVariations) {
-            if (QFile::exists(path)) {
-                qDebug() << "Found symbolic icon variation:" << path;
-                return QIcon(path);
-            }
-        }
-
-        // List of possible theme icon names to try (with and without -symbolic suffix)
-        QStringList iconNames = {
-            "distributor-logo-" + distro + "-symbolic",
-            "distributor-logo-" + distro,
-            distro + "-logo-symbolic",
-            distro + "-logo",
-            distro + "-symbolic",
-            distro,
-            "linux-" + distro + "-symbolic",
-            "linux-" + distro,
-            distro + "linux-symbolic",
-            distro + "linux"
-        };
-
-        // First try theme icons
-        for (const QString &iconName : iconNames) {
-            QIcon icon = QIcon::fromTheme(iconName);
-            if (!icon.isNull()) {
-                qDebug() << "Found theme icon:" << iconName;
-                return icon;
-            }
-            qDebug() << "Theme icon not found:" << iconName;
-        }
-
-        qDebug() << "No distro-specific icon found for" << distro << "- using fallback";
-        return getFallbackIcon();
-    }
-
-    QIcon getFallbackIcon() const
-    {
-        // Try several fallback options
-        QStringList fallbacks = {
-            "distributor-logo",
-            "preferences-virtualization-container",
-            "virtualbox",
-            "docker",
-            "application-x-executable",
-            "system-run"
-        };
-
-        for (const QString &fallback : fallbacks) {
-            QIcon icon = QIcon::fromTheme(fallback);
-            if (!icon.isNull()) {
-                qDebug() << "Using fallback icon:" << fallback;
-                return icon;
-            }
-        }
-
-        qDebug() << "No fallback icons found - using default";
-        return QIcon::fromTheme("application-x-executable");
     }
 };
 
@@ -235,13 +164,16 @@ void CreateContainerDialog::refreshImages()
     for (const auto &image : images) {
         QString url = image["url"];
         QString distro = image["distro"];
+        QString iconPath = image["icon"];
 
         QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
         item->setData(Qt::UserRole, url); // Store URL in UserRole
         item->setData(Qt::UserRole + 1, distro); // Store distro in UserRole + 1
+        item->setData(Qt::UserRole + 2, iconPath); // Store icon path in UserRole + 2
         item->setToolTip(url);
     }
 }
+
 
 void CreateContainerDialog::searchImages(const QString &query)
 {
@@ -256,10 +188,13 @@ void CreateContainerDialog::searchImages(const QString &query)
     for (const auto &image : images) {
         QString url = image["url"];
         QString distro = image["distro"];
+        QString iconPath = image["icon"];
+
 
         QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
         item->setData(Qt::UserRole, url); // Store URL in UserRole
         item->setData(Qt::UserRole + 1, distro); // Store distro in UserRole + 1
+        item->setData(Qt::UserRole + 2, iconPath); // Store icon path in UserRole + 2
         item->setToolTip(url);
     }
 }
