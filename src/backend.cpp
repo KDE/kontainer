@@ -24,14 +24,29 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
     // Normalize separators
     image.replace('-', '_');
     image.replace('.', '_');
+    image.replace(':', '_');
 
-    // Prefer strong prefix matches in any path segment
+    // Check for version numbers that might confuse the matching
+    QRegularExpression versionPattern("\\d{2}\\.\\d{2}");
+    image.remove(versionPattern);
+
+    // Check for common patterns
     for (const QString &distro : DISTROS) {
-        QRegularExpression rx("(^|/)" + QRegularExpression::escape(distro) + "([:/]|_)");
+        QRegularExpression rx("(^|/|_)" + QRegularExpression::escape(distro) + "([:/_]|$)");
         if (rx.match(image).hasMatch()) {
             return distro;
         }
     }
+
+    // Check for toolbox variants
+    if (image.contains("toolbox")) {
+        for (const QString &distro : DISTROS) {
+            if (image.contains(distro)) {
+                return distro;
+            }
+        }
+    }
+
 
     // Fallback: check for substring
     for (const QString &distro : DISTROS) {
@@ -83,12 +98,12 @@ QList<QMap<QString, QString>> Backend::getContainers() const
         container["distro"] = parseDistroFromImage(container["image"]);
         container["status"] = parts[headers.indexOf("STATUS")];
         container["id"] = parts[headers.indexOf("ID")];
+        container["icon"] = getDistroIcon(container["distro"]);
 
         containers << container;
     }
     return containers;
 }
-
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
     QStringList args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
@@ -234,10 +249,31 @@ QList<QMap<QString, QString>> Backend::getAvailableImages()
         image["url"] = trimmed;
         image["name"] = trimmed.split('/').last();
         image["distro"] = parseDistroFromImage(trimmed);
+        image["icon"] = getDistroIcon(image["distro"]);
         images.append(image);
     }
 
     return images;
+}
+
+QString Backend::getDistroIcon(const QString &distroName) const
+{
+    QString lowerDistro = distroName.toLower();
+
+    // First try exact match
+    if (distroIconMap.contains(lowerDistro)) {
+        return ":/icons/" + distroIconMap[lowerDistro];
+    }
+
+    // Then try partial matches
+    for (const QString &key : distroIconMap.keys()) {
+        if (lowerDistro.contains(key)) {
+            return ":/icons/" + distroIconMap[key];
+        }
+    }
+
+    // Default icon (tux)
+    return ":/icons/tux.svg";
 }
 
 QList<QMap<QString, QString>> Backend::searchImages(const QString &query)

@@ -37,6 +37,10 @@ set(HEADERS
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
+file(GLOB ICON_FILES "res/icons/*.svg")
+target_sources(${PROJECT_NAME} PRIVATE ${ICON_FILES})
+
+
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
     Qt6::Widgets
