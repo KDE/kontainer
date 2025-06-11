@@ -2,7 +2,6 @@
 #include "backend.h"
 
 // Custom item delegate for image list
-// Custom item delegate for image list
 class ImageListItemDelegate : public QStyledItemDelegate
 {
 public:
