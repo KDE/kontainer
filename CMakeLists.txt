@@ -35,11 +35,11 @@ set(HEADERS
     include/terminalutils.h
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+qt_add_resources(RESOURCES
+    resources.qrc
+)
 
-file(GLOB ICON_FILES "res/icons/*.svg")
-target_sources(${PROJECT_NAME} PRIVATE ${ICON_FILES})
-
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core

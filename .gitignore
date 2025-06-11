@@ -11,3 +11,7 @@ build/
 CMakeLists.txt.user
 .cache/
 .clang-format
+resources.qrc.depends
+qrc_resources.cpp
+__
+

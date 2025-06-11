@@ -20,7 +20,7 @@ public:
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        // Draw background
+        // Draw background (keep existing hover/selection logic)
         if (opt.state & QStyle::State_Selected) {
             painter->fillRect(opt.rect, opt.palette.highlight());
         } else if (opt.state & QStyle::State_MouseOver) {
@@ -32,22 +32,31 @@ public:
         // Get container data
         QString image = index.data(Qt::UserRole + 3).toString();
         QString distro = index.data(Qt::UserRole + 4).toString();
+        QString iconPath = index.data(Qt::UserRole + 5).toString();
 
-        // Draw icon with fallback logic
+        // Draw icon using shipped resources
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
-        QIcon icon = findBestIcon(distro);
-        icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal);
+        QPixmap icon;
+        if (!iconPath.isEmpty()) {
+            icon.load(iconPath); // Will load from resources (":/icons/...")
+        }
 
-        // Draw container name with accent color
+        if (icon.isNull()) {
+            icon.load(":/icons/tux.svg"); // Fallback icon
+        }
+
+        icon = icon.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        painter->drawPixmap(iconRect, icon);
+
+        // Keep existing text drawing logic
         painter->setPen(opt.state & QStyle::State_Selected ? opt.palette.highlightedText().color() : opt.palette.text().color());
 
         QRect nameRect = opt.rect.adjusted(iconSize + 12, 0, -30, -opt.rect.height() / 2);
         QString elidedName = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, nameRect.width());
         painter->drawText(nameRect, Qt::AlignLeft | Qt::AlignVCenter, elidedName);
 
-        // Draw image name below
         QFont smallFont = opt.font;
         smallFont.setPointSize(smallFont.pointSize() - 2);
         painter->setFont(smallFont);
@@ -68,87 +77,6 @@ public:
         QSize size = QStyledItemDelegate::sizeHint(option, index);
         size.setHeight(qMax(size.height(), 48));
         return size;
-    }
-
-private:
-    QIcon findBestIcon(const QString &distro) const
-    {
-        if (distro.isEmpty() || distro == "unknown") {
-            qDebug() << "No distro specified, using fallback icon";
-            return getFallbackIcon();
-        }
-
-        // First try the exact symbolic icon path we know exists
-        QString symbolicPath = QString("/usr/share/icons/char-white/apps/symbolic/distributor-logo-%1-symbolic.svg").arg(distro);
-        if (QFile::exists(symbolicPath)) {
-            qDebug() << "Found exact symbolic icon:" << symbolicPath;
-            return QIcon(symbolicPath);
-        }
-
-        // Try alternative naming variations for symbolic icons
-        QStringList symbolicVariations = {
-            QString("/usr/share/icons/char-white/apps/symbolic/%1-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/%1-logo-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/%1linux-symbolic.svg").arg(distro),
-            QString("/usr/share/icons/char-white/apps/symbolic/linux-%1-symbolic.svg").arg(distro)
-        };
-
-        for (const QString &path : symbolicVariations) {
-            if (QFile::exists(path)) {
-                qDebug() << "Found symbolic icon variation:" << path;
-                return QIcon(path);
-            }
-        }
-
-        // List of possible theme icon names to try (with and without -symbolic suffix)
-        QStringList iconNames = {
-            "distributor-logo-" + distro + "-symbolic",
-            "distributor-logo-" + distro,
-            distro + "-logo-symbolic",
-            distro + "-logo",
-            distro + "-symbolic",
-            distro,
-            "linux-" + distro + "-symbolic",
-            "linux-" + distro,
-            distro + "linux-symbolic",
-            distro + "linux"
-        };
-
-        // First try theme icons
-        for (const QString &iconName : iconNames) {
-            QIcon icon = QIcon::fromTheme(iconName);
-            if (!icon.isNull()) {
-                qDebug() << "Found theme icon:" << iconName;
-                return icon;
-            }
-            qDebug() << "Theme icon not found:" << iconName;
-        }
-
-        qDebug() << "No distro-specific icon found for" << distro << "- using fallback";
-        return getFallbackIcon();
-    }
-
-    QIcon getFallbackIcon() const
-    {
-        // Try several fallback options
-        QStringList fallbacks = {
-            "preferences-virtualization-container",
-            "virtualbox",
-            "docker",
-            "application-x-executable",
-            "system-run"
-        };
-
-        for (const QString &fallback : fallbacks) {
-            QIcon icon = QIcon::fromTheme(fallback);
-            if (!icon.isNull()) {
-                qDebug() << "Using fallback icon:" << fallback;
-                return icon;
-            }
-        }
-
-        qDebug() << "No fallback icons found - using default";
-        return QIcon::fromTheme("application-x-executable");
     }
 };
 
@@ -390,13 +318,19 @@ void MainWindow::refreshContainers()
         QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
         item->setData(Qt::UserRole + 3, container["image"]); // Store image name
         item->setData(Qt::UserRole + 4, container["distro"]); // Store distro name
-        qDebug() << "Container:" << container["name"] << "Distro:" << container["distro"];
+        item->setData(Qt::UserRole + 5, container["icon"]); // Store icon path from backend
+
+        qDebug() << "Container:" << container["name"]
+        << "Distro:" << container["distro"]
+        << "Icon:" << container["icon"];
     }
 
     if (containers.isEmpty()) {
         QListWidgetItem *item = new QListWidgetItem("No containers found", containerList);
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
-        item->setIcon(QIcon::fromTheme("dialog-information"));
+        // Use shipped fallback icon
+        QPixmap fallback(":/icons/tux.svg");
+        item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
         qDebug() << "No containers found";
     }
 

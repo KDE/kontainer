@@ -104,6 +104,7 @@ QList<QMap<QString, QString>> Backend::getContainers() const
     }
     return containers;
 }
+
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
     QStringList args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
