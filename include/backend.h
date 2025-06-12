@@ -75,7 +75,7 @@ private:
                                             {"neon", "kde-neon.svg"},
                                             {"neurodebian", "debian.svg"},
                                             {"opensuse", "opensuse.svg"},
-                                            //{"oracle", "oracle.svg"},
+                                            {"oracle", "oracle.svg"},
                                             {"redhat", "redhat.svg"},
                                             {"rhel", "redhat.svg"},
                                             {"rocky", "rocky-linux.svg"},

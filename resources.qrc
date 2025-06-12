@@ -43,6 +43,7 @@
     <file alias="icons/nixos.svg">res/icons/nixos.svg</file>
     <file alias="icons/nobara.svg">res/icons/nobara.svg</file>
     <file alias="icons/opensuse.svg">res/icons/opensuse.svg</file>
+    <file alias="icons/oracle.svg">res/icons/oracle.svg</file>
     <file alias="icons/parabola.svg">res/icons/parabola.svg</file>
     <file alias="icons/redhat.svg">res/icons/redhat.svg</file>
     <file alias="icons/rocky-linux.svg">res/icons/rocky-linux.svg</file>
