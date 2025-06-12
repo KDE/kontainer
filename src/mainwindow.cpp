@@ -9,7 +9,7 @@ class ContainerItemDelegate : public QStyledItemDelegate
 {
 public:
     explicit ContainerItemDelegate(QObject *parent = nullptr)
-    : QStyledItemDelegate(parent)
+        : QStyledItemDelegate(parent)
     {
     }
 
@@ -320,9 +320,7 @@ void MainWindow::refreshContainers()
         item->setData(Qt::UserRole + 4, container["distro"]); // Store distro name
         item->setData(Qt::UserRole + 5, container["icon"]); // Store icon path from backend
 
-        qDebug() << "Container:" << container["name"]
-        << "Distro:" << container["distro"]
-        << "Icon:" << container["icon"];
+        qDebug() << "Container:" << container["name"] << "Distro:" << container["distro"] << "Icon:" << container["icon"];
     }
 
     if (containers.isEmpty()) {

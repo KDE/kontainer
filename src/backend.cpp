@@ -47,7 +47,6 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
         }
     }
 
-
     // Fallback: check for substring
     for (const QString &distro : DISTROS) {
         if (image.contains(distro)) {
@@ -57,7 +56,6 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 
     return "unknown";
 }
-
 
 QString Backend::getContainerDistro(const QString &containerName) const
 {

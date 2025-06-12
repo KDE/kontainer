@@ -6,7 +6,7 @@ class ImageListItemDelegate : public QStyledItemDelegate
 {
 public:
     explicit ImageListItemDelegate(QObject *parent = nullptr)
-    : QStyledItemDelegate(parent)
+        : QStyledItemDelegate(parent)
     {
     }
 
@@ -54,7 +54,6 @@ public:
 
         painter->restore();
     }
-
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
@@ -174,7 +173,6 @@ void CreateContainerDialog::refreshImages()
     }
 }
 
-
 void CreateContainerDialog::searchImages(const QString &query)
 {
     if (query.isEmpty()) {
@@ -189,7 +187,6 @@ void CreateContainerDialog::searchImages(const QString &query)
         QString url = image["url"];
         QString distro = image["distro"];
         QString iconPath = image["icon"];
-
 
         QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
         item->setData(Qt::UserRole, url); // Store URL in UserRole
