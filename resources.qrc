@@ -3,19 +3,10 @@
     <file alias="icons/almalinux.svg">res/icons/almalinux.svg</file>
     <file alias="icons/alpine.svg">res/icons/alpine.svg</file>
     <file alias="icons/aosc.svg">res/icons/aosc.svg</file>
-    <file alias="icons/apple.svg">res/icons/apple.svg</file>
-    <file alias="icons/archcraft.svg">res/icons/archcraft.svg</file>
-    <file alias="icons/archlabs.svg">res/icons/archlabs.svg</file>
     <file alias="icons/archlinux.svg">res/icons/archlinux.svg</file>
-    <file alias="icons/arcolinux.svg">res/icons/arcolinux.svg</file>
-    <file alias="icons/arduino.svg">res/icons/arduino.svg</file>
-    <file alias="icons/artix.svg">res/icons/artix.svg</file>
-    <file alias="icons/biglinux.svg">res/icons/biglinux.svg</file>
     <file alias="icons/blackarchlinux.svg">res/icons/blackarchlinux.svg</file>
     <file alias="icons/centos.svg">res/icons/centos.svg</file>
-    <file alias="icons/cinnamon.svg">res/icons/cinnamon.svg</file>
     <file alias="icons/clearlinux.svg">res/icons/clearlinux.svg</file>
-    <file alias="icons/codeberg.svg">res/icons/codeberg.svg</file>
     <file alias="icons/coreos.svg">res/icons/coreos.svg</file>
     <file alias="icons/crystal.svg">res/icons/crystal.svg</file>
     <file alias="icons/debian.svg">res/icons/debian.svg</file>
@@ -23,7 +14,6 @@
     <file alias="icons/devuan.svg">res/icons/devuan.svg</file>
     <file alias="icons/elementary.svg">res/icons/elementary.svg</file>
     <file alias="icons/endeavour.svg">res/icons/endeavour.svg</file>
-    <file alias="icons/fedora-inverse.svg">res/icons/fedora-inverse.svg</file>
     <file alias="icons/fedora.svg">res/icons/fedora.svg</file>
     <file alias="icons/garuda.svg">res/icons/garuda.svg</file>
     <file alias="icons/gentoo.svg">res/icons/gentoo.svg</file>
@@ -35,7 +25,6 @@
     <file alias="icons/kubuntu-inverse.svg">res/icons/kubuntu-inverse.svg</file>
     <file alias="icons/kubuntu.svg">res/icons/kubuntu.svg</file>
     <file alias="icons/leap.svg">res/icons/leap.svg</file>
-    <file alias="icons/linuxmint-inverse.svg">res/icons/linuxmint-inverse.svg</file>
     <file alias="icons/linuxmint.svg">res/icons/linuxmint.svg</file>
     <file alias="icons/locos.svg">res/icons/locos.svg</file>
     <file alias="icons/mageia.svg">res/icons/mageia.svg</file>
