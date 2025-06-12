@@ -14,4 +14,4 @@ CMakeLists.txt.user
 resources.qrc.depends
 qrc_resources.cpp
 __
-
+res/icons/*.qrc.depends

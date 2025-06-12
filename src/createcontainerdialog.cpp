@@ -27,7 +27,7 @@ public:
         }
 
         // Get icon path and distro from item data
-        QString iconPath = index.data(Qt::UserRole + 2).toString(); // Let's assume you store icon path here
+        QString iconPath = index.data(Qt::UserRole + 2).toString();
         QString distro = index.data(Qt::UserRole + 1).toString();
 
         // Icon drawing
