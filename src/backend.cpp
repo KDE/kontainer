@@ -21,33 +21,45 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString image = imageUrl.toLower();
 
-    // Normalize separators
-    image.replace('-', '_');
-    image.replace('.', '_');
-    image.replace(':', '_');
+    // Ordered list of patterns to try (most specific to most generic)
+    QVector<QPair<QString, QString>> patterns = {
+        // 1. Explicit toolbox patterns (ubi9/toolbox, ubuntu-toolbox, etc.)
+        {"(^|/)([a-z]+)-?toolbox(:|$)", "$2"}, // ubuntu-toolbox -> ubuntu
+        {"(^|/)ubi([0-9]+)/toolbox(:|$)", "rhel"}, // ubi9/toolbox -> rhel
+        {"(^|/)([a-z]+)/toolbox(:|$)", "$2"}, // fedora/toolbox -> fedora
 
-    // Check for version numbers that might confuse the matching
-    QRegularExpression versionPattern("\\d{2}\\.\\d{2}");
-    image.remove(versionPattern);
+        // 2. Versioned distro names (ubuntu:22.04, rockylinux:9)
+        {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"}, // ubuntu22.04 -> ubuntu
 
-    // Check for common patterns
-    for (const QString &distro : DISTROS) {
-        QRegularExpression rx("(^|/|_)" + QRegularExpression::escape(distro) + "([:/_]|$)");
-        if (rx.match(image).hasMatch()) {
-            return distro;
-        }
-    }
+        // 3. Standard distro names in path
+        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
 
-    // Check for toolbox variants
-    if (image.contains("toolbox")) {
-        for (const QString &distro : DISTROS) {
-            if (image.contains(distro)) {
-                return distro;
+        // 4. Common abbreviations and aliases
+        {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
+        {"(^|/)ubi([0-9]?)(:|/|$)", "rhel"},
+        {"(^|/)nd[0-9]+(:|/|$)", "neurodebian"},
+
+        // 5. Substring fallback (least specific)
+        {"([a-z]+)(-|_)?(linux|os)", "$1"} // something-linux -> something
+    };
+
+    // Try each pattern in order
+    for (const auto &[pattern, replacement] : patterns) {
+        QRegularExpression rx(pattern);
+        QRegularExpressionMatch match = rx.match(image);
+        if (match.hasMatch()) {
+            QString matchedDistro = match.captured(replacement == "$2" ? 2 : 1);
+
+            // Validate the matched distro against our known list
+            for (const QString &distro : DISTROS) {
+                if (matchedDistro.contains(distro)) {
+                    return distro;
+                }
             }
         }
     }
 
-    // Fallback: check for substring
+    // Final fallback: check for any distro name as substring
     for (const QString &distro : DISTROS) {
         if (image.contains(distro)) {
             return distro;
