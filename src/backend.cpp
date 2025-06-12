@@ -21,6 +21,18 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString image = imageUrl.toLower();
 
+    // First check hardcoded URL mappings (exact matches)
+    static const QMap<QString, QString> hardcodedMappings = {{"ghcr.io/vanilla-os/vso:main", "vso"},
+                                                             {"docker.io/blackarchlinux/blackarch:latest", "blackarch"},
+                                                             {"cgr.dev/chainguard/wolfi-base", "wolfi"}};
+
+    // Check for exact matches first
+    for (auto it = hardcodedMappings.constBegin(); it != hardcodedMappings.constEnd(); ++it) {
+        if (image.startsWith(it.key())) {
+            return it.value();
+        }
+    }
+
     // Ordered list of patterns to try (most specific to most generic)
     QVector<QPair<QString, QString>> patterns = {
         // 1. Explicit toolbox patterns (ubi9/toolbox, ubuntu-toolbox, etc.)
