@@ -80,11 +80,11 @@ private:
                                             {"rhel", "redhat.svg"},
                                             {"rocky", "rocky-linux.svg"},
                                             {"slackware", "slackware.svg"},
-                                            //{"steamos", "steamos.svg"},
+                                            {"steamos", "steamos.svg"},
                                             {"ubuntu", "ubuntu.svg"},
                                             {"vanilla", "vanilla.svg"},
                                             {"void", "void.svg"},
-                                            //{"wolfi", "wolfi.svg"},
+                                            {"wolfi", "wolfi.svg"},
 
                                             // Variants and derivatives
                                             {"bazzite", "fedora.svg"},
