@@ -71,7 +71,7 @@ private:
                                             {"gentoo", "gentoo.svg"},
                                             {"kali", "kali-linux.svg"},
                                             {"linuxmint", "linuxmint.svg"},
-                                            //{"mageia", "mageia.svg"},
+                                            {"mageia", "mageia.svg"},
                                             {"neon", "kde-neon.svg"},
                                             {"neurodebian", "debian.svg"},
                                             {"opensuse", "opensuse.svg"},

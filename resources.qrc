@@ -36,6 +36,7 @@
     <file alias="icons/linuxmint-inverse.svg">res/icons/linuxmint-inverse.svg</file>
     <file alias="icons/linuxmint.svg">res/icons/linuxmint.svg</file>
     <file alias="icons/locos.svg">res/icons/locos.svg</file>
+    <file alias="icons/mageia.svg">res/icons/mageia.svg</file>
     <file alias="icons/mandriva.svg">res/icons/mandriva.svg</file>
     <file alias="icons/manjaro.svg">res/icons/manjaro.svg</file>
     <file alias="icons/mate.svg">res/icons/mate.svg</file>
