@@ -102,7 +102,7 @@ private:
 
                                             // Cloud/container specific
                                             {"chainguard", "tux.svg"},
-                                            {"ublue", "tux.svg"}, // Could use fedora.svg or create custom
+                                            {"ublue", "ublue.svg"}, // Could use fedora.svg or create custom
                                             {"crystal", "crystal.svg"},
 
                                             // Default fallbacks

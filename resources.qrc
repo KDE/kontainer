@@ -53,6 +53,7 @@
     <file alias="icons/slackware.svg">res/icons/slackware.svg</file>
     <file alias="icons/steamos.svg">res/icons/steamos.svg</file>
     <file alias="icons/tux.svg">res/icons/tux.svg</file>
+    <file alias="icons/ublue.svg">res/icons/ublue.svg</file>
     <file alias="icons/ubuntu.svg">res/icons/ubuntu.svg</file>
     <file alias="icons/void.svg">res/icons/void.svg</file>
     <file alias="icons/wolfi.svg">res/icons/wolfi.svg</file>
