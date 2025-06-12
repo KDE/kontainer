@@ -64,7 +64,7 @@ private:
                                             {"arch", "archlinux.svg"},
                                             {"blackarch", "archlinux.svg"},
                                             {"centos", "centos.svg"},
-                                            //{"clearlinux", "clearlinux.svg"},
+                                            {"clearlinux", "clearlinux.svg"},
                                             {"debian", "debian.svg"},
                                             {"deepin", "deepin.svg"},
                                             {"fedora", "fedora.svg"},
