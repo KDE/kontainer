@@ -13,9 +13,10 @@ public:
         QString lowerImage = image.toLower();
 
         // Define package type mappings
-        static const QMap<QString, QStringList> distroMappings = {{"deb", {"debian", "ubuntu", "mint", "vso", "popos", "kali"}},
-                                                                  {"rpm", {"fedora", "rhel", "centos", "opensuse", "suse", "rockylinux"}},
-                                                                  {"arch", {"arch", "manjaro", "endeavouros", "artix"}}};
+        static const QMap<QString, QStringList> distroMappings = {
+            {"deb", {"debian", "ubuntu", "mint", "vso", "popos", "kali", "neon", "nd\\d+"}},
+            {"rpm", {"fedora", "rhel", "centos", "opensuse", "suse", "rockylinux", "ubi\\d*", "almalinux", "mageia"}},
+            {"arch", {"arch", "blackarch", "archlinux", "arch-toolbox", "arch-distrobox", "crystal"}}};
 
         // Check each package type
         for (auto it = distroMappings.constBegin(); it != distroMappings.constEnd(); ++it) {
