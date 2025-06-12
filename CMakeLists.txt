@@ -10,6 +10,8 @@ set(CMAKE_AUTOUIC ON)
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 include(KDEClangFormat)
+include(KDEGitCommitHooks)
+kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Concurrent)
 
