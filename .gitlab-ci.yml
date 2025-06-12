@@ -1,0 +1,17 @@
+stages:
+  - build
+
+build_project:
+  stage: build
+  image: archlinux:latest
+  before_script:
+    - pacman -Sy --noconfirm base-devel cmake git qt6-base qt6-tools extra-cmake-modules
+  script:
+    - mkdir build
+    - cd build
+    - cmake ..
+    - make -j$(nproc)
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 hour
