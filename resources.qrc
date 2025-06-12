@@ -11,6 +11,7 @@
     <file alias="icons/arduino.svg">res/icons/arduino.svg</file>
     <file alias="icons/artix.svg">res/icons/artix.svg</file>
     <file alias="icons/biglinux.svg">res/icons/biglinux.svg</file>
+    <file alias="icons/blackarchlinux.svg">res/icons/blackarchlinux.svg</file>
     <file alias="icons/centos.svg">res/icons/centos.svg</file>
     <file alias="icons/cinnamon.svg">res/icons/cinnamon.svg</file>
     <file alias="icons/clearlinux.svg">res/icons/clearlinux.svg</file>

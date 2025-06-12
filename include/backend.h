@@ -62,7 +62,7 @@ private:
                                             {"alpine", "alpine.svg"},
                                             //{"amazon", "amazon.svg"},
                                             {"arch", "archlinux.svg"},
-                                            {"blackarch", "archlinux.svg"},
+                                            {"blackarch", "blackarchlinux.svg"},
                                             {"centos", "centos.svg"},
                                             {"clearlinux", "clearlinux.svg"},
                                             {"debian", "debian.svg"},
