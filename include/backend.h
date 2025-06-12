@@ -51,16 +51,17 @@ private:
     QString parseDistroFromImage(const QString &imageUrl) const;
     QString getDistroIcon(const QString &distroName) const;
 
-    const QStringList DISTROS = {"alma",       "alpine", "amazon",     "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",   "bullseye",
-                                 "buster",     "centos", "chainguard", "clearlinux", "crystal",   "debian",      "deepin",   "fedora",     "gentoo",
-                                 "kali",       "leap",   "linuxmint",  "mageia",     "neon",      "neurodebian", "opensuse", "oracle",     "plasma",
-                                 "powershell", "redhat", "rhel",       "rocky",      "slackware", "steamos",     "toolbox",  "tumbleweed", "ubi",
-                                 "ublue",      "ubuntu", "vanilla",    "void",       "wheezy",    "wolfi"};
+    const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
+                                 "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",
+                                 "gentoo",   "kali",       "leap",   "linuxmint",   "mageia",     "neon",      "neurodebian", "opensuse", "oracle",
+                                 "plasma",   "powershell", "redhat", "rhel",        "rocky",      "slackware", "steamos",     "toolbox",  "tumbleweed",
+                                 "ubi",      "ublue",      "ubuntu", "vanilla",     "vso",        "void",      "wheezy",      "wolfi"};
 
     QMap<QString, QString> distroIconMap = {// Official distros
                                             {"alma", "almalinux.svg"},
                                             {"alpine", "alpine.svg"},
-                                            //{"amazon", "amazon.svg"},
+                                            {"amazon", "amazonlinux.svg"},
+                                            {"amazonlinux", "amazonlinux.svg"},
                                             {"arch", "archlinux.svg"},
                                             {"blackarch", "blackarchlinux.svg"},
                                             {"centos", "centos.svg"},
@@ -83,6 +84,7 @@ private:
                                             {"steamos", "steamos.svg"},
                                             {"ubuntu", "ubuntu.svg"},
                                             {"vanilla", "vanilla.svg"},
+                                            {"vso", "vanilla.svg"},
                                             {"void", "void.svg"},
                                             {"wolfi", "wolfi.svg"},
 

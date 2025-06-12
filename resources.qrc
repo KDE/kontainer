@@ -2,6 +2,7 @@
 <qresource prefix="/">
     <file alias="icons/almalinux.svg">res/icons/almalinux.svg</file>
     <file alias="icons/alpine.svg">res/icons/alpine.svg</file>
+    <file alias="icons/amazonlinux.svg">res/icons/amazonlinux.svg</file>
     <file alias="icons/archlinux.svg">res/icons/archlinux.svg</file>
     <file alias="icons/blackarchlinux.svg">res/icons/blackarchlinux.svg</file>
     <file alias="icons/centos.svg">res/icons/centos.svg</file>
