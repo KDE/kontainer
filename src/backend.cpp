@@ -5,12 +5,23 @@
 Backend::Backend(QObject *parent)
     : QObject(parent)
 {
+    // Check if we're running as a Flatpak
+    m_isFlatpak = QFile::exists("/.flatpak-info");
 }
 
 QString Backend::runCommand(const QStringList &command) const
 {
     QProcess process;
-    process.start(command[0], command.mid(1));
+    QStringList actualCommand;
+
+    if (m_isFlatpak) {
+        // Prepend with flatpak-spawn if running as Flatpak
+        actualCommand << "flatpak-spawn" << "--host" << command;
+    } else {
+        actualCommand = command;
+    }
+
+    process.start(actualCommand[0], actualCommand.mid(1));
     if (!process.waitForFinished(60000)) {
         return "Error: Command timed out";
     }
@@ -169,14 +180,30 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
         executable = "flatpak";
     }
 
-    if (!QStandardPaths::findExecutable(executable).isEmpty()) {
-        bool success = QProcess::startDetached(executable, args);
-        if (!success) {
-            qWarning() << "Failed to start terminal" << executable << "with args" << args;
-            QProcess::startDetached("xterm", {"-e", command});
+    if (m_isFlatpak) {
+        // If we're running as Flatpak, we need to use flatpak-spawn to launch the terminal
+        QStringList flatpakArgs = {"flatpak-spawn", "--host", executable};
+        flatpakArgs.append(args);
+
+        if (!QStandardPaths::findExecutable("flatpak-spawn").isEmpty()) {
+            bool success = QProcess::startDetached("flatpak-spawn", flatpakArgs.mid(1));
+            if (!success) {
+                qWarning() << "Failed to start terminal" << executable << "with args" << args;
+                QProcess::startDetached("flatpak-spawn", {"--host", "xterm", "-e", command});
+            }
+        } else {
+            QProcess::startDetached("flatpak-spawn", {"--host", "xterm", "-e", command});
         }
     } else {
-        QProcess::startDetached("xterm", {"-e", command});
+        if (!QStandardPaths::findExecutable(executable).isEmpty()) {
+            bool success = QProcess::startDetached(executable, args);
+            if (!success) {
+                qWarning() << "Failed to start terminal" << executable << "with args" << args;
+                QProcess::startDetached("xterm", {"-e", command});
+            }
+        } else {
+            QProcess::startDetached("xterm", {"-e", command});
+        }
     }
 }
 
@@ -192,7 +219,11 @@ void Backend::assembleContainer(const QString &iniFile)
         process->deleteLater();
     });
 
-    process->start("distrobox", {"assemble", "create", "--file", iniFile});
+    if (m_isFlatpak) {
+        process->start("flatpak-spawn", {"--host", "distrobox", "assemble", "create", "--file", iniFile});
+    } else {
+        process->start("distrobox", {"assemble", "create", "--file", iniFile});
+    }
 }
 
 void Backend::enterContainer(const QString &name, const QString &terminal)

@@ -50,6 +50,7 @@ private:
     QString runCommand(const QStringList &command) const;
     QString parseDistroFromImage(const QString &imageUrl) const;
     QString getDistroIcon(const QString &distroName) const;
+    bool m_isFlatpak = false;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",
