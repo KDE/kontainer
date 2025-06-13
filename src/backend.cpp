@@ -185,7 +185,12 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
         QStringList flatpakArgs = {"flatpak-spawn", "--host", executable};
         flatpakArgs.append(args);
 
-        if (!QStandardPaths::findExecutable("flatpak-spawn").isEmpty()) {
+        // Check if terminal exists on host using flatpak-spawn --host which
+        QProcess whichProcess;
+        whichProcess.start("flatpak-spawn", {"--host", "which", executable});
+        whichProcess.waitForFinished();
+
+        if (whichProcess.exitCode() == 0) {
             bool success = QProcess::startDetached("flatpak-spawn", flatpakArgs.mid(1));
             if (!success) {
                 qWarning() << "Failed to start terminal" << executable << "with args" << args;
