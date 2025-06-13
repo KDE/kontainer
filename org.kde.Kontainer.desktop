@@ -8,4 +8,3 @@ Categories=System;Utility;
 StartupNotify=true
 Terminal=false
 X-Flatpak=org.kde.Kontainer
-DBusActivatable=true
