@@ -11,8 +11,9 @@ Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application no
 - ✅ **Features:** Parity with BoxBuddy (create, delete, enter, upgrade, export/unexport apps)  
 - ✅ **Refactoring:** Planned to improve modularity and maintainability    
 - ✅ **Configuration system:** Planned — support for dynamic user preferences  
+- ✅ **Packaging:** Flatpak support
 - ⏳ **i18n:** Ongoing work  
-- ⏳ **Packaging:** Flatpak support planned
+
 
 ## Features
 
@@ -24,7 +25,6 @@ Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application no
 - ✅ Upgrade all containers  
 - ✅ Manage apps via host or container context  
 - ⏳ KDE-style full i18n (using `KLocalizedString`)  
-- ❌ No automatic Flatpak manifest generation (yet)
 
 ## Goals
 
@@ -41,8 +41,8 @@ Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application no
 
 ## Build Instructions
 
-1. Ensure Qt 6.9+ is installed  
-2. Clone and enter the project directory  
+1. Ensure Qt 6.9+ is installed
+2. Clone and enter the project directory
 3. Build the project:
 
 ```bash
@@ -51,6 +51,30 @@ make
 ```
 
 4. This will build the project completely and produce the executable.
+
+## Installation
+
+### 🟢 Recommended: Flatpak
+
+You can install Kontainer using Flatpak for an isolated and consistent environment:
+
+```bash
+wget https://invent.kde.org/silverhadch/k-box/-/raw/master/kontainer.flatpak.yaml
+flatpak install org.kde.Sdk//6.9
+flatpak-builder --force-clean build-dir kontainer.flatpak.yaml --user --install
+```
+
+This will install Kontainer as a user Flatpak and ensure it runs with the correct dependencies and KDE integration.
+
+### 🟡 Alternative: AUR (Arch Linux)
+
+If you're on Arch Linux or a derivative, you can also install Kontainer from the AUR:
+
+```bash
+yay -S kontainer-git
+```
+
+> **Note:** While the AUR package works, Flatpak is the **recommended method** for the most consistent and sandboxed setup.
 
 ## License
 
