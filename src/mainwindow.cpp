@@ -224,32 +224,74 @@ void MainWindow::setupUI()
     QComboBox *terminalSelector = new QComboBox(toolBar);
     auto terminalInfoMap = getTerminalInfoMap();
 
-    // Check for regular terminals
+    // Check for available terminals
+    bool isFlatpakEnv = QFile::exists("/.flatpak-info");
+    QStringList availableTerminals;
+
+    // First check regular terminals
     for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
         if (!isFlatpakTerminal(term)) {
-            if (!QStandardPaths::findExecutable(term).isEmpty()) {
+            bool terminalAvailable = false;
+
+            if (isFlatpakEnv) {
+                // Inside Flatpak, use flatpak-spawn --host which
+                QProcess whichProcess;
+                whichProcess.start("flatpak-spawn", {"--host", "which", term});
+                whichProcess.waitForFinished();
+                terminalAvailable = (whichProcess.exitCode() == 0);
+            } else {
+                // Outside Flatpak, use standard executable check
+                terminalAvailable = !QStandardPaths::findExecutable(term).isEmpty();
+            }
+
+            if (terminalAvailable) {
+                availableTerminals.append(term);
                 QIcon icon = QIcon::fromTheme(info.icon);
                 terminalSelector->addItem(icon, term);
             }
         }
     }
 
-    // Check for Flatpak terminals
-    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+    // Then check Flatpak terminals (only if we're not inside Flatpak)
+    if (!isFlatpakEnv) {
+        for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+            if (isFlatpakTerminal(term)) {
+                QProcess process;
+                process.start("flatpak", {"list", "--app", "--columns=application"});
+                if (process.waitForFinished() && process.readAllStandardOutput().contains(term.toUtf8())) {
+                    availableTerminals.append(term);
+                    QIcon icon = QIcon::fromTheme(info.icon);
+                    terminalSelector->addItem(icon, term);
+                }
+            }
+        }
+    }
+
+    // Add separator if we have both types of terminals
+    bool hasRegular = false;
+    bool hasFlatpak = false;
+    for (const QString &term : availableTerminals) {
         if (isFlatpakTerminal(term)) {
-            QProcess process;
-            process.start("flatpak", {"list", "--app", "--columns=application"});
-            if (process.waitForFinished() && process.readAllStandardOutput().contains(term.toUtf8())) {
-                QIcon icon = QIcon::fromTheme(info.icon);
-                terminalSelector->addItem(icon, term);
-            }
+            hasFlatpak = true;
+        } else {
+            hasRegular = true;
         }
+        if (hasRegular && hasFlatpak)
+            break;
     }
 
-    // Add separator if we have both types
-    if (terminalSelector->count() > 0
-        && (terminalSelector->findText("org.") != -1 || terminalSelector->findText("com.") != -1 || terminalSelector->findText("app.") != -1)) {
-        terminalSelector->insertSeparator(terminalSelector->count());
+    if (hasRegular && hasFlatpak) {
+        // Find the first flatpak terminal index
+        int firstFlatpakIndex = -1;
+        for (int i = 0; i < terminalSelector->count(); ++i) {
+            if (isFlatpakTerminal(terminalSelector->itemText(i))) {
+                firstFlatpakIndex = i;
+                break;
+            }
+        }
+        if (firstFlatpakIndex != -1) {
+            terminalSelector->insertSeparator(firstFlatpakIndex);
+        }
     }
 
     // Set current terminal to saved preference or first available
