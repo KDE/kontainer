@@ -1,11 +1,11 @@
 [Desktop Entry]
 Name=Kontainer
 Comment=Manage Distrobox containers with a Qt GUI
-Exec=flatpak run org.kde.Kontainer
+Exec=/app/bin/Kontainer
 Icon=preferences-virtualization-container
 Type=Application
 Categories=System;Utility;
 StartupNotify=true
 Terminal=false
-X-Flatpak=org.kde.kontainer
+X-Flatpak=org.kde.Kontainer
 DBusActivatable=true
