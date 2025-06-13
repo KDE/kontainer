@@ -232,7 +232,7 @@ void CreateContainerDialog::startContainerCreation()
     connect(m_createProcess, &QProcess::readyRead, this, &CreateContainerDialog::handleReadyRead);
     connect(m_createProcess, &QProcess::errorOccurred, this, &CreateContainerDialog::handleErrorOccurred);
 
-    // Build command
+    // Build command arguments
     QStringList args = {"create", "-n", name, "-i", image, "-Y"};
     if (init) {
         args << "--init" << "--additional-packages" << "systemd";
@@ -246,8 +246,22 @@ void CreateContainerDialog::startContainerCreation()
         }
     }
 
-    qDebug() << "Executing:" << "distrobox" << args;
-    m_createProcess->start("distrobox", args);
+    // Detect if running inside Flatpak
+    bool isFlatpak = QFile::exists("/.flatpak-info");
+
+    QString program;
+    QStringList programArgs;
+    if (isFlatpak) {
+        program = "flatpak-spawn";
+        programArgs << "--host" << "distrobox";
+        programArgs.append(args);
+    } else {
+        program = "distrobox";
+        programArgs = args;
+    }
+
+    qDebug() << "Executing:" << program << programArgs;
+    m_createProcess->start(program, programArgs);
 }
 
 void CreateContainerDialog::handleReadyRead()

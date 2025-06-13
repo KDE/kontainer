@@ -1,0 +1,28 @@
+app-id: org.kde.Kontainer
+runtime: org.kde.Platform
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+command: Kontainer
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=x11
+  - --filesystem=host
+  - --device=dri
+  - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=org.freedesktop.DBus
+  - --system-talk-name=org.freedesktop.DBus
+  - --env=FLATPAK_ENABLE_SDK_EXT=*
+  - --system-talk-name=org.freedesktop.Flatpak
+  - --allow=devel
+
+modules:
+  - name: kontainer
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        url: https://invent.kde.org/silverhadch/k-box.git
+        branch: work/hadi
+
