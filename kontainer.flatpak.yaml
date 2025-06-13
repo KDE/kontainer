@@ -4,12 +4,16 @@ runtime-version: '6.9'
 sdk: org.kde.Sdk
 command: Kontainer
 finish-args:
-  # File system access for Flatpak <-> Host interaction
+  - --share=ipc
+  - --socket=wayland
+  - --socket=x11
   - --filesystem=host
-  # DBus access to allow flatpak-spawn to talk to host services
+  - --device=dri
   - --talk-name=org.freedesktop.Flatpak
+  - --talk-name=org.freedesktop.DBus
+  - --system-talk-name=org.freedesktop.DBus
+  - --env=FLATPAK_ENABLE_SDK_EXT=*
   - --system-talk-name=org.freedesktop.Flatpak
-  # This is needed if you want to run host commands like flatpak-spawn --host ...
   - --allow=devel
 
 modules:
