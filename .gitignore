@@ -15,3 +15,5 @@ resources.qrc.depends
 qrc_resources.cpp
 __
 res/icons/*.qrc.depends
+.flatpak-builder/
+build-dir/
