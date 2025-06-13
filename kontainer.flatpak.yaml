@@ -20,4 +20,5 @@ modules:
     sources:
       - type: git
         url: https://invent.kde.org/silverhadch/k-box.git
+        branch: work/hadi
 
