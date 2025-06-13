@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+include(GNUInstallDirs)
 
 # === ECM & KDEClangFormat ===
 find_package(ECM REQUIRED NO_MODULE)
@@ -56,3 +57,6 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES
 )
 
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(FILES kontainer.desktop DESTINATION share/applications)

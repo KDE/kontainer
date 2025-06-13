@@ -1,0 +1,23 @@
+app-id: org.kde.Kontainer
+runtime: org.kde.Platform
+runtime-version: '6.9'
+sdk: org.kde.Sdk
+command: Kontainer
+finish-args:
+  # File system access for Flatpak <-> Host interaction
+  - --filesystem=host
+  # DBus access to allow flatpak-spawn to talk to host services
+  - --talk-name=org.freedesktop.Flatpak
+  - --system-talk-name=org.freedesktop.Flatpak
+  # This is needed if you want to run host commands like flatpak-spawn --host ...
+  - --allow=devel
+
+modules:
+  - name: kontainer
+    buildsystem: cmake
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        url: https://invent.kde.org/silverhadch/k-box.git
+
