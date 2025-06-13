@@ -59,4 +59,4 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-install(FILES kontainer.desktop DESTINATION share/applications)
+install(FILES kontainer-flatpak.desktop DESTINATION share/applications)
