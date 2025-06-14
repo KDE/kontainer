@@ -90,7 +90,7 @@ MainWindow::MainWindow(QWidget *parent)
     preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
-    setWindowTitle("Kontainer");
+    setWindowTitle(i18n("Kontainer"));
     resize(600, 600);
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
 
@@ -132,41 +132,41 @@ void MainWindow::setupUI()
     rightLayout->setContentsMargins(0, 0, 0, 0);
     rightLayout->setSpacing(8);
 
-    enterBtn = new QPushButton(QIcon::fromTheme("system-run"), "Enter", rightPanel);
-    enterBtn->setToolTip("Enter the selected container");
+    enterBtn = new QPushButton(QIcon::fromTheme("system-run"), i18n("Enter"), rightPanel);
+    enterBtn->setToolTip(i18n("Enter the selected container"));
     connect(enterBtn, &QPushButton::clicked, this, &MainWindow::enterContainer);
 
-    deleteBtn = new QPushButton(QIcon::fromTheme("edit-delete"), "Delete", rightPanel);
-    deleteBtn->setToolTip("Delete the selected container");
+    deleteBtn = new QPushButton(QIcon::fromTheme("edit-delete"), i18n("Delete"), rightPanel);
+    deleteBtn->setToolTip(i18n("Delete the selected container"));
     connect(deleteBtn, &QPushButton::clicked, this, &MainWindow::deleteContainer);
 
-    appsBtn = new QPushButton(QIcon::fromTheme("applications-other"), "Applications", rightPanel);
-    appsBtn->setToolTip("Manage exported applications");
+    appsBtn = new QPushButton(QIcon::fromTheme("applications-other"), i18n("Applications"), rightPanel);
+    appsBtn->setToolTip(i18n("Manage exported applications"));
     connect(appsBtn, &QPushButton::clicked, this, &MainWindow::showAppsDialog);
 
-    upgradeBtn = new QPushButton(QIcon::fromTheme("system-software-update"), "Upgrade", rightPanel);
-    upgradeBtn->setToolTip("Upgrade the selected container");
+    upgradeBtn = new QPushButton(QIcon::fromTheme("system-software-update"), i18n("Upgrade"), rightPanel);
+    upgradeBtn->setToolTip(i18n("Upgrade the selected container"));
     connect(upgradeBtn, &QPushButton::clicked, this, &MainWindow::upgradeContainer);
 
     QFrame *separator = new QFrame(rightPanel);
     separator->setFrameShape(QFrame::HLine);
     separator->setFrameShadow(QFrame::Sunken);
 
-    QPushButton *refreshBtn = new QPushButton(QIcon::fromTheme("view-refresh"), "Refresh", rightPanel);
-    refreshBtn->setToolTip("Refresh container list");
+    QPushButton *refreshBtn = new QPushButton(QIcon::fromTheme("view-refresh"), i18n("Refresh"), rightPanel);
+    refreshBtn->setToolTip(i18n("Refresh container list"));
     connect(refreshBtn, &QPushButton::clicked, this, &MainWindow::refreshContainers);
 
     // Package installation buttons
-    installDebBtn = new QPushButton(QIcon::fromTheme("application-x-deb"), "Install .deb", rightPanel);
-    installDebBtn->setToolTip("Install Debian/Ubuntu package");
+    installDebBtn = new QPushButton(QIcon::fromTheme("application-x-deb"), i18n("Install .deb"), rightPanel);
+    installDebBtn->setToolTip(i18n("Install Debian/Ubuntu package"));
     connect(installDebBtn, &QPushButton::clicked, this, &MainWindow::installDebPackage);
 
-    installRpmBtn = new QPushButton(QIcon::fromTheme("application-x-rpm"), "Install .rpm", rightPanel);
-    installRpmBtn->setToolTip("Install Fedora/OpenSUSE package");
+    installRpmBtn = new QPushButton(QIcon::fromTheme("application-x-rpm"), i18n("Install .rpm"), rightPanel);
+    installRpmBtn->setToolTip(i18n("Install Fedora/OpenSUSE package"));
     connect(installRpmBtn, &QPushButton::clicked, this, &MainWindow::installRpmPackage);
 
-    installArchBtn = new QPushButton(QIcon::fromTheme("application-x-tarz"), "Install .pkg", rightPanel);
-    installArchBtn->setToolTip("Install Arch Linux package");
+    installArchBtn = new QPushButton(QIcon::fromTheme("application-x-tarz"), i18n("Install .pkg"), rightPanel);
+    installArchBtn->setToolTip(i18n("Install Arch Linux package"));
     connect(installArchBtn, &QPushButton::clicked, this, &MainWindow::installArchPackage);
 
     rightLayout->addWidget(installDebBtn);
@@ -189,25 +189,25 @@ void MainWindow::setupUI()
     // Left side buttons (create and upgrade all)
     addBtn = new QToolButton(toolBar);
     addBtn->setIcon(QIcon::fromTheme("list-add"));
-    addBtn->setText("New Container");
+    addBtn->setText(i18n("New Container"));
     addBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    addBtn->setToolTip("Create new container");
+    addBtn->setToolTip(i18n("Create new container"));
     connect(addBtn, &QToolButton::clicked, this, &MainWindow::createNewContainer);
     toolBar->addWidget(addBtn);
 
     aBtn = new QToolButton(toolBar);
     aBtn->setIcon(QIcon::fromTheme("system-software-update"));
-    aBtn->setText("Upgrade all Containers");
+    aBtn->setText(i18n("Upgrade all Containers"));
     aBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    aBtn->setToolTip("Upgrades all containers");
+    aBtn->setToolTip(i18n("Upgrades all containers"));
     connect(aBtn, &QToolButton::clicked, this, &MainWindow::upgradeAllContainers);
     toolBar->addWidget(aBtn);
 
     assembleBtn = new QToolButton(toolBar);
     assembleBtn->setIcon(QIcon::fromTheme("applications-development"));
-    assembleBtn->setText("Assemble");
+    assembleBtn->setText(i18n("Assemble"));
     assembleBtn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    assembleBtn->setToolTip("Create container from INI file");
+    assembleBtn->setToolTip(i18n("Create container from INI file"));
     connect(assembleBtn, &QToolButton::clicked, this, &MainWindow::assembleContainer);
     toolBar->addWidget(assembleBtn);
 
@@ -217,7 +217,7 @@ void MainWindow::setupUI()
     toolBar->addWidget(spacer);
 
     // Right side - terminal selection
-    QLabel *terminalLabel = new QLabel("Terminal:", toolBar);
+    QLabel *terminalLabel = new QLabel(i18n("Terminal:"), toolBar);
     toolBar->addWidget(terminalLabel);
 
     QComboBox *terminalSelector = new QComboBox(toolBar);
@@ -333,7 +333,7 @@ void MainWindow::onAssembleFinished(const QString &result)
         progressDialog->deleteLater();
         progressDialog = nullptr;
     }
-    QMessageBox::information(this, tr("Assemble Result"), result);
+    QMessageBox::information(this, i18n("Assemble Result"), result);
     refreshContainers();
 }
 
@@ -368,16 +368,16 @@ void MainWindow::refreshContainers()
         item->setData(Qt::UserRole + 4, container["distro"]); // Store distro name
         item->setData(Qt::UserRole + 5, container["icon"]); // Store icon path from backend
 
-        qDebug() << "Container:" << container["name"] << "Distro:" << container["distro"] << "Icon:" << container["icon"];
+        qDebug() << i18n("Container:") << container["name"] << i18n("Distro:") << container["distro"] << i18n("Icon:") << container["icon"];
     }
 
     if (containers.isEmpty()) {
-        QListWidgetItem *item = new QListWidgetItem("No containers found", containerList);
+        QListWidgetItem *item = new QListWidgetItem(i18n("No containers found"), containerList);
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
         // Use shipped fallback icon
         QPixmap fallback(":/icons/tux.svg");
         item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-        qDebug() << "No containers found";
+        qDebug() << i18n("No containers found");
     }
 
     currentContainer.clear();
@@ -390,16 +390,16 @@ void MainWindow::deleteContainer()
         return;
 
     QMessageBox msgBox(this);
-    msgBox.setWindowTitle("Confirm Deletion");
-    msgBox.setText(QString("Delete container <b>%1</b>?").arg(currentContainer));
-    msgBox.setInformativeText("This action cannot be undone.");
+    msgBox.setWindowTitle(i18n("Confirm Deletion"));
+    msgBox.setText(QString(i18n("Delete container <b>%1</b>?")).arg(currentContainer));
+    msgBox.setInformativeText(i18n("This action cannot be undone."));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     msgBox.setIcon(QMessageBox::Warning);
 
     if (msgBox.exec() == QMessageBox::Yes) {
         QString result = backend->deleteContainer(currentContainer);
-        QMessageBox::information(this, "Result", result);
+        QMessageBox::information(this, i18n("Result"), result);
         refreshContainers();
     }
 }
@@ -423,7 +423,7 @@ void MainWindow::createNewContainer()
 {
     CreateContainerDialog dialog(backend, preferredTerminal, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QProgressDialog progress("Creating container...", "Cancel", 0, 0, this);
+        QProgressDialog progress(i18n("Creating container..."), i18n("Cancel"), 0, 0, this);
         progress.setWindowModality(Qt::WindowModal);
         progress.show();
 
@@ -432,7 +432,7 @@ void MainWindow::createNewContainer()
         QString result = backend->createContainer(dialog.containerName(), dialog.imageUrl(), dialog.homePath(), dialog.useInit(), dialog.volumes());
 
         progress.close();
-        QMessageBox::information(this, "Result", result);
+        QMessageBox::information(this, i18n("Result"), result);
         refreshContainers();
     }
 }
@@ -448,7 +448,7 @@ void MainWindow::installDebPackage()
     if (currentContainer.isEmpty())
         return;
 
-    QString filePath = QFileDialog::getOpenFileName(this, "Select .deb Package", QDir::homePath(), "Debian Packages (*.deb)");
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .deb Package"), QDir::homePath(), i18n("Debian Packages (*.deb)"));
     if (!filePath.isEmpty()) {
         backend->installDebPackage(preferredTerminal, currentContainer, filePath);
     }
@@ -459,7 +459,7 @@ void MainWindow::installRpmPackage()
     if (currentContainer.isEmpty())
         return;
 
-    QString filePath = QFileDialog::getOpenFileName(this, "Select .rpm Package", QDir::homePath(), "RPM Packages (*.rpm)");
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .rpm Package"), QDir::homePath(), i18n("RPM Packages (*.rpm)"));
     if (!filePath.isEmpty()) {
         backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
     }
@@ -470,7 +470,7 @@ void MainWindow::installArchPackage()
     if (currentContainer.isEmpty())
         return;
 
-    QString filePath = QFileDialog::getOpenFileName(this, "Select Arch Package", QDir::homePath(), "Arch Packages (*.pkg.tar.*)");
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select Arch Package"), QDir::homePath(), i18n("Arch Packages (*.pkg.tar.*)"));
     if (!filePath.isEmpty()) {
         backend->installArchPackage(preferredTerminal, currentContainer, filePath);
     }
@@ -478,10 +478,10 @@ void MainWindow::installArchPackage()
 
 void MainWindow::assembleContainer()
 {
-    QString iniFile = QFileDialog::getOpenFileName(this, tr("Select Distrobox INI File"), QDir::homePath(), tr("INI Files (*.ini);;All Files (*)"));
+    QString iniFile = QFileDialog::getOpenFileName(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
 
     if (!iniFile.isEmpty()) {
-        progressDialog = new QProgressDialog(tr("Assembling container..."), tr("Cancel"), 0, 0, this);
+        progressDialog = new QProgressDialog(i18n("Assembling container..."), i18n("Cancel"), 0, 0, this);
         progressDialog->setWindowModality(Qt::WindowModal);
         progressDialog->setCancelButton(nullptr); // Remove cancel button
         progressDialog->show();
