@@ -3,6 +3,8 @@
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("Kontainer");
+
     QApplication app(argc, argv);
 
     app.setStyle(QStyleFactory::create("Breeze"));

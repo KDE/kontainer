@@ -1,6 +1,7 @@
 #ifndef BACKEND_H
 #define BACKEND_H
 
+#include <KLocalizedString>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>

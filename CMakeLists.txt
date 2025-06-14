@@ -10,6 +10,7 @@ include(GNUInstallDirs)
 # === ECM & KDEClangFormat ===
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+find_package(KF6 REQUIRED COMPONENTS I18n)
 include(KDEClangFormat)
 include(KDEGitCommitHooks)
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
@@ -48,6 +49,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core
     Qt6::Widgets
     Qt6::Gui
+    KF6::I18n
 )
 
 # === clang-format Target ===

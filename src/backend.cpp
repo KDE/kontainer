@@ -23,7 +23,7 @@ QString Backend::runCommand(const QStringList &command) const
 
     process.start(actualCommand[0], actualCommand.mid(1));
     if (!process.waitForFinished(60000)) {
-        return "Error: Command timed out";
+        return i18n("Error: Command timed out");
     }
     return process.readAllStandardOutput().trimmed();
 }
@@ -160,7 +160,7 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
 {
     auto terminalInfoMap = getTerminalInfoMap();
     if (!terminalInfoMap.contains(terminal)) {
-        qWarning() << "Unknown terminal:" << terminal;
+        qWarning() << i18n("Unknown terminal:") << terminal;
         QProcess::startDetached("xterm", {"-e", command});
         return;
     }
@@ -193,7 +193,7 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
         if (whichProcess.exitCode() == 0) {
             bool success = QProcess::startDetached("flatpak-spawn", flatpakArgs.mid(1));
             if (!success) {
-                qWarning() << "Failed to start terminal" << executable << "with args" << args;
+                qWarning() << i18n("Failed to start terminal") << executable << i18n("with args") << args;
                 QProcess::startDetached("flatpak-spawn", {"--host", "xterm", "-e", command});
             }
         } else {
@@ -203,7 +203,7 @@ void Backend::executeInTerminal(const QString &terminal, const QString &command)
         if (!QStandardPaths::findExecutable(executable).isEmpty()) {
             bool success = QProcess::startDetached(executable, args);
             if (!success) {
-                qWarning() << "Failed to start terminal" << executable << "with args" << args;
+                qWarning() << i18n("Failed to start terminal") << executable << i18n("with args") << args;
                 QProcess::startDetached("xterm", {"-e", command});
             }
         } else {
@@ -218,7 +218,7 @@ void Backend::assembleContainer(const QString &iniFile)
     connect(process, &QProcess::finished, this, [this, process](int exitCode) {
         QString result = process->readAllStandardOutput();
         if (exitCode != 0) {
-            result = "Error: " + process->readAllStandardError();
+            result = i18n("Error: ") + process->readAllStandardError();
         }
         emit assembleFinished(result);
         process->deleteLater();

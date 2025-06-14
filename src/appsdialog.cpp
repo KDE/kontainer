@@ -61,7 +61,7 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     , m_containerName(containerName)
 {
     // Window setup
-    setWindowTitle("Applications - " + containerName);
+    setWindowTitle(i18n("Applications - ") + containerName);
     resize(600, 500);
     setWindowIcon(QIcon::fromTheme("applications-other"));
 
@@ -81,14 +81,14 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     m_exportedAppsList->setIconSize(QSize(32, 32));
     m_exportedAppsList->setAlternatingRowColors(true);
 
-    QPushButton *unexportBtn = new QPushButton("Unexport");
+    QPushButton *unexportBtn = new QPushButton(i18n("Unexport"));
     unexportBtn->setIcon(QIcon::fromTheme("list-remove"));
-    unexportBtn->setToolTip("Remove the selected application from your host system");
+    unexportBtn->setToolTip(i18n("Remove the selected application from your host system"));
     connect(unexportBtn, &QPushButton::clicked, [this]() {
         if (m_exportedAppsList->currentItem()) {
             QString app = m_exportedAppsList->currentItem()->text();
             QString result = m_backend->unexportApp(app, m_containerName);
-            QMessageBox::information(this, "Unexport App", result);
+            QMessageBox::information(this, i18n("Unexport App"), result);
             loadApps();
         }
     });
@@ -111,14 +111,14 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     m_availableAppsList->setIconSize(QSize(32, 32));
     m_availableAppsList->setAlternatingRowColors(true);
 
-    QPushButton *exportBtn = new QPushButton("Export");
+    QPushButton *exportBtn = new QPushButton(i18n("Export"));
     exportBtn->setIcon(QIcon::fromTheme("list-add"));
-    exportBtn->setToolTip("Make the selected application available on your host system");
+    exportBtn->setToolTip(i18n("Make the selected application available on your host system"));
     connect(exportBtn, &QPushButton::clicked, [this]() {
         if (m_availableAppsList->currentItem()) {
             QString app = m_availableAppsList->currentItem()->text();
             QString result = m_backend->exportApp(app, m_containerName);
-            QMessageBox::information(this, "Export App", result);
+            QMessageBox::information(this, i18n("Export App"), result);
             loadApps();
         }
     });
@@ -130,8 +130,8 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     exportButtonLayout->addWidget(exportBtn);
     availableLayout->addLayout(exportButtonLayout);
 
-    m_tabs->addTab(exportedTab, QIcon::fromTheme("emblem-shared"), "Exported Apps");
-    m_tabs->addTab(availableTab, QIcon::fromTheme("applications-other"), "Available Apps");
+    m_tabs->addTab(exportedTab, QIcon::fromTheme("emblem-shared"), i18n("Exported Apps"));
+    m_tabs->addTab(availableTab, QIcon::fromTheme("applications-other"), i18n("Available Apps"));
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(8, 8, 8, 8);
