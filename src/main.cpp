@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    KLocalizedString::setApplicationDomain("Kontainer");
+    KLocalizedString::setApplicationDomain("kontainer");
 
     QApplication app(argc, argv);
 
