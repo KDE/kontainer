@@ -1,0 +1,394 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Hadi Chokr <hadichokr@icloud.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-14 11:13+0200\n"
+"PO-Revision-Date: 2025-06-14 11:21+0200\n"
+"Last-Translator: Hadi Chokr <hadichokr@icloud.com>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/backend.cpp:26
+msgid "Error: Command timed out"
+msgstr "Fehler: Befehl hat das Zeitlimit überschritten"
+
+#: src/backend.cpp:163
+msgid "Unknown terminal:"
+msgstr "Unbekanntes Terminal:"
+
+#: src/backend.cpp:196 src/backend.cpp:206
+msgid "Failed to start terminal"
+msgstr "Fehler beim Starten des Terminals"
+
+#: src/backend.cpp:196 src/backend.cpp:206
+msgid "with args"
+msgstr "mit Argumenten"
+
+#: src/backend.cpp:221
+msgid "Error: "
+msgstr "Fehler: "
+
+#. Window setup
+#: src/appsdialog.cpp:64
+msgid "Applications - "
+msgstr "Anwendungen – "
+
+#: src/appsdialog.cpp:84
+msgid "Unexport"
+msgstr "Export aufheben"
+
+#: src/appsdialog.cpp:86
+msgid "Remove the selected application from your host system"
+msgstr "Entfernt die ausgewählte Anwendung vom Host-System"
+
+#: src/appsdialog.cpp:91
+msgid "Unexport App"
+msgstr "Export der App aufheben"
+
+#: src/appsdialog.cpp:114
+msgid "Export"
+msgstr "Exportieren"
+
+#: src/appsdialog.cpp:116
+msgid "Make the selected application available on your host system"
+msgstr "Stellt die ausgewählte Anwendung auf dem Host-System bereit"
+
+#: src/appsdialog.cpp:121
+msgid "Export App"
+msgstr "App exportieren"
+
+#: src/appsdialog.cpp:133
+msgid "Exported Apps"
+msgstr "Exportierte Apps"
+
+#: src/appsdialog.cpp:134
+msgid "Available Apps"
+msgstr "Verfügbare Apps"
+
+#. Window setup
+#: src/createcontainerdialog.cpp:74
+msgid "Create New Container"
+msgstr "Neuen Container erstellen"
+
+#: src/createcontainerdialog.cpp:87
+msgid "my-container"
+msgstr "mein-container"
+
+#: src/createcontainerdialog.cpp:88
+msgid "Container Name:"
+msgstr "Container-Name:"
+
+#: src/createcontainerdialog.cpp:91
+msgid "Search images..."
+msgstr "Suche Images..."
+
+#: src/createcontainerdialog.cpp:93
+msgid "Search Images:"
+msgstr "Images suchen:"
+
+#: src/createcontainerdialog.cpp:100
+msgid "Available Images:"
+msgstr "Verfügbare Images:"
+
+#: src/createcontainerdialog.cpp:103
+msgid "Leave empty for default"
+msgstr "Leer lassen für Standard"
+
+#: src/createcontainerdialog.cpp:104
+msgid "Custom Home Path:"
+msgstr "Eigener Home-Pfad:"
+
+#: src/createcontainerdialog.cpp:107
+msgid "e.g., /host/path:/container/path (comma separate multiple)"
+msgstr "z. B. /host/pfad:/container/pfad (mehrere durch Komma trennen)"
+
+#: src/createcontainerdialog.cpp:108
+msgid "Additional Volumes:"
+msgstr "Zusätzliche Volumes:"
+
+#: src/createcontainerdialog.cpp:110
+msgid "Enable systemd init"
+msgstr "Systemd-Init aktivieren"
+
+#: src/createcontainerdialog.cpp:111
+msgid "Enable systemd as init system inside the container"
+msgstr "Systemd als Init-System im Container verwenden"
+
+#: src/createcontainerdialog.cpp:112
+msgid "Init System:"
+msgstr "Init-System:"
+
+#: src/createcontainerdialog.cpp:119
+msgid "Refresh Images"
+msgstr "Images aktualisieren"
+
+#: src/createcontainerdialog.cpp:126 src/mainwindow.cpp:426
+#: src/mainwindow.cpp:484
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/createcontainerdialog.cpp:131
+msgid "Create"
+msgstr "Erstellen"
+
+#: src/createcontainerdialog.cpp:209 src/createcontainerdialog.cpp:214
+#: src/createcontainerdialog.cpp:302 src/createcontainerdialog.cpp:323
+msgid "Error"
+msgstr "Fehler"
+
+#: src/createcontainerdialog.cpp:209
+msgid "Please enter a container name"
+msgstr "Bitte einen Containernamen eingeben"
+
+#: src/createcontainerdialog.cpp:214
+msgid "Please select an image"
+msgstr "Bitte ein Image auswählen"
+
+#: src/createcontainerdialog.cpp:220
+msgid "Creating Container"
+msgstr "Container wird erstellt"
+
+#: src/createcontainerdialog.cpp:221
+msgid "Starting container creation..."
+msgstr "Starte Container-Erstellung..."
+
+#: src/createcontainerdialog.cpp:263
+msgid "Executing:"
+msgstr "Ausführung:"
+
+#: src/createcontainerdialog.cpp:272
+msgid "Process output:"
+msgstr "Prozessausgabe:"
+
+#: src/createcontainerdialog.cpp:279
+msgid "Process error: "
+msgstr "Prozessfehler: "
+
+#: src/createcontainerdialog.cpp:282
+msgid "Failed to start"
+msgstr "Fehler beim Start"
+
+#: src/createcontainerdialog.cpp:285
+msgid "Crashed"
+msgstr "Abgestürzt"
+
+#: src/createcontainerdialog.cpp:288
+msgid "Timed out"
+msgstr "Zeitüberschreitung"
+
+#: src/createcontainerdialog.cpp:291
+msgid "Write error"
+msgstr "Schreibfehler"
+
+#: src/createcontainerdialog.cpp:294
+msgid "Read error"
+msgstr "Lesefehler"
+
+#: src/createcontainerdialog.cpp:297
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
+
+#: src/createcontainerdialog.cpp:312
+msgid "Container '%1' created successfully!"
+msgstr "Container „%1“ erfolgreich erstellt!"
+
+#: src/createcontainerdialog.cpp:314
+msgid "Success"
+msgstr "Erfolg"
+
+#: src/createcontainerdialog.cpp:319
+msgid "Container creation failed (exit code: %1)\n"
+msgstr "Container-Erstellung fehlgeschlagen (Exit-Code: %1)\n"
+
+#: src/createcontainerdialog.cpp:321
+msgid ""
+"\n"
+"Error output:\n"
+msgstr ""
+"\n"
+"Fehlerausgabe:\n"
+
+#: src/mainwindow.cpp:93
+msgid "Kontainer"
+msgstr "Kontainer"
+
+#: src/mainwindow.cpp:135
+msgid "Enter"
+msgstr "Betreten"
+
+#: src/mainwindow.cpp:136
+msgid "Enter the selected container"
+msgstr "Den ausgewählten Container betreten"
+
+#: src/mainwindow.cpp:139
+msgid "Delete"
+msgstr "Löschen"
+
+#: src/mainwindow.cpp:140
+msgid "Delete the selected container"
+msgstr "Den ausgewählten Container löschen"
+
+#: src/mainwindow.cpp:143
+msgid "Applications"
+msgstr "Anwendungen"
+
+#: src/mainwindow.cpp:144
+msgid "Manage exported applications"
+msgstr "Exportierte Anwendungen verwalten"
+
+#: src/mainwindow.cpp:147
+msgid "Upgrade"
+msgstr "Aktualisieren"
+
+#: src/mainwindow.cpp:148
+msgid "Upgrade the selected container"
+msgstr "Den ausgewählten Container aktualisieren"
+
+#: src/mainwindow.cpp:155
+msgid "Refresh"
+msgstr "Aktualisieren"
+
+#: src/mainwindow.cpp:156
+msgid "Refresh container list"
+msgstr "Containerliste aktualisieren"
+
+#. Package installation buttons
+#: src/mainwindow.cpp:160
+msgid "Install .deb"
+msgstr ".deb installieren"
+
+#: src/mainwindow.cpp:161
+msgid "Install Debian/Ubuntu package"
+msgstr "Debian/Ubuntu-Paket installieren"
+
+#: src/mainwindow.cpp:164
+msgid "Install .rpm"
+msgstr ".rpm installieren"
+
+#: src/mainwindow.cpp:165
+msgid "Install Fedora/OpenSUSE package"
+msgstr "Fedora/OpenSUSE-Paket installieren"
+
+#: src/mainwindow.cpp:168
+msgid "Install .pkg"
+msgstr ".pkg installieren"
+
+#: src/mainwindow.cpp:169
+msgid "Install Arch Linux package"
+msgstr "Arch-Linux-Paket installieren"
+
+#: src/mainwindow.cpp:192
+msgid "New Container"
+msgstr "Neuer Container"
+
+#: src/mainwindow.cpp:194
+msgid "Create new container"
+msgstr "Neuen Container erstellen"
+
+#: src/mainwindow.cpp:200
+msgid "Upgrade all Containers"
+msgstr "Alle Container aktualisieren"
+
+#: src/mainwindow.cpp:202
+msgid "Upgrades all containers"
+msgstr "Aktualisiert alle Container"
+
+#: src/mainwindow.cpp:208
+msgid "Assemble"
+msgstr "Zusammenbauen"
+
+#: src/mainwindow.cpp:210
+msgid "Create container from INI file"
+msgstr "Container aus INI-Datei erstellen"
+
+#. Right side - terminal selection
+#: src/mainwindow.cpp:220
+msgid "Terminal:"
+msgstr "Terminal:"
+
+#: src/mainwindow.cpp:336
+msgid "Assemble Result"
+msgstr "Zusammenbau-Ergebnis"
+
+#. Store image name
+#. Store distro name
+#. Store icon path from backend
+#: src/mainwindow.cpp:371
+msgid "Container:"
+msgstr "Container:"
+
+#: src/mainwindow.cpp:371
+msgid "Distro:"
+msgstr "Distribution:"
+
+#: src/mainwindow.cpp:371
+msgid "Icon:"
+msgstr "Symbol:"
+
+#: src/mainwindow.cpp:375 src/mainwindow.cpp:380
+msgid "No containers found"
+msgstr "Keine Container gefunden"
+
+#: src/mainwindow.cpp:393
+msgid "Confirm Deletion"
+msgstr "Löschen bestätigen"
+
+#: src/mainwindow.cpp:394
+msgid "Delete container <b>%1</b>?"
+msgstr "Container <b>%1</b> löschen?"
+
+#: src/mainwindow.cpp:395
+msgid "This action cannot be undone."
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
+
+#: src/mainwindow.cpp:402 src/mainwindow.cpp:435
+msgid "Result"
+msgstr "Ergebnis"
+
+#: src/mainwindow.cpp:426
+msgid "Creating container..."
+msgstr "Erstelle Container..."
+
+#: src/mainwindow.cpp:451
+msgid "Select .deb Package"
+msgstr ".deb-Paket auswählen"
+
+#: src/mainwindow.cpp:451
+msgid "Debian Packages (*.deb)"
+msgstr "Debian-Pakete (*.deb)"
+
+#: src/mainwindow.cpp:462
+msgid "Select .rpm Package"
+msgstr ".rpm-Paket auswählen"
+
+#: src/mainwindow.cpp:462
+msgid "RPM Packages (*.rpm)"
+msgstr "RPM-Pakete (*.rpm)"
+
+#: src/mainwindow.cpp:473
+msgid "Select Arch Package"
+msgstr "Arch-Paket auswählen"
+
+#: src/mainwindow.cpp:473
+msgid "Arch Packages (*.pkg.tar.*)"
+msgstr "Arch-Pakete (*.pkg.tar.*)"
+
+#: src/mainwindow.cpp:481
+msgid "Select Distrobox INI File"
+msgstr "Distrobox-INI-Datei auswählen"
+
+#: src/mainwindow.cpp:481
+msgid "INI Files (*.ini);;All Files (*)"
+msgstr "INI-Dateien (*.ini);;Alle Dateien (*)"
+
+#: src/mainwindow.cpp:484
+msgid "Assembling container..."
+msgstr "Baue Container zusammen..."
