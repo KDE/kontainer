@@ -1,6 +1,7 @@
 #ifndef CREATECONTAINERDIALOG_H
 #define CREATECONTAINERDIALOG_H
 
+#include <KLocalizedString>
 #include <QApplication>
 #include <QCheckBox>
 #include <QDebug>

@@ -7,7 +7,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 include(GNUInstallDirs)
 
-# === ECM & KDEClangFormat ===
+# === ECM & KDEClangFormat & KI18n ===
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 find_package(KF6 REQUIRED COMPONENTS I18n)
@@ -60,5 +60,6 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES
 
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
+# === Flatpak Install Target ===
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
 install(FILES org.kde.Kontainer.desktop DESTINATION share/applications)
