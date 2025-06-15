@@ -312,16 +312,16 @@ void CreateContainerDialog::handleCreateFinished(int exitCode, QProcess::ExitSta
     m_progressDialog->cancel();
 
     if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-        QString successMsg = QString(i18n("Container '%1' created successfully!")).arg(containerName());
+        QString successMsg = i18n("Container '%1' created successfully!", containerName());
         m_progressDialog->setLabelText(successMsg);
         QMessageBox::information(this, i18n("Success"), successMsg);
         m_backend->enterContainer(containerName(), m_terminal);
         accept();
     } else {
         QString errorOutput = QString::fromUtf8(m_createProcess->readAll());
-        QString errorMsg = QString(i18n("Container creation failed (exit code: %1)\n")).arg(exitCode);
+        QString errorMsg = i18n("Container creation failed (exit code: %1)", exitCode);
         if (!errorOutput.isEmpty()) {
-            errorMsg += i18n("\nError output:\n") + errorOutput;
+            errorMsg = i18n("Container creation failed (exit code: %1)\n\nError output: %2\n", exitCode, errorOutput);
         }
         QMessageBox::critical(this, i18n("Error"), errorMsg);
     }
