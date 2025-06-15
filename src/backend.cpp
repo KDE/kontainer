@@ -289,10 +289,15 @@ QStringList Backend::getExportedApps(const QString &containerName)
     QString prefix = containerName + "-";
 
     for (const QFileInfo &file : dir.entryInfoList({prefix + "*.desktop"}, QDir::Files)) {
-        apps << file.baseName().mid(prefix.length());
+        QString fileName = file.fileName(); // e.g. "mycontainer-org.kde.kcalc.desktop"
+        QString appId = fileName.mid(prefix.length());
+        appId.chop(QStringLiteral(".desktop").length());
+        apps << appId; // e.g. "org.kde.kcalc"
     }
+
     return apps;
 }
+
 
 QString Backend::exportApp(const QString &appName, const QString &containerName)
 {
