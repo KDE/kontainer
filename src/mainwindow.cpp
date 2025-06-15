@@ -394,7 +394,7 @@ void MainWindow::deleteContainer()
 
     QMessageBox msgBox(this);
     msgBox.setWindowTitle(i18n("Confirm Deletion"));
-    msgBox.setText(QString(i18n("Delete container <b>%1</b>?")).arg(currentContainer));
+    msgBox.setText(i18n("Delete container <b>%1</b>?", currentContainer));
     msgBox.setInformativeText(i18n("This action cannot be undone."));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
@@ -452,6 +452,7 @@ void MainWindow::installDebPackage()
         return;
 
     QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .deb Package"), QDir::homePath(), i18n("Debian Packages (*.deb)"));
+    qDebug() << "Selected .deb package:" << filePath;
     if (!filePath.isEmpty()) {
         backend->installDebPackage(preferredTerminal, currentContainer, filePath);
     }

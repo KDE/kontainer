@@ -25,7 +25,6 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
-      - type: git
-        url: https://invent.kde.org/silverhadch/k-box.git
-        branch: master
+      - type: dir
+        path: "."
 
