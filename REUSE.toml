@@ -1,0 +1,7 @@
+version = 1
+
+# All the icons are either public domain, licensed with the Unlicensed License, dont contain enough creative work or are made by Hadi Chokr.
+[[annotations]]
+path = "res/icons/*"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"

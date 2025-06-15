@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: CC0-1.0
+
 app-id: org.kde.Kontainer
 runtime: org.kde.Platform
 runtime-version: '6.9'

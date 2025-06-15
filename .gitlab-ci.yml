@@ -1,4 +1,13 @@
+# SPDX-FileCopyrightText: none
+# # SPDX-License-Identifier: CC0-1.0
+
+include:
+  - project: sysadmin/ci-utilities
+    file:
+      - /gitlab-templates/reuse-lint.yml
+
 stages:
+  - validate
   - build
 
 build_project:

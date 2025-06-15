@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: none
+# SPDX-License-Identifier: CC0-1.0
+
 cmake_minimum_required(VERSION 3.16)
 project(Kontainer)
 
