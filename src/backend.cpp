@@ -269,7 +269,12 @@ void Backend::installArchPackage(const QString &terminal, const QString &contain
 
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
-    QString output = runCommand({"distrobox", "enter", containerName, "--", "find", "/usr/share/applications", "-name", "*.desktop"});
+    QString output = runCommand({
+        "distrobox", "enter", containerName, "--",
+        "sh", "-c",
+        "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"
+    });
+
     QStringList apps;
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
         apps << line.split('/').last().replace(".desktop", "");
