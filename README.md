@@ -12,7 +12,7 @@ Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application no
 - ✅ **Refactoring:** Planned to improve modularity and maintainability    
 - ✅ **Configuration system:** Planned — support for dynamic user preferences  
 - ✅ **Packaging:** Flatpak support
-- ⏳ **i18n:** Ongoing work  
+- ✅️ **i18n:** Via KI18n 
 
 
 ## Features
@@ -24,7 +24,7 @@ Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application no
 - ✅ Export and unexport container apps  
 - ✅ Upgrade all containers  
 - ✅ Manage apps via host or container context  
-- ⏳ KDE-style full i18n (using `KLocalizedString`)  
+- ✅️ KDE-style full i18n (using `KLocalizedString`)  
 
 ## Goals
 
