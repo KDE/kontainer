@@ -1,0 +1,57 @@
+Subject: Re: Request for Permission to Use Alpine Linux Logo in KDE Application
+Sent: 17 June 2025 16:57:35 CEST
+From: Natanael Copa <ncopa@alpinelinux.org>
+To: Hadi Chokr <hadichokr@icloud.com>
+Cc: ~alpine/devel@lists.alpinelinux.org
+
+
+
+> 16. juni 2025 kl. 19:42 skrev Hadi Chokr <hadichokr@icloud.com>:
+> 
+> Dear Alpine Linux Developers,
+
+Hi Hadi!
+
+> 
+> I hope you're doing well.
+> 
+> My name is Hadi Chokr, and I am a KDE Developer. We are currently working on a GUI frontend for Distrobox called “Kontainer” (formerly K-Box), which integrates container management with the KDE Plasma desktop environment.
+> 
+> To provide a more visually clear experience, we would like to use the logos of supported distributions in the application’s UI list. One such distribution is Alpine Linux.
+> 
+> We are respectfully asking for your permission to use the Alpine Linux logo in our application. This is to ensure we comply with trademark and legal guidelines.
+> 
+> Could you please let us know:
+> - Whether we may use the Alpine Linux logo/icon for this purpose?
+
+You may use the logo in your application.
+
+> - What license applies to the icon?
+
+I don’t know yet to be honest. I need to investigate if we decided the exact license.
+
+> - Who should be credited as the rights holder?
+
+Good question. I found an email from 18 January 2019 where the author of the logo is giving the rights to me. I think you can credit it to the Alpine Linux Project.
+
+I found a suggestion on the mailing list for the guidelines of the logo, but I dont think it was ever followed up. I think you can use that as general guidelines until we have something properly documented.
+
+https://lists.alpinelinux.org/~alpine/devel/%3CCA%2BT2pCHpuJcz%3DZs9LkSw%3DJqdrao2kdBfbyTrQsdESKH%3D47tSHw%40mail.gmail.com%3E￼
+
+
+Thank you for asking!
+
+-nc
+
+> 
+> You can see the current icons here (subject to change as it moves into the KDE infrastructure): 
+> https://invent.kde.org/system/kontainer/-/tree/master/res/icons?ref_type=heads
+> 
+> If you do not approve the use of the icon, we will immediately remove it.
+> 
+> Thank you for your time and consideration. Please don’t hesitate to reach out if more information is needed.
+> 
+> Best regards, 
+> Hadi Chokr 
+> KDE Developer 
+> silverhadch07@matrix.org
