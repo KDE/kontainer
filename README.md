@@ -59,7 +59,7 @@ make
 You can install Kontainer using Flatpak for an isolated and consistent environment:
 
 ```bash
-git clone https://invent.kde.org/silverhadch/k-box
+git clone https://invent.kde.org/system/kontainer
 flatpak install org.kde.Sdk//6.9
 flatpak-builder --force-clean build-dir kontainer.flatpak.yaml --user --install
 ```
