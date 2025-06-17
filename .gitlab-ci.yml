@@ -5,22 +5,4 @@ include:
   - project: sysadmin/ci-utilities
     file:
       - /gitlab-templates/reuse-lint.yml
-
-stages:
-  - validate
-  - build
-
-build_project:
-  stage: build
-  image: archlinux:latest
-  before_script:
-    - pacman -Sy --noconfirm base-devel clang cmake git qt6-base qt6-tools extra-cmake-modules ki18n
-  script:
-    - mkdir build
-    - cd build
-    - cmake ..
-    - make -j$(nproc)
-  artifacts:
-    paths:
-      - build/
-    expire_in: 1 hour
+      - /gitlab-templates/linux-qt6.yml
