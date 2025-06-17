@@ -43,7 +43,11 @@ public:
         }
 
         if (icon.isNull()) {
-            icon.load(":/icons/tux.svg"); // Fallback icon, similar to main UI
+            icon = QIcon(":/icons/tux.svg").pixmap(iconSize, iconSize);
+            if (icon.isNull()) {
+                // Final fallback, in case embedded icon also fails
+                icon = QIcon::fromTheme("preferences-virtualization-container").pixmap(iconSize, iconSize);
+            }
         }
 
         icon = icon.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
