@@ -9,7 +9,7 @@ command: kontainer
 finish-args:
   - --share=ipc
   - --socket=wayland
-  - --socket=x11-fallback
+  - --socket=fallback-x11
   - --filesystem=home:rw
   - --device=dri
   - --talk-name=org.freedesktop.Flatpak
