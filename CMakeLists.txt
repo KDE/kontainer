@@ -20,23 +20,6 @@ kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui Concurrent)
 
-file(GLOB RES_CONTENT "${CMAKE_SOURCE_DIR}/res/*")
-
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/res" OR RES_CONTENT STREQUAL "")
-    message(STATUS "Cloning kontainer-logos-trademarks into ${CMAKE_SOURCE_DIR}/res")
-    execute_process(
-        COMMAND git clone https://invent.kde.org/silverhadch/kontainer-logos-trademarks.git res
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        RESULT_VARIABLE result
-    )
-    if(NOT result EQUAL 0)
-        message(FATAL_ERROR "Failed to clone kontainer-logos-trademarks repository")
-    endif()
-else()
-    message(STATUS "Skipping clone of kontainer-logos-trademarks – 'res' already exists and is not empty")
-endif()
-
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

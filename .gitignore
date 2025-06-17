@@ -23,4 +23,3 @@ res/icons/*.qrc.depends
 .flatpak-builder/
 build-dir/
 my-local-repo/
-res/
