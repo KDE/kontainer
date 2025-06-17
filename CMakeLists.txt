@@ -46,9 +46,9 @@ qt_add_resources(RESOURCES
     resources.qrc
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${RESOURCES})
+add_executable(kontainer ${SOURCES} ${HEADERS} ${RESOURCES})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(kontainer PRIVATE
     Qt6::Core
     Qt6::Widgets
     Qt6::Gui
@@ -66,5 +66,5 @@ file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES
 kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
 
 # === Flatpak Install Target ===
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
-install(FILES org.kde.Kontainer.desktop DESTINATION share/applications)
+install(TARGETS kontainer RUNTIME DESTINATION bin)
+install(FILES org.kde.kontainer.desktop DESTINATION share/applications)
