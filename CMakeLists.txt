@@ -43,7 +43,7 @@ set(HEADERS
 )
 
 qt_add_resources(RESOURCES
-    res/resources.qrc
+    resources.qrc
 )
 
 add_executable(kontainer ${SOURCES} ${HEADERS} ${RESOURCES})

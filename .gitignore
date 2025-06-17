@@ -6,8 +6,6 @@ CMakeCache.txt
 Makefile
 cmake_install.cmake
 Kontainer
-kontainer
-kontainer_autogen/
 Kontainer_autogen/
 .qt/
 compile_commands.json
