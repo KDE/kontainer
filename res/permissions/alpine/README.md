@@ -1,0 +1,1 @@
+The Trademark of Alpine Linux Logo belongs to the Alpine Linux Development Team.

@@ -1,0 +1,35 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+    <file alias="icons/almalinux.svg">icons/almalinux.svg</file>
+    <file alias="icons/alpine.svg">icons/alpine.svg</file>
+    <file alias="icons/amazonlinux.svg">icons/amazonlinux.svg</file>
+    <file alias="icons/archlinux.svg">icons/archlinux.svg</file>
+    <file alias="icons/blackarchlinux.svg">icons/blackarchlinux.svg</file>
+    <file alias="icons/centos.svg">icons/centos.svg</file>
+    <file alias="icons/clearlinux.svg">icons/clearlinux.svg</file>
+    <file alias="icons/coreos.svg">icons/coreos.svg</file>
+    <file alias="icons/crystal.svg">icons/crystal.svg</file>
+    <file alias="icons/debian.svg">icons/debian.svg</file>
+    <file alias="icons/deepin.svg">icons/deepin.svg</file>
+    <file alias="icons/elementary.svg">icons/elementary.svg</file>
+    <file alias="icons/fedora.svg">icons/fedora.svg</file>
+    <file alias="icons/gentoo.svg">icons/gentoo.svg</file>
+    <file alias="icons/kali-linux.svg">icons/kali-linux.svg</file>
+    <file alias="icons/kde-neon.svg">icons/kde-neon.svg</file>
+    <file alias="icons/linuxmint.svg">icons/linuxmint.svg</file>
+    <file alias="icons/mageia.svg">icons/mageia.svg</file>
+    <file alias="icons/opensuse.svg">icons/opensuse.svg</file>
+    <file alias="icons/oracle.svg">icons/oracle.svg</file>
+    <file alias="icons/redhat.svg">icons/redhat.svg</file>
+    <file alias="icons/rocky-linux.svg">icons/rocky-linux.svg</file>
+    <file alias="icons/slackware.svg">icons/slackware.svg</file>
+    <file alias="icons/steamos.svg">icons/steamos.svg</file>
+    <file alias="icons/tux.svg">icons/tux.svg</file>
+    <file alias="icons/ublue.svg">icons/ublue.svg</file>
+    <file alias="icons/ubuntu.svg">icons/ubuntu.svg</file>
+    <file alias="icons/vanilla.svg">icons/vanilla.svg</file>
+    <file alias="icons/void.svg">icons/void.svg</file>
+    <file alias="icons/wolfi.svg">icons/wolfi.svg</file>
+</qresource>
+</RCC>
+

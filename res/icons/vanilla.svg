@@ -1,0 +1,28 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(100,100)">
+        <!-- Main chunky petal (now darker) -->
+        <path d="M0,-100 C40,-60,40,-40,0,0 C-40,-40,-40,-60,0,-100" fill="#fbc02d"/>
+        <!-- Highlight on the left side (now lighter) -->
+        <path d="M0,-100 C-40,-60,-40,-40,0,0 C-20,-40,-20,-60,0,-100" fill="#ffd54f"/>
+
+        <g transform="rotate(72)">
+            <path d="M0,-100 C40,-60,40,-40,0,0 C-40,-40,-40,-60,0,-100" fill="#fbc02d"/>
+            <path d="M0,-100 C-40,-60,-40,-40,0,0 C-20,-40,-20,-60,0,-100" fill="#ffd54f"/>
+        </g>
+
+        <g transform="rotate(144)">
+            <path d="M0,-100 C40,-60,40,-40,0,0 C-40,-40,-40,-60,0,-100" fill="#fbc02d"/>
+            <path d="M0,-100 C-40,-60,-40,-40,0,0 C-20,-40,-20,-60,0,-100" fill="#ffd54f"/>
+        </g>
+
+        <g transform="rotate(216)">
+            <path d="M0,-100 C40,-60,40,-40,0,0 C-40,-40,-40,-60,0,-100" fill="#fbc02d"/>
+            <path d="M0,-100 C-40,-60,-40,-40,0,0 C-20,-40,-20,-60,0,-100" fill="#ffd54f"/>
+        </g>
+
+        <g transform="rotate(288)">
+            <path d="M0,-100 C40,-60,40,-40,0,0 C-40,-40,-40,-60,0,-100" fill="#fbc02d"/>
+            <path d="M0,-100 C-40,-60,-40,-40,0,0 C-20,-40,-20,-60,0,-100" fill="#ffd54f"/>
+        </g>
+    </g>
+</svg>
