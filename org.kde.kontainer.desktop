@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Kontainer
-Comment=Manage Distrobox containers with a Qt GUI
+Comment=Manage Distrobox containers
 Exec=kontainer
 Icon=preferences-virtualization-container
 Type=Application
