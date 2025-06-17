@@ -1,7 +1,7 @@
 version = 1
 
-# This is a placeholder please refer to the README in res
+# This is a placeholder please refer to the README in res for the actuall Copyrights
 [[annotations]]
-path = "res/*"
+path = "res/**"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
