@@ -5,6 +5,3 @@ Exec=kontainer
 Icon=preferences-virtualization-container
 Type=Application
 Categories=System;Utility;
-StartupNotify=true
-Terminal=false
-X-Flatpak=org.kde.kontainer
