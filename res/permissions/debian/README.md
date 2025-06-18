@@ -1,3 +1,10 @@
-Redistribution of the logo is allowed due to Debian's liberal trademark policy.
+### Trademark and Attribution
+
 The Debian trademark belongs to Software in the Public Interest, Inc. (SPI).
-https://www.debian.org/logos/
+
+Redistribution of the Debian logo is allowed due to Debian’s liberal trademark policy.
+
+### Justification for Use
+
+- The logo is used to represent Debian-based systems.
+- Usage complies with Debian’s trademark guidelines.
