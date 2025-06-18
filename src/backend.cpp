@@ -221,7 +221,7 @@ void Backend::assembleContainer(const QString &iniFile)
     connect(process, &QProcess::finished, this, [this, process](int exitCode) {
         QString result = process->readAllStandardOutput();
         if (exitCode != 0) {
-            result = i18n("Error: ") + process->readAllStandardError();
+            result = i18n("Error: %1", process->readAllStandardError());
         }
         emit assembleFinished(result);
         process->deleteLater();

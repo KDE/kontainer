@@ -92,31 +92,31 @@ CreateContainerDialog::CreateContainerDialog(Backend *backend, const QString &te
 
     m_nameEdit = new QLineEdit(this);
     m_nameEdit->setPlaceholderText(i18n("my-container"));
-    formLayout->addRow(i18n("Container Name:"), m_nameEdit);
+    formLayout->addRow(i18n("Container name:"), m_nameEdit);
 
     m_searchEdit = new QLineEdit(this);
-    m_searchEdit->setPlaceholderText(i18n("Search images..."));
+    m_searchEdit->setPlaceholderText(i18n("Search images…"));
     connect(m_searchEdit, &QLineEdit::textChanged, this, &CreateContainerDialog::searchImages);
-    formLayout->addRow(i18n("Search Images:"), m_searchEdit);
+    formLayout->addRow(i18n("Search images:"), m_searchEdit);
 
     m_imageList = new QListWidget(this);
     m_imageList->setItemDelegate(new ImageListItemDelegate(this));
     m_imageList->setIconSize(QSize(32, 32));
     m_imageList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_imageList->setAlternatingRowColors(true);
-    formLayout->addRow(i18n("Available Images:"), m_imageList);
+    formLayout->addRow(i18n("Available images:"), m_imageList);
 
     m_homeEdit = new QLineEdit(this);
     m_homeEdit->setPlaceholderText(i18n("Leave empty for default"));
-    formLayout->addRow(i18n("Custom Home Path:"), m_homeEdit);
+    formLayout->addRow(i18n("Custom home path:"), m_homeEdit);
 
     m_volumesEdit = new QLineEdit(this);
     m_volumesEdit->setPlaceholderText(i18n("e.g., /host/path:/container/path (comma separate multiple)"));
-    formLayout->addRow(i18n("Additional Volumes:"), m_volumesEdit);
+    formLayout->addRow(i18n("Additional volumes:"), m_volumesEdit);
 
     m_initCheckbox = new QCheckBox(i18n("Enable systemd init"), this);
     m_initCheckbox->setToolTip(i18n("Enable systemd as init system inside the container"));
-    formLayout->addRow(i18n("Init System:"), m_initCheckbox);
+    formLayout->addRow(i18n("Init system:"), m_initCheckbox);
 
     // Setup buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -225,7 +225,7 @@ void CreateContainerDialog::startContainerCreation()
     // Setup progress dialog
     m_progressDialog = new QProgressDialog(this);
     m_progressDialog->setWindowTitle(i18n("Creating Container"));
-    m_progressDialog->setLabelText(i18n("Starting container creation..."));
+    m_progressDialog->setLabelText(i18n("Starting container creation…"));
     m_progressDialog->setRange(0, 0); // Indeterminate progress
     m_progressDialog->setCancelButton(nullptr);
     m_progressDialog->setModal(true);
@@ -283,7 +283,7 @@ void CreateContainerDialog::handleReadyRead()
 void CreateContainerDialog::handleErrorOccurred(QProcess::ProcessError error)
 {
     m_progressDialog->cancel();
-    QString errorMsg = i18n("Process error: ");
+    QString errorMsg = i18n("Process error:") + QLatin1String(" ");
     switch (error) {
     case QProcess::FailedToStart:
         errorMsg += i18n("Failed to start");
@@ -316,7 +316,7 @@ void CreateContainerDialog::handleCreateFinished(int exitCode, QProcess::ExitSta
     m_progressDialog->cancel();
 
     if (exitStatus == QProcess::NormalExit && exitCode == 0) {
-        QString successMsg = i18n("Container '%1' created successfully!", containerName());
+        QString successMsg = i18n("Container “%1” created successfully!", containerName());
         m_progressDialog->setLabelText(successMsg);
         QMessageBox::information(this, i18n("Success"), successMsg);
         m_backend->enterContainer(containerName(), m_terminal);

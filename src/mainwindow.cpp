@@ -430,7 +430,7 @@ void MainWindow::createNewContainer()
 {
     CreateContainerDialog dialog(backend, preferredTerminal, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QProgressDialog progress(i18n("Creating container..."), i18n("Cancel"), 0, 0, this);
+        QProgressDialog progress(i18n("Creating container…"), i18n("Cancel"), 0, 0, this);
         progress.setWindowModality(Qt::WindowModal);
         progress.show();
 

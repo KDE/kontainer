@@ -64,7 +64,7 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     , m_containerName(containerName)
 {
     // Window setup
-    setWindowTitle(i18n("Applications - ") + containerName);
+    setWindowTitle(i18nc("@title:window, %1 is a container name", "Applications — %1", containerName));
     resize(600, 500);
     setWindowIcon(QIcon::fromTheme("applications-other"));
 
