@@ -78,4 +78,10 @@ yay -S kontainer-git
 
 ## License
 
-Licensed under the **GNU General Public License v2.0 or later**. See `LICENSE` for details.
+Licensed under the **GNU General Public License v2.0 or later**. See `LICENSES` and the 'SPDX Headers' for details.
+
+## Trademark and Attribution
+
+All icons used in this application belong to their respective trademark owners.
+
+Detailed attribution, usage justifications, and permissions (including correspondence such as emails or screenshots) are documented in the `res/trademarks/` folder, organized by distribution name. Each subfolder includes a `README.md` with trademark ownership, licensing details, and the basis for use in this project.
