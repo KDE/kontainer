@@ -9,7 +9,7 @@
 
 - The ublue logo is used **solely to identify Universal Blue-based containers**.
 - This use does **not imply sponsorship, endorsement, or affiliation** by Universal Blue.
-- The use is **non-commercial**, and the logo links to [ublue.dev](https://ublue.dev) where appropriate.
+- The use is **non-commercial**.
 - This project respects the ethos and brand of the ublue community.
 
 > The usage aligns with the open and collaborative nature of the Universal Blue project.
