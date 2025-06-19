@@ -30,6 +30,11 @@ public:
     void upgradeContainer(const QString &name, const QString &terminal);
     void upgradeAllContainers(const QString &terminal);
     void executeInTerminal(const QString &terminal, const QString &command);
+    void installDebPackageNoTerminal(const QString &containerName, const QString &filePath);
+    void installRpmPackageNoTerminal(const QString &containerName, const QString &filePath);
+    void installArchPackageNoTerminal(const QString &containerName, const QString &filePath);
+    void upgradeContainerNoTerminal(const QString &containerName);
+    void upgradeAllContainersNoTerminal();
     // App operations
     QStringList getAvailableApps(const QString &containerName);
     QStringList getExportedApps(const QString &containerName);
@@ -44,6 +49,11 @@ public:
 
 signals:
     void assembleFinished(const QString &result);
+    void debInstallFinished(const QString &output);
+    void rpmInstallFinished(const QString &output);
+    void archInstallFinished(const QString &output);
+    void upgradeFinished(const QString &output);
+    void upgradeAllFinished(const QString &output);
 
 public slots:
     void assembleContainer(const QString &iniFile);

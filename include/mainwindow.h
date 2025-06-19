@@ -22,6 +22,7 @@
 #include <QStyle>
 #include <QStyledItemDelegate>
 #include <QTabWidget>
+#include <QTextEdit>
 #include <QToolBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -40,6 +41,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     QString preferredTerminal;
+    void showCommandOutput(const QString &output);
 
 private slots:
     void refreshContainers();

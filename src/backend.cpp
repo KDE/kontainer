@@ -410,3 +410,178 @@ QList<QMap<QString, QString>> Backend::searchImages(const QString &query)
 
     return filteredImages;
 }
+
+void Backend::installDebPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    qDebug() << "[installDebPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+
+    QProcess *process = new QProcess(this);
+    QStringList args;
+
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "apt" << "install" << "-y" << filePath;
+    } else {
+        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "apt" << "install" << "-y" << filePath;
+    }
+
+    qDebug() << "[installDebPackageNoTerminal] Command:" << args;
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString stdoutData = process->readAllStandardOutput();
+        QString stderrData = process->readAllStandardError();
+
+        qDebug() << "[installDebPackageNoTerminal] Exit code:" << exitCode;
+        qDebug() << "[installDebPackageNoTerminal] Stdout:" << stdoutData;
+        qDebug() << "[installDebPackageNoTerminal] Stderr:" << stderrData;
+
+        QString result = stdoutData;
+        if (exitCode != 0) {
+            result += "\nError: " + stderrData;
+        }
+
+        emit debInstallFinished(result);
+        process->deleteLater();
+    });
+
+    process->start(args[0], args.mid(1));
+}
+
+void Backend::installRpmPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    qDebug() << "[installRpmPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+
+    QProcess *process = new QProcess(this);
+    QStringList args;
+
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "dnf" << "install" << "-y" << filePath;
+    } else {
+        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "dnf" << "install" << "-y" << filePath;
+    }
+
+    qDebug() << "[installRpmPackageNoTerminal] Command:" << args;
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString stdoutData = process->readAllStandardOutput();
+        QString stderrData = process->readAllStandardError();
+
+        qDebug() << "[installRpmPackageNoTerminal] Exit code:" << exitCode;
+        qDebug() << "[installRpmPackageNoTerminal] Stdout:" << stdoutData;
+        qDebug() << "[installRpmPackageNoTerminal] Stderr:" << stderrData;
+
+        QString result = stdoutData;
+        if (exitCode != 0) {
+            result += "\nError: " + stderrData;
+        }
+
+        emit rpmInstallFinished(result);
+        process->deleteLater();
+    });
+
+    process->start(args[0], args.mid(1));
+}
+
+void Backend::installArchPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    qDebug() << "[installArchPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+
+    QProcess *process = new QProcess(this);
+    QStringList args;
+
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "pacman" << "-U" << "--noconfirm" << filePath;
+    } else {
+        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "pacman" << "-U" << "--noconfirm" << filePath;
+    }
+
+    qDebug() << "[installArchPackageNoTerminal] Command:" << args;
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString stdoutData = process->readAllStandardOutput();
+        QString stderrData = process->readAllStandardError();
+
+        qDebug() << "[installArchPackageNoTerminal] Exit code:" << exitCode;
+        qDebug() << "[installArchPackageNoTerminal] Stdout:" << stdoutData;
+        qDebug() << "[installArchPackageNoTerminal] Stderr:" << stderrData;
+
+        QString result = stdoutData;
+        if (exitCode != 0) {
+            result += "\nError: " + stderrData;
+        }
+
+        emit archInstallFinished(result);
+        process->deleteLater();
+    });
+
+    process->start(args[0], args.mid(1));
+}
+
+void Backend::upgradeContainerNoTerminal(const QString &containerName)
+{
+    qDebug() << "[upgradeContainerNoTerminal] Upgrading container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+
+    QProcess *process = new QProcess(this);
+    QStringList args;
+
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host" << "distrobox-upgrade" << containerName;
+    } else {
+        args << "distrobox-upgrade" << containerName;
+    }
+
+    qDebug() << "[upgradeContainerNoTerminal] Command:" << args;
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString stdoutData = process->readAllStandardOutput();
+        QString stderrData = process->readAllStandardError();
+
+        qDebug() << "[upgradeContainerNoTerminal] Exit code:" << exitCode;
+        qDebug() << "[upgradeContainerNoTerminal] Stdout:" << stdoutData;
+        qDebug() << "[upgradeContainerNoTerminal] Stderr:" << stderrData;
+
+        QString result = stdoutData;
+        if (exitCode != 0) {
+            result += "\nError: " + stderrData;
+        }
+
+        emit upgradeFinished(result);
+        process->deleteLater();
+    });
+
+    process->start(args[0], args.mid(1));
+}
+
+void Backend::upgradeAllContainersNoTerminal()
+{
+    qDebug() << "[upgradeAllContainersNoTerminal] Upgrading all containers (Flatpak:" << m_isFlatpak << ")";
+
+    QProcess *process = new QProcess(this);
+    QStringList args;
+
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host" << "distrobox-upgrade" << "--all";
+    } else {
+        args << "distrobox-upgrade" << "--all";
+    }
+
+    qDebug() << "[upgradeAllContainersNoTerminal] Command:" << args;
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
+        QString stdoutData = process->readAllStandardOutput();
+        QString stderrData = process->readAllStandardError();
+
+        qDebug() << "[upgradeAllContainersNoTerminal] Exit code:" << exitCode;
+        qDebug() << "[upgradeAllContainersNoTerminal] Stdout:" << stdoutData;
+        qDebug() << "[upgradeAllContainersNoTerminal] Stderr:" << stderrData;
+
+        QString result = stdoutData;
+        if (exitCode != 0) {
+            result += "\nError: " + stderrData;
+        }
+
+        emit upgradeAllFinished(result);
+        process->deleteLater();
+    });
+
+    process->start(args[0], args.mid(1));
+}

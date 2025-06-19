@@ -259,14 +259,21 @@ void MainWindow::setupUI()
         }
     }
 
-    // Set current terminal to saved preference or first available
-    int index = terminalSelector->findText(preferredTerminal);
-    if (index >= 0) {
-        terminalSelector->setCurrentIndex(index);
-    } else if (terminalSelector->count() > 0) {
-        preferredTerminal = terminalSelector->itemText(0);
-        QSettings settings;
-        settings.setValue("terminal/preferred", preferredTerminal);
+    if (availableTerminals.isEmpty()) {
+        preferredTerminal.clear(); // kein Terminal vorhanden
+        enterBtn->setEnabled(false);
+        enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
+    } else {
+        int index = terminalSelector->findText(preferredTerminal);
+        if (index >= 0) {
+            terminalSelector->setCurrentIndex(index);
+        } else {
+            preferredTerminal = terminalSelector->itemText(0);
+            QSettings settings;
+            settings.setValue("terminal/preferred", preferredTerminal);
+            terminalSelector->setCurrentIndex(0);
+        }
+        enterBtn->setEnabled(true);
     }
 
     connect(terminalSelector, &QComboBox::currentTextChanged, this, [this](const QString &term) {
@@ -277,12 +284,6 @@ void MainWindow::setupUI()
 
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
-
-    // Set initial state of Enter button
-    enterBtn->setEnabled(hasTerminal);
-    if (!hasTerminal) {
-        enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
-    }
 
     // Main layout
     mainLayout->addWidget(containerList, 1);
@@ -409,40 +410,6 @@ QString MainWindow::getContainerDistro() const
     return distro;
 }
 
-void MainWindow::installDebPackage()
-{
-    if (currentContainer.isEmpty())
-        return;
-
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .deb Package"), QDir::homePath(), i18n("Debian Packages (*.deb)"));
-    qDebug() << "Selected .deb package:" << filePath;
-    if (!filePath.isEmpty()) {
-        backend->installDebPackage(preferredTerminal, currentContainer, filePath);
-    }
-}
-
-void MainWindow::installRpmPackage()
-{
-    if (currentContainer.isEmpty())
-        return;
-
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .rpm Package"), QDir::homePath(), i18n("RPM Packages (*.rpm)"));
-    if (!filePath.isEmpty()) {
-        backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
-    }
-}
-
-void MainWindow::installArchPackage()
-{
-    if (currentContainer.isEmpty())
-        return;
-
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select Arch Package"), QDir::homePath(), i18n("Arch Packages (*.pkg.tar.*)"));
-    if (!filePath.isEmpty()) {
-        backend->installArchPackage(preferredTerminal, currentContainer, filePath);
-    }
-}
-
 void MainWindow::assembleContainer()
 {
     QString iniFile = QFileDialog::getOpenFileName(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
@@ -464,14 +431,172 @@ void MainWindow::enterContainer()
     backend->enterContainer(currentContainer, preferredTerminal);
 }
 
+void MainWindow::installDebPackage()
+{
+    qDebug() << "[installDebPackage] Called";
+
+    if (currentContainer.isEmpty()) {
+        qDebug() << "[installDebPackage] No container selected. Aborting.";
+        return;
+    }
+
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .deb Package"), QDir::homePath(), i18n("Debian Packages (*.deb)"));
+    qDebug() << "[installDebPackage] Selected file:" << filePath;
+
+    if (!filePath.isEmpty()) {
+        if (preferredTerminal.isEmpty()) {
+            qDebug() << "[installDebPackage] No preferred terminal. Using internal install.";
+
+            progressDialog = new QProgressDialog(i18n("Installing .deb package..."), QString(), 0, 0, this);
+            progressDialog->setWindowModality(Qt::WindowModal);
+            progressDialog->setCancelButton(nullptr);
+            progressDialog->show();
+
+            connect(backend, &Backend::debInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installDebPackageNoTerminal(currentContainer, filePath);
+        } else {
+            qDebug() << "[installDebPackage] Using preferred terminal:" << preferredTerminal;
+            connect(backend, &Backend::debInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installDebPackage(preferredTerminal, currentContainer, filePath);
+        }
+    } else {
+        qDebug() << "[installDebPackage] File selection canceled.";
+    }
+}
+
+void MainWindow::installRpmPackage()
+{
+    qDebug() << "[installRpmPackage] Called";
+
+    if (currentContainer.isEmpty()) {
+        qDebug() << "[installRpmPackage] No container selected. Aborting.";
+        return;
+    }
+
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .rpm Package"), QDir::homePath(), i18n("RPM Packages (*.rpm)"));
+    qDebug() << "[installRpmPackage] Selected file:" << filePath;
+
+    if (!filePath.isEmpty()) {
+        if (preferredTerminal.isEmpty()) {
+            qDebug() << "[installRpmPackage] No preferred terminal. Using internal install.";
+            progressDialog = new QProgressDialog(i18n("Installing .rpm package..."), QString(), 0, 0, this);
+            progressDialog->setWindowModality(Qt::WindowModal);
+            progressDialog->setCancelButton(nullptr);
+            progressDialog->show();
+
+            connect(backend, &Backend::rpmInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installRpmPackageNoTerminal(currentContainer, filePath);
+        } else {
+            qDebug() << "[installRpmPackage] Using preferred terminal:" << preferredTerminal;
+            connect(backend, &Backend::rpmInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
+        }
+    } else {
+        qDebug() << "[installRpmPackage] File selection canceled.";
+    }
+}
+
+void MainWindow::installArchPackage()
+{
+    qDebug() << "[installArchPackage] Called";
+
+    if (currentContainer.isEmpty()) {
+        qDebug() << "[installArchPackage] No container selected. Aborting.";
+        return;
+    }
+
+    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select Arch Package"), QDir::homePath(), i18n("Arch Packages (*.pkg.tar.*)"));
+    qDebug() << "[installArchPackage] Selected file:" << filePath;
+
+    if (!filePath.isEmpty()) {
+        if (preferredTerminal.isEmpty()) {
+            qDebug() << "[installArchPackage] No preferred terminal. Using internal install.";
+            progressDialog = new QProgressDialog(i18n("Installing Arch package..."), QString(), 0, 0, this);
+            progressDialog->setWindowModality(Qt::WindowModal);
+            progressDialog->setCancelButton(nullptr);
+            progressDialog->show();
+
+            connect(backend, &Backend::archInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installArchPackageNoTerminal(currentContainer, filePath);
+        } else {
+            qDebug() << "[installArchPackage] Using preferred terminal:" << preferredTerminal;
+            connect(backend, &Backend::archInstallFinished, this, &MainWindow::showCommandOutput);
+            backend->installArchPackage(preferredTerminal, currentContainer, filePath);
+        }
+    } else {
+        qDebug() << "[installArchPackage] File selection canceled.";
+    }
+}
+
 void MainWindow::upgradeContainer()
 {
-    if (currentContainer.isEmpty())
+    qDebug() << "[upgradeContainer] Called";
+
+    if (currentContainer.isEmpty()) {
+        qDebug() << "[upgradeContainer] No container selected. Aborting.";
         return;
-    backend->upgradeContainer(currentContainer, preferredTerminal);
+    }
+
+    if (preferredTerminal.isEmpty()) {
+        qDebug() << "[upgradeContainer] No preferred terminal. Using internal upgrade.";
+        progressDialog = new QProgressDialog(i18n("Upgrading container..."), QString(), 0, 0, this);
+        progressDialog->setWindowModality(Qt::WindowModal);
+        progressDialog->setCancelButton(nullptr);
+        progressDialog->show();
+
+        connect(backend, &Backend::upgradeFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeContainerNoTerminal(currentContainer);
+    } else {
+        qDebug() << "[upgradeContainer] Using preferred terminal:" << preferredTerminal;
+        connect(backend, &Backend::upgradeFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeContainer(currentContainer, preferredTerminal);
+    }
 }
 
 void MainWindow::upgradeAllContainers()
 {
-    backend->upgradeAllContainers(preferredTerminal);
+    qDebug() << "[upgradeAllContainers] Called";
+
+    if (preferredTerminal.isEmpty()) {
+        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
+        progressDialog = new QProgressDialog(i18n("Upgrading all containers..."), QString(), 0, 0, this);
+        progressDialog->setWindowModality(Qt::WindowModal);
+        progressDialog->setCancelButton(nullptr);
+        progressDialog->show();
+
+        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeAllContainersNoTerminal();
+    } else {
+        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
+        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeAllContainers(preferredTerminal);
+    }
+}
+
+void MainWindow::showCommandOutput(const QString &output)
+{
+    qDebug() << "Command output received:" << output;
+    if (progressDialog) {
+        progressDialog->close();
+        progressDialog->deleteLater();
+        progressDialog = nullptr;
+    }
+
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle(i18n("Command Output"));
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
+
+    QTextEdit *outputText = new QTextEdit(dialog);
+    outputText->setReadOnly(true);
+    outputText->setPlainText(output);
+    outputText->setWordWrapMode(QTextOption::NoWrap);
+
+    QPushButton *closeBtn = new QPushButton(i18n("Close"), dialog);
+    connect(closeBtn, &QPushButton::clicked, dialog, &QDialog::accept);
+
+    layout->addWidget(outputText);
+    layout->addWidget(closeBtn);
+    dialog->resize(600, 400);
+    dialog->exec();
+    dialog->deleteLater();
 }

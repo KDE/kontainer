@@ -18,7 +18,7 @@ public:
         // Define package type mappings
         static const QMap<QString, QStringList> distroMappings = {
             {"deb", {"debian", "ubuntu", "mint", "vso", "popos", "kali", "neon", "nd\\d+"}},
-            {"rpm", {"fedora", "rhel", "centos", "opensuse", "suse", "rockylinux", "ubi\\d*", "almalinux", "mageia"}},
+            {"rpm", {"fedora", "rhel", "centos", "opensuse", "suse", "rockylinux", "ubi\\d*", "redhat", "ubi", "almalinux", "mageia"}},
             {"arch", {"arch", "blackarch", "archlinux", "arch-toolbox", "arch-distrobox", "crystal"}}};
 
         // Check each package type
