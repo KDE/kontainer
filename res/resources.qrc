@@ -19,7 +19,6 @@
     <file alias="icons/linuxmint.svg">icons/linuxmint.svg</file>
     <file alias="icons/mageia.svg">icons/mageia.svg</file>
     <file alias="icons/opensuse.svg">icons/opensuse.svg</file>
-    <file alias="icons/oracle.svg">icons/oracle.svg</file>
     <file alias="icons/redhat.svg">icons/redhat.svg</file>
     <file alias="icons/rocky-linux.svg">icons/rocky-linux.svg</file>
     <file alias="icons/slackware.svg">icons/slackware.svg</file>
