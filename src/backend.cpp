@@ -109,6 +109,54 @@ QString Backend::getContainerDistro(const QString &containerName) const
     return "";
 }
 
+QStringList Backend::getAvailableTerminals() const
+{
+    QStringList availableTerminals;
+    auto terminalInfoMap = getTerminalInfoMap();
+
+    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+        if (!isFlatpakTerminal(term)) {
+            bool terminalAvailable = false;
+            if (m_isFlatpak) {
+                QProcess whichProcess;
+                whichProcess.start("flatpak-spawn", {"--host", "which", term});
+                whichProcess.waitForFinished(500);
+                terminalAvailable = (whichProcess.exitCode() == 0);
+            } else {
+                terminalAvailable = !QStandardPaths::findExecutable(term).isEmpty();
+            }
+            if (terminalAvailable) {
+                availableTerminals.append(term);
+            }
+        }
+    }
+
+    // Check Flatpak terminals
+    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
+        if (isFlatpakTerminal(term)) {
+            bool terminalAvailable = false;
+            if (m_isFlatpak) {
+                QProcess process;
+                process.start("flatpak-spawn", {"--host", "flatpak", "list", "--app", "--columns=application"});
+                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
+                    terminalAvailable = true;
+                }
+            } else {
+                QProcess process;
+                process.start("flatpak", {"list", "--app", "--columns=application"});
+                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
+                    terminalAvailable = true;
+                }
+            }
+            if (terminalAvailable) {
+                availableTerminals.append(term);
+            }
+        }
+    }
+
+    return availableTerminals;
+}
+
 QList<QMap<QString, QString>> Backend::getContainers() const
 {
     QString output = runCommand({"distrobox", "list", "--no-color"});

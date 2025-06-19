@@ -36,6 +36,7 @@ public:
     QString exportApp(const QString &appName, const QString &containerName);
     QString unexportApp(const QString &appName, const QString &containerName);
     QString getContainerDistro(const QString &containerName) const;
+    QStringList getAvailableTerminals() const;
 
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
