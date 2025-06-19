@@ -232,7 +232,7 @@ void MainWindow::setupUI()
 
     // Get available terminals from backend
     QStringList availableTerminals = backend->getAvailableTerminals();
-    bool hasTerminal = !availableTerminals.isEmpty();
+    hasTerminal = !availableTerminals.isEmpty();
 
     // Populate terminal selector
     for (const QString &term : availableTerminals) {
@@ -307,7 +307,11 @@ void MainWindow::onAssembleFinished(const QString &result)
 void MainWindow::updateButtonStates()
 {
     bool hasSelection = !currentContainer.isEmpty();
-    enterBtn->setEnabled(hasSelection);
+    if (!hasTerminal) {
+        enterBtn->setVisible(false);
+    } else {
+        enterBtn->setEnabled(hasSelection);
+    }
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
     upgradeBtn->setEnabled(hasSelection);

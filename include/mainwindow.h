@@ -69,6 +69,7 @@ private:
     QPushButton *installRpmBtn;
     QPushButton *installArchBtn;
     QString getContainerDistro() const;
+    bool hasTerminal = false;
 
     Backend *backend;
     QListWidget *containerList;
