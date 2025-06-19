@@ -230,64 +230,19 @@ void MainWindow::setupUI()
     QComboBox *terminalSelector = new QComboBox(toolBar);
     auto terminalInfoMap = getTerminalInfoMap();
 
-    // Check for available terminals
-    bool isFlatpakEnv = QFile::exists("/.flatpak-info");
-    QStringList availableTerminals;
+    // Get available terminals from backend
+    QStringList availableTerminals = backend->getAvailableTerminals();
+    bool hasTerminal = !availableTerminals.isEmpty();
 
-    // First check regular terminals
-    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
-        if (!isFlatpakTerminal(term)) {
-            bool terminalAvailable = false;
-
-            if (isFlatpakEnv) {
-                // Inside Flatpak, use flatpak-spawn --host which
-                QProcess whichProcess;
-                whichProcess.start("flatpak-spawn", {"--host", "which", term});
-                whichProcess.waitForFinished(500);
-                terminalAvailable = (whichProcess.exitCode() == 0);
-            } else {
-                // Outside Flatpak, use standard executable check
-                terminalAvailable = !QStandardPaths::findExecutable(term).isEmpty();
-            }
-
-            if (terminalAvailable) {
-                availableTerminals.append(term);
-                QIcon icon = QIcon::fromTheme(info.icon, QIcon::fromTheme("utilities-terminal"));
-                terminalSelector->addItem(icon, term);
-            }
-        }
+    // Populate terminal selector
+    for (const QString &term : availableTerminals) {
+        TerminalInfo info = terminalInfoMap[term];
+        QIcon icon =
+            QIcon::fromTheme(info.icon, isFlatpakTerminal(term) ? QIcon::fromTheme("application-x-executable") : QIcon::fromTheme("utilities-terminal"));
+        terminalSelector->addItem(icon, term);
     }
 
-    // Check Flatpak terminals (both inside and outside Flatpak)
-    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
-        if (isFlatpakTerminal(term)) {
-            bool terminalAvailable = false;
-
-            if (isFlatpakEnv) {
-                // Inside Flatpak, check if the terminal Flatpak is installed
-                QProcess process;
-                process.start("flatpak-spawn", {"--host", "flatpak", "list", "--app", "--columns=application"});
-                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
-                    terminalAvailable = true;
-                }
-            } else {
-                // Outside Flatpak, normal Flatpak check
-                QProcess process;
-                process.start("flatpak", {"list", "--app", "--columns=application"});
-                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
-                    terminalAvailable = true;
-                }
-            }
-
-            if (terminalAvailable) {
-                availableTerminals.append(term);
-                QIcon icon = QIcon::fromTheme(info.icon, QIcon::fromTheme("application-x-executable"));
-                terminalSelector->addItem(icon, term);
-            }
-        }
-    }
-
-    // Add separator if we have both types of terminals
+    // Add separator if we have both regular and Flatpak terminals
     bool hasRegular = std::any_of(availableTerminals.begin(), availableTerminals.end(), [this](const QString &term) {
         return !isFlatpakTerminal(term);
     });
@@ -296,7 +251,6 @@ void MainWindow::setupUI()
     });
 
     if (hasRegular && hasFlatpak) {
-        // Find first Flatpak terminal index
         for (int i = 0; i < terminalSelector->count(); ++i) {
             if (isFlatpakTerminal(terminalSelector->itemText(i))) {
                 terminalSelector->insertSeparator(i);
@@ -317,13 +271,18 @@ void MainWindow::setupUI()
 
     connect(terminalSelector, &QComboBox::currentTextChanged, this, [this](const QString &term) {
         preferredTerminal = term;
-        // Save preference immediately
         QSettings settings;
         settings.setValue("terminal/preferred", preferredTerminal);
     });
 
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
+
+    // Set initial state of Enter button
+    enterBtn->setEnabled(hasTerminal);
+    if (!hasTerminal) {
+        enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
+    }
 
     // Main layout
     mainLayout->addWidget(containerList, 1);
