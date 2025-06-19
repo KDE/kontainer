@@ -1,6 +1,19 @@
 [Desktop Entry]
 Name=Kontainer
+Name[ca]=Kontainer
+Name[ca@valencia]=Kontainer
+Name[he]=Kontainer
+Name[sl]=Kontainer
+Name[tr]=Konteyner
+Name[uk]=Kontainer
+Name[x-test]=xxKontainerxx
 Comment=Manage Distrobox containers
+Comment[ca]=Gestiona contenidors de Distrobox
+Comment[ca@valencia]=Gestiona contenidors de Distrobox
+Comment[he]=ניהול מכולות של Distrobox
+Comment[tr]=Distrobox kapsayıcılarını yönetin
+Comment[uk]=Керування контейнерами Distrobox
+Comment[x-test]=xxManage Distrobox containersxx
 Exec=kontainer
 Icon=preferences-virtualization-container
 Type=Application
