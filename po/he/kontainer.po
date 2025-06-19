@@ -1,0 +1,498 @@
+# Copyright (C) 2025 This file is copyright:
+# This file is distributed under the same license as the kontainer package.
+#
+# SPDX-FileCopyrightText: 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+msgid ""
+msgstr ""
+"Project-Id-Version: kontainer\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2025-06-19 00:45+0000\n"
+"PO-Revision-Date: 2025-06-18 16:13+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.1\n"
+
+#: src/appsdialog.cpp:67
+#, fuzzy, kde-format
+#| msgid "Applications - "
+msgctxt "@title:window, %1 is a container name"
+msgid "Applications — %1"
+msgstr "יישומים - "
+
+#: src/appsdialog.cpp:87
+#, kde-format
+msgid "Unexport"
+msgstr "ביטול ייצוא"
+
+#: src/appsdialog.cpp:89
+#, kde-format
+msgid "Remove the selected application from your host system"
+msgstr "הסרת היישום הנבחר מהמערכת המארחת שלך"
+
+#: src/appsdialog.cpp:94
+#, kde-format
+msgid "Unexport App"
+msgstr "ביטול ייצוא יישום"
+
+#: src/appsdialog.cpp:117
+#, kde-format
+msgid "Export"
+msgstr "ייצוא"
+
+#: src/appsdialog.cpp:119
+#, kde-format
+msgid "Make the selected application available on your host system"
+msgstr "להנגיש את היישום הנבחר למערכת המארחת שלך"
+
+#: src/appsdialog.cpp:124
+#, kde-format
+msgid "Export App"
+msgstr "ייצוא יישום"
+
+#: src/appsdialog.cpp:136
+#, kde-format
+msgid "Exported Apps"
+msgstr "יישומים שיוצאו"
+
+#: src/appsdialog.cpp:137
+#, kde-format
+msgid "Available Apps"
+msgstr "יישומים זמינים"
+
+#: src/backend.cpp:29
+#, kde-format
+msgid "Error: Command timed out"
+msgstr "שגיאה: הזמן שהוקצה לפעולה נגמר"
+
+#: src/backend.cpp:166
+#, kde-format
+msgid "Unknown terminal:"
+msgstr "מסוף לא ידוע:"
+
+#: src/backend.cpp:199 src/backend.cpp:209
+#, kde-format
+msgid "Failed to start terminal"
+msgstr "הפעלת המסוף נכשלה"
+
+#: src/backend.cpp:199 src/backend.cpp:209
+#, kde-format
+msgid "with args"
+msgstr "עם ארגומנטים"
+
+#: src/backend.cpp:224
+#, fuzzy, kde-format
+#| msgid "Error: "
+msgid "Error: %1"
+msgstr "שגיאה: "
+
+#: src/createcontainerdialog.cpp:81
+#, kde-format
+msgid "Create New Container"
+msgstr "יצירת מכולה חדשה"
+
+#: src/createcontainerdialog.cpp:94
+#, kde-format
+msgid "my-container"
+msgstr "המכולה-שלי"
+
+#: src/createcontainerdialog.cpp:95
+#, fuzzy, kde-format
+#| msgid "Container Name:"
+msgid "Container name:"
+msgstr "שם המכולה:"
+
+#: src/createcontainerdialog.cpp:98
+#, fuzzy, kde-format
+#| msgid "Search images..."
+msgid "Search images…"
+msgstr "חיפוש דמויות…"
+
+#: src/createcontainerdialog.cpp:100
+#, fuzzy, kde-format
+#| msgid "Search Images:"
+msgid "Search images:"
+msgstr "חיפוש תמונות:"
+
+#: src/createcontainerdialog.cpp:107
+#, fuzzy, kde-format
+#| msgid "Available Images:"
+msgid "Available images:"
+msgstr "תמונות זמינות:"
+
+#: src/createcontainerdialog.cpp:110
+#, kde-format
+msgid "Leave empty for default"
+msgstr "להשאיר ריק לברירת מחדל"
+
+#: src/createcontainerdialog.cpp:111
+#, fuzzy, kde-format
+#| msgid "Custom Home Path:"
+msgid "Custom home path:"
+msgstr "נתיב בית כברירת מחדל:"
+
+#: src/createcontainerdialog.cpp:114
+#, kde-format
+msgid "e.g., /host/path:/container/path (comma separate multiple)"
+msgstr "למשל: ‎/host/path:/container/path (אפשר להפריד בין כמה כאלה בפסיקים)"
+
+#: src/createcontainerdialog.cpp:115
+#, fuzzy, kde-format
+#| msgid "Additional Volumes:"
+msgid "Additional volumes:"
+msgstr "כרכים נוספים:"
+
+#: src/createcontainerdialog.cpp:117
+#, kde-format
+msgid "Enable systemd init"
+msgstr "הפעלת אתחול עם systemd"
+
+#: src/createcontainerdialog.cpp:118
+#, kde-format
+msgid "Enable systemd as init system inside the container"
+msgstr "הפעלת systemd כמערכת אתחול בתוך המכולה"
+
+#: src/createcontainerdialog.cpp:119
+#, fuzzy, kde-format
+#| msgid "Init System:"
+msgid "Init system:"
+msgstr "מערכת אתחול:"
+
+#: src/createcontainerdialog.cpp:126
+#, kde-format
+msgid "Refresh Images"
+msgstr "רענון דמויות"
+
+#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:433
+#: src/mainwindow.cpp:492
+#, kde-format
+msgid "Cancel"
+msgstr "ביטול"
+
+#: src/createcontainerdialog.cpp:138
+#, kde-format
+msgid "Create"
+msgstr "יצירה"
+
+#: src/createcontainerdialog.cpp:216 src/createcontainerdialog.cpp:221
+#: src/createcontainerdialog.cpp:309 src/createcontainerdialog.cpp:330
+#, kde-format
+msgid "Error"
+msgstr "שגיאה"
+
+#: src/createcontainerdialog.cpp:216
+#, kde-format
+msgid "Please enter a container name"
+msgstr "נא למלא שם למכולה"
+
+#: src/createcontainerdialog.cpp:221
+#, kde-format
+msgid "Please select an image"
+msgstr "נא לבחור דמות"
+
+#: src/createcontainerdialog.cpp:227
+#, kde-format
+msgid "Creating Container"
+msgstr "המכולה נוצרת"
+
+#: src/createcontainerdialog.cpp:228
+#, fuzzy, kde-format
+#| msgid "Starting container creation..."
+msgid "Starting container creation…"
+msgstr "יצירת המכולה מתחילה…"
+
+#: src/createcontainerdialog.cpp:270
+#, kde-format
+msgid "Executing:"
+msgstr "מופעל:"
+
+#: src/createcontainerdialog.cpp:279
+#, kde-format
+msgid "Process output:"
+msgstr "פלט תהליך:"
+
+#: src/createcontainerdialog.cpp:286
+#, fuzzy, kde-format
+#| msgid "Process error: "
+msgid "Process error:"
+msgstr "שגיאת תהליך: "
+
+#: src/createcontainerdialog.cpp:289
+#, kde-format
+msgid "Failed to start"
+msgstr "ההתחלה נכשלה"
+
+#: src/createcontainerdialog.cpp:292
+#, kde-format
+msgid "Crashed"
+msgstr "קרס"
+
+#: src/createcontainerdialog.cpp:295
+#, kde-format
+msgid "Timed out"
+msgstr "נגמר הזמן שהוקצב"
+
+#: src/createcontainerdialog.cpp:298
+#, kde-format
+msgid "Write error"
+msgstr "שגיאת כתיבה"
+
+#: src/createcontainerdialog.cpp:301
+#, kde-format
+msgid "Read error"
+msgstr "שגיאת קריאה"
+
+#: src/createcontainerdialog.cpp:304
+#, kde-format
+msgid "Unknown error"
+msgstr "שגיאה לא ידועה"
+
+#: src/createcontainerdialog.cpp:319
+#, fuzzy, kde-format
+#| msgid "Container '%1' created successfully!"
+msgid "Container “%1” created successfully!"
+msgstr "המכולה ‚%1’ נוצרה בהצלחה!"
+
+#: src/createcontainerdialog.cpp:321
+#, kde-format
+msgid "Success"
+msgstr "הצלחה"
+
+#: src/createcontainerdialog.cpp:326
+#, kde-format
+msgid "Container creation failed (exit code: %1)"
+msgstr "יצירת המכולה נכשלה (קוד יציאה: %1)"
+
+#: src/createcontainerdialog.cpp:328
+#, kde-format
+msgid ""
+"Container creation failed (exit code: %1)\n"
+"\n"
+"Error output: %2\n"
+msgstr ""
+"יצירת המכולה נכשלה (קוד יציאה: %1)\n"
+"\n"
+"פלט שגיאה: %2\n"
+
+#: src/mainwindow.cpp:100
+#, kde-format
+msgid "Kontainer"
+msgstr "Kontainer"
+
+#: src/mainwindow.cpp:142
+#, kde-format
+msgid "Enter"
+msgstr "כניסה"
+
+#: src/mainwindow.cpp:143
+#, kde-format
+msgid "Enter the selected container"
+msgstr "כניסה למכולה הנבחרת"
+
+#: src/mainwindow.cpp:146
+#, kde-format
+msgid "Delete"
+msgstr "מחיקה"
+
+#: src/mainwindow.cpp:147
+#, kde-format
+msgid "Delete the selected container"
+msgstr "מחיקת המכולה הנבחרת"
+
+#: src/mainwindow.cpp:150
+#, kde-format
+msgid "Applications"
+msgstr "יישומים"
+
+#: src/mainwindow.cpp:151
+#, kde-format
+msgid "Manage exported applications"
+msgstr "ניהול יישומים מיוצאים"
+
+#: src/mainwindow.cpp:154
+#, kde-format
+msgid "Upgrade"
+msgstr "שדרוג"
+
+#: src/mainwindow.cpp:155
+#, kde-format
+msgid "Upgrade the selected container"
+msgstr "שדרוג המכולה הנבחרת"
+
+#: src/mainwindow.cpp:162
+#, kde-format
+msgid "Refresh"
+msgstr "ריענון"
+
+#: src/mainwindow.cpp:163
+#, kde-format
+msgid "Refresh container list"
+msgstr "ריענון רשימת המכולות"
+
+#: src/mainwindow.cpp:167
+#, kde-format
+msgid "Install .deb"
+msgstr "התקנת ‎.deb"
+
+#: src/mainwindow.cpp:168
+#, kde-format
+msgid "Install Debian/Ubuntu package"
+msgstr "התקנת חבילת דביאן/אובונטו"
+
+#: src/mainwindow.cpp:171
+#, kde-format
+msgid "Install .rpm"
+msgstr "התקנת ‎.rpm"
+
+#: src/mainwindow.cpp:172
+#, kde-format
+msgid "Install Fedora/OpenSUSE package"
+msgstr "התקנת חבילת פדורה/OpenSUSE"
+
+#: src/mainwindow.cpp:175
+#, kde-format
+msgid "Install .pkg"
+msgstr "התקנת ‎.pkg"
+
+#: src/mainwindow.cpp:176
+#, kde-format
+msgid "Install Arch Linux package"
+msgstr "התקנת חבילת לינוקס ארץ׳"
+
+#: src/mainwindow.cpp:199
+#, kde-format
+msgid "New Container"
+msgstr "מכולה חדשה"
+
+#: src/mainwindow.cpp:201
+#, kde-format
+msgid "Create new container"
+msgstr "יצירת מכולה חדשה"
+
+#: src/mainwindow.cpp:207
+#, kde-format
+msgid "Upgrade all Containers"
+msgstr "שדרוג כל המכולות"
+
+#: src/mainwindow.cpp:209
+#, kde-format
+msgid "Upgrades all containers"
+msgstr "שדרוג כל המכולות"
+
+#: src/mainwindow.cpp:215
+#, kde-format
+msgid "Assemble"
+msgstr "הרכבה"
+
+#: src/mainwindow.cpp:217
+#, kde-format
+msgid "Create container from INI file"
+msgstr "יצירת מכולה מקובץ INI"
+
+#: src/mainwindow.cpp:227
+#, kde-format
+msgid "Terminal:"
+msgstr "מסוף:"
+
+#: src/mainwindow.cpp:343
+#, kde-format
+msgid "Assemble Result"
+msgstr "תוצאת הרכבה"
+
+#: src/mainwindow.cpp:378
+#, kde-format
+msgid "Container:"
+msgstr "מכולה:"
+
+#: src/mainwindow.cpp:378
+#, kde-format
+msgid "Distro:"
+msgstr "הפצה:"
+
+#: src/mainwindow.cpp:378
+#, kde-format
+msgid "Icon:"
+msgstr "סמל:"
+
+#: src/mainwindow.cpp:382 src/mainwindow.cpp:387
+#, kde-format
+msgid "No containers found"
+msgstr "לא נמצאו מכולות"
+
+#: src/mainwindow.cpp:400
+#, kde-format
+msgid "Confirm Deletion"
+msgstr "אישור מחיקה"
+
+#: src/mainwindow.cpp:401
+#, kde-format
+msgid "Delete container <b>%1</b>?"
+msgstr "למחוק את המכולה <b>%1</b>?"
+
+#: src/mainwindow.cpp:402
+#, kde-format
+msgid "This action cannot be undone."
+msgstr "זאת פעולה בלתי הפיכה."
+
+#: src/mainwindow.cpp:409 src/mainwindow.cpp:442
+#, kde-format
+msgid "Result"
+msgstr "תוצאה"
+
+#: src/mainwindow.cpp:433
+#, fuzzy, kde-format
+#| msgid "Creating Container"
+msgid "Creating container…"
+msgstr "המכולה נוצרת"
+
+#: src/mainwindow.cpp:458
+#, kde-format
+msgid "Select .deb Package"
+msgstr "בחירת חבילת ‎.deb"
+
+#: src/mainwindow.cpp:458
+#, kde-format
+msgid "Debian Packages (*.deb)"
+msgstr "חבילות דביאן (‎*.deb)"
+
+#: src/mainwindow.cpp:470
+#, kde-format
+msgid "Select .rpm Package"
+msgstr "בחירת חבילת ‎.rpm"
+
+#: src/mainwindow.cpp:470
+#, kde-format
+msgid "RPM Packages (*.rpm)"
+msgstr "חבילות RPM‏ (‎*.rpm)"
+
+#: src/mainwindow.cpp:481
+#, kde-format
+msgid "Select Arch Package"
+msgstr "בחירת חבילת ארץ׳"
+
+#: src/mainwindow.cpp:481
+#, kde-format
+msgid "Arch Packages (*.pkg.tar.*)"
+msgstr "חבילות ארץ׳ (‎*.pkg.tar.*‎)"
+
+#: src/mainwindow.cpp:489
+#, kde-format
+msgid "Select Distrobox INI File"
+msgstr "בחירת קובץ INI של Distrobox"
+
+#: src/mainwindow.cpp:489
+#, kde-format
+msgid "INI Files (*.ini);;All Files (*)"
+msgstr "קובצי INI‏ (‎*.ini);;כל הקבצים (*)"
+
+#: src/mainwindow.cpp:492
+#, kde-format
+msgid "Assembling container..."
+msgstr "המכולה מורכבת…"
+
+#~ msgid "Creating container..."
+#~ msgstr "המכולה נוצרת…"
