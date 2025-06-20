@@ -6,24 +6,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-19 00:45+0000\n"
-"PO-Revision-Date: 2025-06-18 08:51+0300\n"
+"POT-Creation-Date: 2025-06-20 00:45+0000\n"
+"PO-Revision-Date: 2025-06-19 08:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 23.04.3\n"
 
 #: src/appsdialog.cpp:67
-#, fuzzy, kde-format
-#| msgid "Applications - "
+#, kde-format
 msgctxt "@title:window, %1 is a container name"
 msgid "Applications — %1"
-msgstr "Програми - "
+msgstr "Програми – %1"
 
 #: src/appsdialog.cpp:87
 #, kde-format
@@ -70,26 +69,25 @@ msgstr "Доступні програми"
 msgid "Error: Command timed out"
 msgstr "Помилка: перевищено час очікування на виконання команди"
 
-#: src/backend.cpp:166
+#: src/backend.cpp:214
 #, kde-format
 msgid "Unknown terminal:"
 msgstr "Невідомий термінал:"
 
-#: src/backend.cpp:199 src/backend.cpp:209
+#: src/backend.cpp:247 src/backend.cpp:257
 #, kde-format
 msgid "Failed to start terminal"
 msgstr "Не вдалося запустити термінал"
 
-#: src/backend.cpp:199 src/backend.cpp:209
+#: src/backend.cpp:247 src/backend.cpp:257
 #, kde-format
 msgid "with args"
 msgstr "з аргументами"
 
-#: src/backend.cpp:224
-#, fuzzy, kde-format
-#| msgid "Error: "
+#: src/backend.cpp:272
+#, kde-format
 msgid "Error: %1"
-msgstr "Помилка: "
+msgstr "Помилка: %1"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -102,26 +100,22 @@ msgid "my-container"
 msgstr "мій-контейнер"
 
 #: src/createcontainerdialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "Container Name:"
+#, kde-format
 msgid "Container name:"
 msgstr "Назва контейнера:"
 
 #: src/createcontainerdialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Search images..."
+#, kde-format
 msgid "Search images…"
 msgstr "Шукати образи…"
 
 #: src/createcontainerdialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Search Images:"
+#, kde-format
 msgid "Search images:"
 msgstr "Шукати образи:"
 
 #: src/createcontainerdialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "Available Images:"
+#, kde-format
 msgid "Available images:"
 msgstr "Доступні образи:"
 
@@ -131,8 +125,7 @@ msgid "Leave empty for default"
 msgstr "Не заповнюйте, якщо типовий"
 
 #: src/createcontainerdialog.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom Home Path:"
+#, kde-format
 msgid "Custom home path:"
 msgstr "Нетиповий шлях до домівки:"
 
@@ -143,8 +136,7 @@ msgstr ""
 "наприклад, /вузол/шлях:/контейнер/шлях (декілька можна відокремити комами)"
 
 #: src/createcontainerdialog.cpp:115
-#, fuzzy, kde-format
-#| msgid "Additional Volumes:"
+#, kde-format
 msgid "Additional volumes:"
 msgstr "Додаткові томи:"
 
@@ -159,8 +151,7 @@ msgid "Enable systemd as init system inside the container"
 msgstr "Увімкнути systemd як систему ініціалізації всередині контейнера"
 
 #: src/createcontainerdialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Init System:"
+#, kde-format
 msgid "Init system:"
 msgstr "Система ініціалізації:"
 
@@ -169,8 +160,8 @@ msgstr "Система ініціалізації:"
 msgid "Refresh Images"
 msgstr "Освіжити образи"
 
-#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:433
-#: src/mainwindow.cpp:492
+#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:397
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Cancel"
 msgstr "Скасувати"
@@ -202,8 +193,7 @@ msgid "Creating Container"
 msgstr "Створення контейнера"
 
 #: src/createcontainerdialog.cpp:228
-#, fuzzy, kde-format
-#| msgid "Starting container creation..."
+#, kde-format
 msgid "Starting container creation…"
 msgstr "Починаємо створення контейнера…"
 
@@ -218,10 +208,9 @@ msgid "Process output:"
 msgstr "Виведено процесом:"
 
 #: src/createcontainerdialog.cpp:286
-#, fuzzy, kde-format
-#| msgid "Process error: "
+#, kde-format
 msgid "Process error:"
-msgstr "Помилка процесу: "
+msgstr "Помилка процесу:"
 
 #: src/createcontainerdialog.cpp:289
 #, kde-format
@@ -254,8 +243,7 @@ msgid "Unknown error"
 msgstr "Невідома помилка"
 
 #: src/createcontainerdialog.cpp:319
-#, fuzzy, kde-format
-#| msgid "Container '%1' created successfully!"
+#, kde-format
 msgid "Container “%1” created successfully!"
 msgstr "Контейнер «%1» успішно створено!"
 
@@ -400,101 +388,142 @@ msgstr "Створити контейнер на основі файла INI"
 msgid "Terminal:"
 msgstr "Термінал:"
 
-#: src/mainwindow.cpp:343
+#: src/mainwindow.cpp:265
+#, kde-format
+msgid "No terminal emulator found - output will be shown in dialog"
+msgstr ""
+
+#: src/mainwindow.cpp:303
 #, kde-format
 msgid "Assemble Result"
 msgstr "Зібрати результат"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Container:"
 msgstr "Контейнер:"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Distro:"
 msgstr "Дистрибутив:"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Icon:"
 msgstr "Піктограма:"
 
-#: src/mainwindow.cpp:382 src/mainwindow.cpp:387
+#: src/mainwindow.cpp:346 src/mainwindow.cpp:351
 #, kde-format
 msgid "No containers found"
 msgstr "Не знайдено жодного контейнера"
 
-#: src/mainwindow.cpp:400
+#: src/mainwindow.cpp:364
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Підтвердження вилучення"
 
-#: src/mainwindow.cpp:401
+#: src/mainwindow.cpp:365
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Вилучити контейнер <b>%1</b>?"
 
-#: src/mainwindow.cpp:402
+#: src/mainwindow.cpp:366
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Наслідки цієї дії неможливо скасувати."
 
-#: src/mainwindow.cpp:409 src/mainwindow.cpp:442
+#: src/mainwindow.cpp:373 src/mainwindow.cpp:406
 #, kde-format
 msgid "Result"
 msgstr "Результат"
 
-#: src/mainwindow.cpp:433
-#, fuzzy, kde-format
-#| msgid "Creating Container"
+#: src/mainwindow.cpp:397
+#, kde-format
 msgid "Creating container…"
-msgstr "Створення контейнера"
+msgstr "Створення контейнера…"
 
-#: src/mainwindow.cpp:458
-#, kde-format
-msgid "Select .deb Package"
-msgstr "Виберіть пакунок .deb"
-
-#: src/mainwindow.cpp:458
-#, kde-format
-msgid "Debian Packages (*.deb)"
-msgstr "пакунки Debian (*.deb)"
-
-#: src/mainwindow.cpp:470
-#, kde-format
-msgid "Select .rpm Package"
-msgstr "Виберіть пакунок .rpm"
-
-#: src/mainwindow.cpp:470
-#, kde-format
-msgid "RPM Packages (*.rpm)"
-msgstr "пакунки RPM (*.rpm)"
-
-#: src/mainwindow.cpp:481
-#, kde-format
-msgid "Select Arch Package"
-msgstr "Виберіть пакунок Arch"
-
-#: src/mainwindow.cpp:481
-#, kde-format
-msgid "Arch Packages (*.pkg.tar.*)"
-msgstr "пакунки Arch (*.pkg.tar.*)"
-
-#: src/mainwindow.cpp:489
+#: src/mainwindow.cpp:419
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Виберіть файл INI Distrobox"
 
-#: src/mainwindow.cpp:489
+#: src/mainwindow.cpp:419
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "файли INI (*.ini);;усі файли (*)"
 
-#: src/mainwindow.cpp:492
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Assembling container..."
 msgstr "Збирання контейнера…"
 
-#~ msgid "Creating container..."
-#~ msgstr "Створення контейнера…"
+#: src/mainwindow.cpp:447
+#, kde-format
+msgid "Select .deb Package"
+msgstr "Виберіть пакунок .deb"
+
+#: src/mainwindow.cpp:447
+#, kde-format
+msgid "Debian Packages (*.deb)"
+msgstr "пакунки Debian (*.deb)"
+
+#: src/mainwindow.cpp:454
+#, fuzzy, kde-format
+#| msgid "Install Debian/Ubuntu package"
+msgid "Installing .deb package..."
+msgstr "Встановити пакунок Debian/Ubuntu"
+
+#: src/mainwindow.cpp:480
+#, kde-format
+msgid "Select .rpm Package"
+msgstr "Виберіть пакунок .rpm"
+
+#: src/mainwindow.cpp:480
+#, kde-format
+msgid "RPM Packages (*.rpm)"
+msgstr "пакунки RPM (*.rpm)"
+
+#: src/mainwindow.cpp:486
+#, fuzzy, kde-format
+#| msgid "Install Arch Linux package"
+msgid "Installing .rpm package..."
+msgstr "Встановити пакунок Arch Linux"
+
+#: src/mainwindow.cpp:512
+#, kde-format
+msgid "Select Arch Package"
+msgstr "Виберіть пакунок Arch"
+
+#: src/mainwindow.cpp:512
+#, kde-format
+msgid "Arch Packages (*.pkg.tar.*)"
+msgstr "пакунки Arch (*.pkg.tar.*)"
+
+#: src/mainwindow.cpp:518
+#, fuzzy, kde-format
+#| msgid "Install Arch Linux package"
+msgid "Installing Arch package..."
+msgstr "Встановити пакунок Arch Linux"
+
+#: src/mainwindow.cpp:546
+#, fuzzy, kde-format
+#| msgid "Creating container..."
+msgid "Upgrading container..."
+msgstr "Створення контейнера…"
+
+#: src/mainwindow.cpp:566
+#, fuzzy, kde-format
+#| msgid "Upgrades all containers"
+msgid "Upgrading all containers..."
+msgstr "Оновлює усі контейнери"
+
+#: src/mainwindow.cpp:590
+#, kde-format
+msgid "Command Output"
+msgstr ""
+
+#: src/mainwindow.cpp:598
+#, kde-format
+msgid "Close"
+msgstr ""

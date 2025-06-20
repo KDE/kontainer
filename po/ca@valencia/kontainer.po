@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-19 00:45+0000\n"
+"POT-Creation-Date: 2025-06-20 00:45+0000\n"
 "PO-Revision-Date: 2025-06-18 10:34+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -71,22 +71,22 @@ msgstr "Aplicacions disponibles"
 msgid "Error: Command timed out"
 msgstr "S'ha produït un error: l'ordre ha excedit el temps"
 
-#: src/backend.cpp:166
+#: src/backend.cpp:214
 #, kde-format
 msgid "Unknown terminal:"
 msgstr "Terminal desconegut:"
 
-#: src/backend.cpp:199 src/backend.cpp:209
+#: src/backend.cpp:247 src/backend.cpp:257
 #, kde-format
 msgid "Failed to start terminal"
 msgstr "No s'ha pogut iniciar el terminal"
 
-#: src/backend.cpp:199 src/backend.cpp:209
+#: src/backend.cpp:247 src/backend.cpp:257
 #, kde-format
 msgid "with args"
 msgstr "amb arguments"
 
-#: src/backend.cpp:224
+#: src/backend.cpp:272
 #, fuzzy, kde-format
 #| msgid "Error: "
 msgid "Error: %1"
@@ -169,8 +169,8 @@ msgstr "Sistema d'inici:"
 msgid "Refresh Images"
 msgstr "Actualitza les imatges"
 
-#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:433
-#: src/mainwindow.cpp:492
+#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:397
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Cancel"
 msgstr "Cancel·la"
@@ -400,102 +400,144 @@ msgstr "Crear un contenidor a partir d'un fitxer INI"
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: src/mainwindow.cpp:343
+#: src/mainwindow.cpp:265
+#, kde-format
+msgid "No terminal emulator found - output will be shown in dialog"
+msgstr ""
+
+#: src/mainwindow.cpp:303
 #, kde-format
 msgid "Assemble Result"
 msgstr "Resultat de l'assemblatge"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Container:"
 msgstr "Contenidor:"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Distro:"
 msgstr "Distribució:"
 
-#: src/mainwindow.cpp:378
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Icon:"
 msgstr "Icona:"
 
-#: src/mainwindow.cpp:382 src/mainwindow.cpp:387
+#: src/mainwindow.cpp:346 src/mainwindow.cpp:351
 #, kde-format
 msgid "No containers found"
 msgstr "No s'ha trobat cap contenidor"
 
-#: src/mainwindow.cpp:400
+#: src/mainwindow.cpp:364
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Confirma la supressió"
 
-#: src/mainwindow.cpp:401
+#: src/mainwindow.cpp:365
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Voleu suprimir el contenidor <b>%1</b>?"
 
-#: src/mainwindow.cpp:402
+#: src/mainwindow.cpp:366
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Esta acció no es podrà desfer."
 
-#: src/mainwindow.cpp:409 src/mainwindow.cpp:442
+#: src/mainwindow.cpp:373 src/mainwindow.cpp:406
 #, kde-format
 msgid "Result"
 msgstr "Resultat"
 
-#: src/mainwindow.cpp:433
+#: src/mainwindow.cpp:397
 #, fuzzy, kde-format
 #| msgid "Creating Container"
 msgid "Creating container…"
 msgstr "Creació de contenidor"
 
-#: src/mainwindow.cpp:458
+#: src/mainwindow.cpp:419
+#, kde-format
+msgid "Select Distrobox INI File"
+msgstr "Seleccioneu el fitxer INI de Distrobox"
+
+#: src/mainwindow.cpp:419
+#, kde-format
+msgid "INI Files (*.ini);;All Files (*)"
+msgstr "Fitxers INI (*.ini);;Tots els fitxers (*)"
+
+#: src/mainwindow.cpp:422
+#, kde-format
+msgid "Assembling container..."
+msgstr "S'està assemblant el contenidor…"
+
+#: src/mainwindow.cpp:447
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Seleccioneu un paquet «.deb»"
 
-#: src/mainwindow.cpp:458
+#: src/mainwindow.cpp:447
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Paquets Debian (*.deb)"
 
-#: src/mainwindow.cpp:470
+#: src/mainwindow.cpp:454
+#, fuzzy, kde-format
+#| msgid "Install Debian/Ubuntu package"
+msgid "Installing .deb package..."
+msgstr "Instal·la un paquet Debian/Ubuntu"
+
+#: src/mainwindow.cpp:480
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Seleccioneu un paquet «.rpm»"
 
-#: src/mainwindow.cpp:470
+#: src/mainwindow.cpp:480
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "Paquets RPM (*.rpm)"
 
-#: src/mainwindow.cpp:481
+#: src/mainwindow.cpp:486
+#, fuzzy, kde-format
+#| msgid "Install Arch Linux package"
+msgid "Installing .rpm package..."
+msgstr "Instal·la un paquet Arch Linux"
+
+#: src/mainwindow.cpp:512
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Seleccioneu un paquet d'Arch"
 
 # skip-rule: t-pu_sp
-#: src/mainwindow.cpp:481
+#: src/mainwindow.cpp:512
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Paquets d'Arch (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:489
-#, kde-format
-msgid "Select Distrobox INI File"
-msgstr "Seleccioneu el fitxer INI de Distrobox"
+#: src/mainwindow.cpp:518
+#, fuzzy, kde-format
+#| msgid "Install Arch Linux package"
+msgid "Installing Arch package..."
+msgstr "Instal·la un paquet Arch Linux"
 
-#: src/mainwindow.cpp:489
-#, kde-format
-msgid "INI Files (*.ini);;All Files (*)"
-msgstr "Fitxers INI (*.ini);;Tots els fitxers (*)"
+#: src/mainwindow.cpp:546
+#, fuzzy, kde-format
+#| msgid "Creating container..."
+msgid "Upgrading container..."
+msgstr "S'està creant el contenidor…"
 
-#: src/mainwindow.cpp:492
-#, kde-format
-msgid "Assembling container..."
-msgstr "S'està assemblant el contenidor…"
+#: src/mainwindow.cpp:566
+#, fuzzy, kde-format
+#| msgid "Upgrades all containers"
+msgid "Upgrading all containers..."
+msgstr "Actualitza tots els contenidors"
 
-#~ msgid "Creating container..."
-#~ msgstr "S'està creant el contenidor…"
+#: src/mainwindow.cpp:590
+#, kde-format
+msgid "Command Output"
+msgstr ""
+
+#: src/mainwindow.cpp:598
+#, kde-format
+msgid "Close"
+msgstr ""
