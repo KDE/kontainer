@@ -89,7 +89,6 @@ public:
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , backend(new Backend(this))
     , preferredTerminal("xterm")
     , preferredBackend("distrobox")
 {
@@ -98,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
     preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
     // Load saved backend preference
     preferredBackend = settings.value("container/backend", "distrobox").toString();
+    backend = new Backend(this);
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
     setWindowTitle(i18n("Kontainer"));
@@ -113,7 +113,7 @@ MainWindow::~MainWindow()
     // Save terminal preference
     QSettings settings;
     settings.setValue("terminal/preferred", preferredTerminal);
-    preferredBackend = settings.value("container/backend", "distrobox").toString(); // fallback: distrobox
+    settings.setValue("container/backend", preferredBackend);
 }
 
 void MainWindow::setupUI()

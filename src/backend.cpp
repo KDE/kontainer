@@ -17,21 +17,21 @@ Backend::Backend(MainWindow *mainWindow, QObject *parent)
 
     if (backends.isEmpty()) {
         qWarning() << "No container backend found!";
-        m_preferredBackend.clear(); // or set to some safe default or empty
+        m_preferredBackend.clear();
     } else if (backends.size() == 1) {
-        // Only one available, override preference
         m_preferredBackend = backends.first();
         qDebug() << "Only one backend available, using:" << m_preferredBackend;
     } else {
-        // Multiple backends available, check if preferred backend is valid
         if (!backends.contains(m_preferredBackend)) {
-            // Preferred backend not available, fallback to first one
             m_preferredBackend = backends.first();
             qDebug() << "Preferred backend not available, fallback to:" << m_preferredBackend;
         } else {
             qDebug() << "Using preferred backend:" << m_preferredBackend;
         }
     }
+
+    // Keep the main window preferredBackend in sync:
+    m_mainWindow->preferredBackend = m_preferredBackend;
 }
 
 QString Backend::runCommand(const QStringList &command) const
