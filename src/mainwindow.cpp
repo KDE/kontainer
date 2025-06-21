@@ -289,14 +289,14 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
-    // Add spacer between terminal selector and backend selector
-    QWidget *spacer2 = new QWidget(toolBar);
-    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    toolBar->addWidget(spacer2);
-
     QStringList availableBackends = backend->availableBackends();
 
     if (availableBackends.size() >= 2) {
+        // Add spacer between terminal selector and backend selector
+        QWidget *spacer2 = new QWidget(toolBar);
+        spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+        toolBar->addWidget(spacer2);
         // --- Backend Selector (Distrobox/Toolbox) ---
         QLabel *backendLabel = new QLabel(i18n("Backend:"), toolBar);
         toolBar->addWidget(backendLabel);
