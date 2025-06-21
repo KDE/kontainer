@@ -4,6 +4,7 @@
 #include "backend.h"
 #include "packagemanager.h"
 #include "terminalutils.h"
+#include <cstdint>
 #include <mainwindow.h>
 
 Backend::Backend(MainWindow *mainWindow, QObject *parent)
@@ -12,7 +13,25 @@ Backend::Backend(MainWindow *mainWindow, QObject *parent)
 {
     m_isFlatpak = QFile::exists("/.flatpak-info");
     m_preferredBackend = m_mainWindow->preferredBackend;
-    qDebug() << "Preferred backend:" << m_preferredBackend;
+    QStringList backends = availableBackends();
+
+    if (backends.isEmpty()) {
+        qWarning() << "No container backend found!";
+        m_preferredBackend.clear(); // or set to some safe default or empty
+    } else if (backends.size() == 1) {
+        // Only one available, override preference
+        m_preferredBackend = backends.first();
+        qDebug() << "Only one backend available, using:" << m_preferredBackend;
+    } else {
+        // Multiple backends available, check if preferred backend is valid
+        if (!backends.contains(m_preferredBackend)) {
+            // Preferred backend not available, fallback to first one
+            m_preferredBackend = backends.first();
+            qDebug() << "Preferred backend not available, fallback to:" << m_preferredBackend;
+        } else {
+            qDebug() << "Using preferred backend:" << m_preferredBackend;
+        }
+    }
 }
 
 QString Backend::runCommand(const QStringList &command) const
@@ -185,33 +204,86 @@ QStringList Backend::getAvailableTerminals() const
 
 QList<QMap<QString, QString>> Backend::getContainers() const
 {
-    QString output = runCommand({"distrobox", "list", "--no-color"});
+    QString output;
+    if (m_preferredBackend == "distrobox") {
+        output = runCommand({"distrobox", "list", "--no-color"});
+    } else if (m_preferredBackend == "toolbox") {
+        output = runCommand({"toolbox", "list", "-c"});
+    } else {
+        return {};
+    }
+
     QStringList lines = output.split('\n', Qt::SkipEmptyParts);
     if (lines.isEmpty())
         return {};
 
-    QStringList headers;
-    for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
-        headers << col.trimmed();
-    }
-
     QList<QMap<QString, QString>> containers;
-    for (int i = 1; i < lines.size(); ++i) {
-        QStringList parts;
-        for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
-            parts << col.trimmed();
+
+    if (m_preferredBackend == "distrobox") {
+        // Pipe-separierte Tabelle (mit Header)
+        QStringList headers;
+        for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
+            headers << col.trimmed();
         }
 
-        QMap<QString, QString> container;
-        container["name"] = parts[headers.indexOf("NAME")];
-        container["image"] = parts[headers.indexOf("IMAGE")];
-        container["distro"] = parseDistroFromImage(container["image"]);
-        container["status"] = parts[headers.indexOf("STATUS")];
-        container["id"] = parts[headers.indexOf("ID")];
-        container["icon"] = getDistroIcon(container["distro"]);
+        for (int i = 1; i < lines.size(); ++i) {
+            QStringList parts;
+            for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
+                parts << col.trimmed();
+            }
 
-        containers << container;
+            if (parts.size() < headers.size())
+                continue; // Zeile überspringen
+
+            QMap<QString, QString> container;
+            container["id"] = parts[headers.indexOf("ID")];
+            container["name"] = parts[headers.indexOf("NAME")];
+            container["status"] = parts[headers.indexOf("STATUS")];
+            container["image"] = parts[headers.indexOf("IMAGE")];
+            container["distro"] = parseDistroFromImage(container["image"]);
+            container["icon"] = getDistroIcon(container["distro"]);
+
+            containers << container;
+        }
+    } else if (m_preferredBackend == "toolbox") {
+        // Leerzeichen-separierte Tabelle (mit Header)
+        // Headers: CONTAINER ID  CONTAINER NAME  CREATED  STATUS  IMAGE NAME
+        // Header-Zeile mit QRegularExpression splitten
+        QRegularExpression re("\\s+");
+        QStringList headerCols = lines[0].split(re, Qt::SkipEmptyParts);
+
+        int idxId = (headerCols.size() > 1 && headerCols[0] == "CONTAINER" && headerCols[1] == "ID") ? 0 : -1;
+        int idxName = (headerCols.size() > 2 && headerCols[0] == "CONTAINER" && headerCols[1] == "ID" && headerCols[2] == "NAME") ? 1 : -1;
+        int idxStatus = headerCols.indexOf("STATUS");
+        int idxImage = headerCols.indexOf("IMAGE");
+        if (idxId == -1)
+            idxId = 0;
+        if (idxName == -1)
+            idxName = 1;
+        if (idxStatus == -1)
+            idxStatus = 3;
+        if (idxImage == -1)
+            idxImage = 4;
+
+        for (int i = 1; i < lines.size(); ++i) {
+            QStringList parts = lines[i].split(re, Qt::SkipEmptyParts);
+            int maxIndex = std::max({idxId, idxName, idxStatus, idxImage});
+
+            if (parts.size() <= maxIndex)
+                continue;
+
+            QMap<QString, QString> container;
+            container["id"] = parts[idxId];
+            container["name"] = parts[idxName];
+            container["status"] = parts[idxStatus];
+            container["image"] = parts[idxImage];
+            container["distro"] = parseDistroFromImage(container["image"]);
+            container["icon"] = getDistroIcon(container["distro"]);
+
+            containers << container;
+        }
     }
+
     return containers;
 }
 

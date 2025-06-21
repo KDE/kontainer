@@ -15,6 +15,7 @@
 #include <QStandardPaths>
 #include <QString>
 #include <QStringList>
+#include <algorithm>
 
 class MainWindow;
 
