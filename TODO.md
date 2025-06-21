@@ -19,18 +19,15 @@
   - upgradeAllContainers()
     ⚠️ No Toolbox equivalent → hide button in MainUI
   - getAvailableApps()
+  - installDebPackage() and no-terminal version - **Apts CLI Interface is unstable and leads to problems with the output dialog**
+  - installRpmPackage() and no-terminal version
+  - installArchPackage() and no-terminal version
+  - getAvailableImages() → **hardcode** in header for now
 ---
 
 ## 🚧 TODO
 
 ### 🔹 Backend
-
-- Use the backend variable from MainUI:
-  - installDebPackage() and no-terminal version
-  - installRpmPackage() and no-terminal version
-  - installArchPackage() and no-terminal version
-  - getAvailableImages() → **hardcode** in header for now - **WIP**
-
 - Implement functionality in Upstream Toolbox:
   - getExportedApps() → 🧠 Implement & upstream — essentially a wrapper script exporting to `.local/share/applications`
   - exportApp() → same as above
@@ -41,6 +38,6 @@
 ### 🔹 Container Dialog UI
 
 - Container creation: hide unsupported options:
-  - CreateContainerDialog()
+  - CreateContainerDialog() - **The new Toolbox List doesnt appear properly**
   - Possibly startContainerCreation()
 
