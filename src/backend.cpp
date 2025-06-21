@@ -646,7 +646,14 @@ QStringList Backend::buildToolboxCommand(const QString &containerName, const QSt
     if (m_isFlatpak) {
         args << "flatpak-spawn" << "--host";
     }
-    args << "toolbox" << "run" << "-c" << containerName << "sh" << "-c" << QString("\"%1\"").arg(command);
+    args << "toolbox" << "run" << "-c" << containerName << "--";
+
+    // Handle quoted paths properly
+    QStringList commandParts = command.split(" ", Qt::SkipEmptyParts);
+    for (const QString &part : commandParts) {
+        args << (part.startsWith('/') ? QDir::toNativeSeparators(part) : part);
+    }
+
     return args;
 }
 
@@ -664,11 +671,21 @@ void Backend::handlePackageInstallFinished(QProcess *process, int exitCode, cons
         result += "\nError: " + stderrData;
     }
 
+    // Emit the specific signal based on signalName
+    if (signalName == "debInstallFinished") {
+        emit debInstallFinished(result);
+    } else if (signalName == "rpmInstallFinished") {
+        emit rpmInstallFinished(result);
+    } else if (signalName == "archInstallFinished") {
+        emit archInstallFinished(result);
+    }
+
+    // Also emit the generic signal
     emit packageInstallFinished(signalName, result);
+
     process->deleteLater();
 }
 
-// Concrete implementations
 void Backend::installDebPackageNoTerminal(const QString &containerName, const QString &filePath)
 {
     installPackageNoTerminal(containerName, filePath, "apt install -y", "debInstallFinished");
