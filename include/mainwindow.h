@@ -42,6 +42,7 @@ public:
     ~MainWindow();
     QString preferredTerminal;
     void showCommandOutput(const QString &output);
+    QString preferredBackend;
 
 private slots:
     void refreshContainers();

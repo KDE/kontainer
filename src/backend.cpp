@@ -109,6 +109,29 @@ QString Backend::getContainerDistro(const QString &containerName) const
     return "";
 }
 
+QStringList Backend::availableBackends() const
+{
+    QStringList result;
+
+    auto isAvailable = [this](const QString &name) -> bool {
+        if (m_isFlatpak) {
+            QProcess whichProcess;
+            whichProcess.start("flatpak-spawn", {"--host", "which", name});
+            whichProcess.waitForFinished(500);
+            return (whichProcess.exitCode() == 0);
+        } else {
+            return !QStandardPaths::findExecutable(name).isEmpty();
+        }
+    };
+
+    if (isAvailable("distrobox"))
+        result << "distrobox";
+    if (isAvailable("toolbox"))
+        result << "toolbox";
+
+    return result;
+}
+
 QStringList Backend::getAvailableTerminals() const
 {
     QStringList availableTerminals;

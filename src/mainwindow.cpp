@@ -110,6 +110,7 @@ MainWindow::~MainWindow()
     // Save terminal preference
     QSettings settings;
     settings.setValue("terminal/preferred", preferredTerminal);
+    preferredBackend = settings.value("container/backend", "distrobox").toString(); // fallback: distrobox
 }
 
 void MainWindow::setupUI()
@@ -284,6 +285,49 @@ void MainWindow::setupUI()
 
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
+
+    QStringList availableBackends = backend->availableBackends();
+
+    if (availableBackends.size() >= 2) {
+        // --- Backend Selector (Distrobox/Toolbox) ---
+        QLabel *backendLabel = new QLabel(i18n("Backend:"), toolBar);
+        toolBar->addWidget(backendLabel);
+
+        QComboBox *backendSelector = new QComboBox(toolBar);
+
+        for (const QString &backendName : availableBackends) {
+            QIcon icon = QIcon::fromTheme(backendName == "toolbox" ? "utilities-terminal" : "system-run");
+            backendSelector->addItem(icon, backendName);
+        }
+
+        QSettings settings;
+        preferredBackend = settings.value("container/backend", availableBackends.first()).toString();
+
+        int backendIndex = backendSelector->findText(preferredBackend);
+        if (backendIndex >= 0) {
+            backendSelector->setCurrentIndex(backendIndex);
+        } else {
+            preferredBackend = availableBackends.first();
+            backendSelector->setCurrentIndex(0);
+            settings.setValue("container/backend", preferredBackend);
+        }
+
+        connect(backendSelector, &QComboBox::currentTextChanged, this, [this](const QString &backendName) {
+            preferredBackend = backendName;
+            QSettings settings;
+            settings.setValue("container/backend", preferredBackend);
+        });
+
+        toolBar->addWidget(backendSelector);
+    } else if (availableBackends.size() == 1) {
+        // Only one backend — auto-select and save
+        preferredBackend = availableBackends.first();
+        QSettings settings;
+        settings.setValue("container/backend", preferredBackend);
+    } else {
+        // No backends available
+        preferredBackend.clear();
+    }
 
     // Main layout
     mainLayout->addWidget(containerList, 1);
