@@ -6,7 +6,9 @@
 
 ### 🔹 Backend
 - Return available backends
-
+- Use the backend variable from MainUI:
+  - getContainers()
+  - parseDistrofromImage()
 ---
 
 ## 🚧 TODO
@@ -14,7 +16,6 @@
 ### 🔹 Backend
 
 - Use the backend variable from MainUI:
-  - getContainers()
   - createContainer()
   - deleteContainer()
   - assembleContainer()
