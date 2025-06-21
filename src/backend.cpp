@@ -409,7 +409,13 @@ void Backend::assembleContainer(const QString &iniFile)
 
 void Backend::enterContainer(const QString &name, const QString &terminal)
 {
-    executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
+    if (m_preferredBackend == "distrobox") {
+        executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
+    } else if (m_preferredBackend == "toolbox") {
+        executeInTerminal(terminal, QString("toolbox enter %1").arg(name));
+    } else {
+        // Bruh
+    }
 }
 
 void Backend::upgradeContainer(const QString &name, const QString &terminal)
@@ -425,28 +431,73 @@ void Backend::upgradeAllContainers(const QString &terminal)
 void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo apt install -y %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installDebPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installDebPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installDebPackage] Unknown backend:" << m_preferredBackend;
+    }
 }
 
 void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo dnf install -y %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installRpmPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installRpmPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installRpmPackage] Unknown backend:" << m_preferredBackend;
+    }
 }
 
 void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo pacman -U --noconfirm %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installArchPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installArchPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installArchPackage] Unknown backend:" << m_preferredBackend;
+    }
 }
 
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
-    QString output = runCommand({
-        "distrobox", "enter", containerName, "--",
-        "sh", "-c",
-        "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"
-    });
+    QString output;
+    if (m_preferredBackend == "distrobox") {
+        output = runCommand({"distrobox",
+                             "enter",
+                             containerName,
+                             "--",
+                             "sh",
+                             "-c",
+                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+    } else if (m_preferredBackend == "toolbox") {
+        output = runCommand({"toolbox",
+                             "run",
+                             "-c",
+                             containerName,
+                             "sh",
+                             "-c",
+                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+    } else {
+        // I dont know
+    }
 
     QStringList apps;
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
