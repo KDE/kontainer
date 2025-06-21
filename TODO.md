@@ -13,7 +13,7 @@
 
 ### 🔹 Backend
 
-- Use the backend variable from main:
+- Use the backend variable from MainUI:
   - getContainers()
   - createContainer()
   - deleteContainer()
