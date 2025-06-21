@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
     setWindowTitle(i18n("Kontainer"));
-    resize(800, 600);
+    resize(850, 600);
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
 
     setupUI();
@@ -286,6 +286,11 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
+    // Add spacer between terminal selector and backend selector
+    QWidget *spacer2 = new QWidget(toolBar);
+    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    toolBar->addWidget(spacer2);
+
     QStringList availableBackends = backend->availableBackends();
 
     if (availableBackends.size() >= 2) {
@@ -328,6 +333,9 @@ void MainWindow::setupUI()
         // No backends available
         preferredBackend.clear();
     }
+
+    qDebug() << "Preferred Terminal" << preferredTerminal;
+    qDebug() << "Preferred Backend" << preferredBackend;
 
     // Main layout
     mainLayout->addWidget(containerList, 1);
