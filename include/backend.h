@@ -59,6 +59,7 @@ signals:
     void archInstallFinished(const QString &output);
     void upgradeFinished(const QString &output);
     void upgradeAllFinished(const QString &output);
+    void packageInstallFinished(const QString &signalName, const QString &result);
 
 public slots:
     void assembleContainer(const QString &iniFile);
@@ -75,6 +76,10 @@ private:
     QString m_preferredBackend;
     void validatePreferredBackend();
     QString getDistroFromToolboxImage(const QString &image) const;
+    void installPackageNoTerminal(const QString &containerName, const QString &filePath, const QString &packageCommand, const QString &signalName);
+    void handlePackageInstallFinished(QProcess *process, int exitCode, const QString &signalName);
+    QStringList buildToolboxCommand(const QString &containerName, const QString &command);
+    QStringList buildDistroboxCommand(const QString &containerName, const QString &command);
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

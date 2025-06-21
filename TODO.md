@@ -9,13 +9,6 @@
 - Use the backend variable from MainUI:
   - getContainers()
   - parseDistrofromImage()
----
-
-## 🚧 TODO
-
-### 🔹 Backend
-
-- Use the backend variable from MainUI:
   - createContainer()
   - deleteContainer()
   - assembleContainer()
@@ -25,15 +18,21 @@
     ⚠️ No Toolbox equivalent → hide button in MainUI
   - upgradeAllContainers()
     ⚠️ No Toolbox equivalent → hide button in MainUI
+  - getAvailableApps()
+---
+
+## 🚧 TODO
+
+### 🔹 Backend
+
+- Use the backend variable from MainUI:
   - installDebPackage() and no-terminal version
   - installRpmPackage() and no-terminal version
   - installArchPackage() and no-terminal version
-  - getAvailableImages() → **hardcode** in header for now
+  - getAvailableImages() → **hardcode** in header for now - **WIP**
 
 - Implement functionality in Upstream Toolbox:
-  - getAvailableApps()
-    🧠 Implement & upstream — essentially a wrapper script exporting to `.local/share/applications`
-  - getExportedApps() → same as above
+  - getExportedApps() → 🧠 Implement & upstream — essentially a wrapper script exporting to `.local/share/applications`
   - exportApp() → same as above
   - unexportApp() → same as above
 
