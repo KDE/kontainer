@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
     setWindowTitle(i18n("Kontainer"));
-    resize(600, 600);
+    resize(800, 600);
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
 
     setupUI();
