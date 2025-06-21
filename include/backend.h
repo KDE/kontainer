@@ -25,6 +25,7 @@ class Backend : public QObject
 public:
     explicit Backend(MainWindow *mainWindow, QObject *parent = nullptr);
     QStringList availableBackends() const;
+    void setPreferredBackend(const QString &backend);
 
     // Container operations
     QList<QMap<QString, QString>> getContainers() const;
@@ -72,6 +73,7 @@ private:
     bool m_isFlatpak = false;
     MainWindow *m_mainWindow;
     QString m_preferredBackend;
+    void validatePreferredBackend();
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

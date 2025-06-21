@@ -13,6 +13,17 @@ Backend::Backend(MainWindow *mainWindow, QObject *parent)
 {
     m_isFlatpak = QFile::exists("/.flatpak-info");
     m_preferredBackend = m_mainWindow->preferredBackend;
+    validatePreferredBackend();
+}
+
+void Backend::setPreferredBackend(const QString &backend)
+{
+    m_preferredBackend = backend;
+    validatePreferredBackend();
+}
+
+void Backend::validatePreferredBackend()
+{
     QStringList backends = availableBackends();
 
     if (backends.isEmpty()) {
@@ -30,8 +41,10 @@ Backend::Backend(MainWindow *mainWindow, QObject *parent)
         }
     }
 
-    // Keep the main window preferredBackend in sync:
-    m_mainWindow->preferredBackend = m_preferredBackend;
+    // Keep main window in sync
+    if (m_mainWindow) {
+        m_mainWindow->preferredBackend = m_preferredBackend;
+    }
 }
 
 QString Backend::runCommand(const QStringList &command) const
@@ -57,57 +70,63 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString image = imageUrl.toLower();
 
-    // First check hardcoded URL mappings (exact matches)
-    static const QMap<QString, QString> hardcodedMappings = {{"ghcr.io/vanilla-os/vso:main", "vso"},
+    // First check hardcoded URL mappings
+    static const QMap<QString, QString> hardcodedMappings = {{"registry.fedoraproject.org/fedora-toolbox", "fedora"},
+                                                             {"registry.fedoraproject.org/f", "fedora"},
+                                                             {"ghcr.io/vanilla-os/vso:main", "vso"},
                                                              {"docker.io/blackarchlinux/blackarch:latest", "blackarch"},
                                                              {"cgr.dev/chainguard/wolfi-base", "wolfi"}};
 
-    // Check for exact matches first
+    // Check exact matches first
     for (auto it = hardcodedMappings.constBegin(); it != hardcodedMappings.constEnd(); ++it) {
         if (image.startsWith(it.key())) {
             return it.value();
         }
     }
 
-    // Ordered list of patterns to try (most specific to most generic)
-    QVector<QPair<QString, QString>> patterns = {
-        // 1. Explicit toolbox patterns (ubi9/toolbox, ubuntu-toolbox, etc.)
-        {"(^|/)([a-z]+)-?toolbox(:|$)", "$2"}, // ubuntu-toolbox -> ubuntu
-        {"(^|/)ubi([0-9]+)/toolbox(:|$)", "rhel"}, // ubi9/toolbox -> rhel
-        {"(^|/)([a-z]+)/toolbox(:|$)", "$2"}, // fedora/toolbox -> fedora
+    // Ordered patterns (most specific to most generic)
+    QVector<QPair<QString, QString>> patterns = {// Toolbox-specific patterns
+                                                 {"(^|/)f([0-9]+)(/|:|$)", "fedora"}, // f38 -> fedora
+                                                 {"(^|/)fedora-toolbox(:|$)", "fedora"}, // fedora-toolbox
+                                                 {"(^|/)ubi([0-9]+)(/|:|$)", "rhel"}, // ubi9 -> rhel
+                                                 {"(^|/)rhel-toolbox(:|$)", "rhel"}, // rhel-toolbox
 
-        // 2. Versioned distro names (ubuntu:22.04, rockylinux:9)
-        {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"}, // ubuntu22.04 -> ubuntu
+                                                 // Versioned distro names
+                                                 {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"},
 
-        // 3. Standard distro names in path
-        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
+                                                 // Standard distro names
+                                                 {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
 
-        // 4. Common abbreviations and aliases
-        {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
-        {"(^|/)ubi([0-9]?)(:|/|$)", "rhel"},
-        {"(^|/)nd[0-9]+(:|/|$)", "neurodebian"},
+                                                 // Common abbreviations
+                                                 {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
+                                                 {"(^|/)ubi([0-9]?)(:|/|$)", "rhel"},
 
-        // 5. Substring fallback (least specific)
-        {"([a-z]+)(-|_)?(linux|os)", "$1"} // something-linux -> something
-    };
+                                                 // Substring fallback
+                                                 {"([a-z]+)(-|_)?(linux|os)", "$1"}};
 
-    // Try each pattern in order
+    // Try each pattern
     for (const auto &[pattern, replacement] : patterns) {
         QRegularExpression rx(pattern);
         QRegularExpressionMatch match = rx.match(image);
         if (match.hasMatch()) {
-            QString matchedDistro = match.captured(replacement == "$2" ? 2 : 1);
+            QString matched;
+            if (replacement.startsWith('$')) {
+                int group = replacement.mid(1).toInt();
+                matched = match.captured(group);
+            } else {
+                matched = replacement;
+            }
 
-            // Validate the matched distro against our known list
+            // Validate against known distros
             for (const QString &distro : DISTROS) {
-                if (matchedDistro.contains(distro)) {
+                if (matched.contains(distro)) {
                     return distro;
                 }
             }
         }
     }
 
-    // Final fallback: check for any distro name as substring
+    // Final fallback
     for (const QString &distro : DISTROS) {
         if (image.contains(distro)) {
             return distro;
@@ -220,7 +239,7 @@ QList<QMap<QString, QString>> Backend::getContainers() const
     QList<QMap<QString, QString>> containers;
 
     if (m_preferredBackend == "distrobox") {
-        // Pipe-separierte Tabelle (mit Header)
+        // Pipe-separated table (with header)
         QStringList headers;
         for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
             headers << col.trimmed();
@@ -233,7 +252,7 @@ QList<QMap<QString, QString>> Backend::getContainers() const
             }
 
             if (parts.size() < headers.size())
-                continue; // Zeile überspringen
+                continue;
 
             QMap<QString, QString> container;
             container["id"] = parts[headers.indexOf("ID")];
@@ -246,44 +265,39 @@ QList<QMap<QString, QString>> Backend::getContainers() const
             containers << container;
         }
     } else if (m_preferredBackend == "toolbox") {
-        // Leerzeichen-separierte Tabelle (mit Header)
-        // Headers: CONTAINER ID  CONTAINER NAME  CREATED  STATUS  IMAGE NAME
-        // Header-Zeile mit QRegularExpression splitten
-        QRegularExpression re("\\s+");
-        QStringList headerCols = lines[0].split(re, Qt::SkipEmptyParts);
-
-        int idxId = (headerCols.size() > 1 && headerCols[0] == "CONTAINER" && headerCols[1] == "ID") ? 0 : -1;
-        int idxName = (headerCols.size() > 2 && headerCols[0] == "CONTAINER" && headerCols[1] == "ID" && headerCols[2] == "NAME") ? 1 : -1;
-        int idxStatus = headerCols.indexOf("STATUS");
-        int idxImage = headerCols.indexOf("IMAGE");
-        if (idxId == -1)
-            idxId = 0;
-        if (idxName == -1)
-            idxName = 1;
-        if (idxStatus == -1)
-            idxStatus = 3;
-        if (idxImage == -1)
-            idxImage = 4;
+        // Toolbox format: ID NAME CREATED STATUS IMAGE
+        // Example: "2a16a2f1137c  fed  About an hour ago  created  registry.fedoraproject.org/fedora-toolbox:latest"
 
         for (int i = 1; i < lines.size(); ++i) {
-            QStringList parts = lines[i].split(re, Qt::SkipEmptyParts);
-            int maxIndex = std::max({idxId, idxName, idxStatus, idxImage});
+            QString line = lines[i].trimmed();
 
-            if (parts.size() <= maxIndex)
+            // Split on two or more spaces to handle the column formatting
+            QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
+
+            // Need at least ID, NAME, and IMAGE (some columns might be missing)
+            if (parts.size() < 3)
                 continue;
 
             QMap<QString, QString> container;
-            container["id"] = parts[idxId];
-            container["name"] = parts[idxName];
-            container["status"] = parts[idxStatus];
-            container["image"] = parts[idxImage];
+
+            // First part is always ID
+            container["id"] = parts[0].trimmed();
+
+            // Second part is NAME (might be followed by CREATED/STATUS)
+            container["name"] = parts[1].trimmed();
+
+            // Last part is always IMAGE
+            container["image"] = parts.last().trimmed();
+
+            // Set default status
+            container["status"] = "running";
+
             container["distro"] = parseDistroFromImage(container["image"]);
             container["icon"] = getDistroIcon(container["distro"]);
 
             containers << container;
         }
     }
-
     return containers;
 }
 

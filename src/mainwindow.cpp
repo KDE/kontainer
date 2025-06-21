@@ -321,8 +321,13 @@ void MainWindow::setupUI()
 
         connect(backendSelector, &QComboBox::currentTextChanged, this, [this](const QString &backendName) {
             preferredBackend = backendName;
+
             QSettings settings;
             settings.setValue("container/backend", preferredBackend);
+
+            backend->setPreferredBackend(backendName);
+
+            refreshContainers();
         });
 
         toolBar->addWidget(backendSelector);
