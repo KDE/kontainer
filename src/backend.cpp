@@ -4,12 +4,15 @@
 #include "backend.h"
 #include "packagemanager.h"
 #include "terminalutils.h"
+#include <mainwindow.h>
 
-Backend::Backend(QObject *parent)
+Backend::Backend(MainWindow *mainWindow, QObject *parent)
     : QObject(parent)
+    , m_mainWindow(mainWindow)
 {
-    // Check if we're running as a Flatpak
     m_isFlatpak = QFile::exists("/.flatpak-info");
+    m_preferredBackend = m_mainWindow->preferredBackend;
+    qDebug() << "Preferred backend:" << m_preferredBackend;
 }
 
 QString Backend::runCommand(const QStringList &command) const

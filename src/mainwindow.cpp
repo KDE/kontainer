@@ -91,10 +91,13 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , backend(new Backend(this))
     , preferredTerminal("xterm")
+    , preferredBackend("distrobox")
 {
     // Load saved terminal preference
     QSettings settings;
     preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
+    // Load saved backend preference
+    preferredBackend = settings.value("container/backend", "distrobox").toString();
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
     setWindowTitle(i18n("Kontainer"));
@@ -306,7 +309,6 @@ void MainWindow::setupUI()
         }
 
         QSettings settings;
-        preferredBackend = settings.value("container/backend", availableBackends.first()).toString();
 
         int backendIndex = backendSelector->findText(preferredBackend);
         if (backendIndex >= 0) {

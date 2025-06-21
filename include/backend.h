@@ -16,11 +16,13 @@
 #include <QString>
 #include <QStringList>
 
+class MainWindow;
+
 class Backend : public QObject
 {
     Q_OBJECT
 public:
-    explicit Backend(QObject *parent = nullptr);
+    explicit Backend(MainWindow *mainWindow, QObject *parent = nullptr);
     QStringList availableBackends() const;
 
     // Container operations
@@ -67,6 +69,8 @@ private:
     QString parseDistroFromImage(const QString &imageUrl) const;
     QString getDistroIcon(const QString &distroName) const;
     bool m_isFlatpak = false;
+    MainWindow *m_mainWindow;
+    QString m_preferredBackend;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",
