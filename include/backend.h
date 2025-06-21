@@ -74,6 +74,7 @@ private:
     MainWindow *m_mainWindow;
     QString m_preferredBackend;
     void validatePreferredBackend();
+    QString getDistroFromToolboxImage(const QString &image) const;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",
@@ -113,8 +114,8 @@ private:
                                             {"wolfi", "wolfi.svg"},
 
                                             // Variants and derivatives
-                                            {"bazzite", "fedora.svg"},
-                                            {"bluefin", "ubuntu.svg"},
+                                            {"bazzite", "ublue.svg"},
+                                            {"bluefin", "ublue.svg"},
                                             {"bullseye", "debian.svg"},
                                             {"buster", "debian.svg"},
                                             {"bookworm", "debian.svg"},

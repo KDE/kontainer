@@ -6,6 +6,7 @@
 #include "terminalutils.h"
 #include <cstdint>
 #include <mainwindow.h>
+#include <toolboximages.h>
 
 Backend::Backend(MainWindow *mainWindow, QObject *parent)
     : QObject(parent)
@@ -134,6 +135,15 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
     }
 
     return "unknown";
+}
+
+QString Backend::getDistroFromToolboxImage(const QString &image) const
+{
+    for (const auto &entry : toolboxImages) {
+        if (entry["image"] == image)
+            return entry["distro"];
+    }
+    return "Unknown";
 }
 
 QString Backend::getContainerDistro(const QString &containerName) const
@@ -292,7 +302,7 @@ QList<QMap<QString, QString>> Backend::getContainers() const
             // Set default status
             container["status"] = "running";
 
-            container["distro"] = parseDistroFromImage(container["image"]);
+            container["distro"] = getDistroFromToolboxImage(container["image"]);
             container["icon"] = getDistroIcon(container["distro"]);
 
             containers << container;
@@ -535,6 +545,10 @@ QString Backend::unexportApp(const QString &appName, const QString &containerNam
 
 QList<QMap<QString, QString>> Backend::getAvailableImages()
 {
+    if (m_preferredBackend == "toolbox") {
+        return toolboxImages; // Return fixed list for toolbox
+    }
+
     QList<QMap<QString, QString>> images;
     QString output = runCommand({"distrobox", "create", "-C"});
 

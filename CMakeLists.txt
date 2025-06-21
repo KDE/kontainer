@@ -40,6 +40,7 @@ set(HEADERS
     include/mainwindow.h
     include/packagemanager.h
     include/terminalutils.h
+    include/toolboximages.h
 )
 
 qt_add_resources(RESOURCES
