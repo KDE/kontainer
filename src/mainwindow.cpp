@@ -319,13 +319,20 @@ void MainWindow::setupUI()
             settings.setValue("container/backend", preferredBackend);
         }
 
-        connect(backendSelector, &QComboBox::currentTextChanged, this, [this](const QString &backendName) {
+        connect(backendSelector, &QComboBox::currentTextChanged, this, [this, toolBar](const QString &backendName) {
             preferredBackend = backendName;
 
             QSettings settings;
             settings.setValue("container/backend", preferredBackend);
 
             backend->setPreferredBackend(backendName);
+
+            bool isToolbox = (backendName == "toolbox");
+            assembleBtn->setVisible(!isToolbox);
+            aBtn->setVisible(!isToolbox);
+            upgradeBtn->setVisible(!isToolbox);
+
+            toolBar->update();
 
             refreshContainers();
         });
@@ -371,6 +378,12 @@ void MainWindow::updateButtonStates()
     } else {
         enterBtn->setEnabled(hasSelection);
     }
+    if (preferredBackend == "toolbox") {
+        assembleBtn->hide();
+        aBtn->hide(); // Upgrade all containers
+        upgradeBtn->hide(); // Upgrade selected container
+    }
+
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
     upgradeBtn->setEnabled(hasSelection);
@@ -473,25 +486,61 @@ QString MainWindow::getContainerDistro() const
     return distro;
 }
 
+void MainWindow::enterContainer()
+{
+    if (currentContainer.isEmpty())
+        return;
+    backend->enterContainer(currentContainer, preferredTerminal);
+}
+
 void MainWindow::assembleContainer()
 {
+    if (preferredBackend == "toolbox") {
+        QMessageBox::information(this,
+                                 i18n("Function Not Supported"),
+                                 i18n("Toolbox backend doesn't support container assembly.\n\n"
+                                      "Please switch to Distrobox backend to use this feature."));
+        return;
+    }
+
     QString iniFile = QFileDialog::getOpenFileName(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
 
     if (!iniFile.isEmpty()) {
         progressDialog = new QProgressDialog(i18n("Assembling container..."), i18n("Cancel"), 0, 0, this);
         progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr); // Remove cancel button
+        progressDialog->setCancelButton(nullptr);
         progressDialog->show();
 
         backend->assembleContainer(iniFile);
     }
 }
 
-void MainWindow::enterContainer()
+void MainWindow::upgradeAllContainers()
 {
-    if (currentContainer.isEmpty())
+    if (preferredBackend == "toolbox") {
+        QMessageBox::information(this,
+                                 i18n("Function Not Supported"),
+                                 i18n("Toolbox backend doesn't support mass container upgrades.\n\n"
+                                      "Please switch to Distrobox backend to use this feature."));
         return;
-    backend->enterContainer(currentContainer, preferredTerminal);
+    }
+
+    qDebug() << "[upgradeAllContainers] Called";
+
+    if (preferredTerminal.isEmpty()) {
+        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
+        progressDialog = new QProgressDialog(i18n("Upgrading all containers..."), QString(), 0, 0, this);
+        progressDialog->setWindowModality(Qt::WindowModal);
+        progressDialog->setCancelButton(nullptr);
+        progressDialog->show();
+
+        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeAllContainersNoTerminal();
+    } else {
+        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
+        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
+        backend->upgradeAllContainers(preferredTerminal);
+    }
 }
 
 void MainWindow::installDebPackage()
@@ -613,26 +662,6 @@ void MainWindow::upgradeContainer()
         qDebug() << "[upgradeContainer] Using preferred terminal:" << preferredTerminal;
         connect(backend, &Backend::upgradeFinished, this, &MainWindow::showCommandOutput);
         backend->upgradeContainer(currentContainer, preferredTerminal);
-    }
-}
-
-void MainWindow::upgradeAllContainers()
-{
-    qDebug() << "[upgradeAllContainers] Called";
-
-    if (preferredTerminal.isEmpty()) {
-        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
-        progressDialog = new QProgressDialog(i18n("Upgrading all containers..."), QString(), 0, 0, this);
-        progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr);
-        progressDialog->show();
-
-        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
-        backend->upgradeAllContainersNoTerminal();
-    } else {
-        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
-        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
-        backend->upgradeAllContainers(preferredTerminal);
     }
 }
 

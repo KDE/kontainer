@@ -303,20 +303,33 @@ QList<QMap<QString, QString>> Backend::getContainers() const
 
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
-    QStringList args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
-    if (init)
-        args << "--init" << "--additional-packages" << "systemd";
-    if (!home.isEmpty())
-        args << "--home" << home;
-    for (const QString &v : volumes) {
-        args << "--volume" << v;
+    QStringList args;
+    if (m_preferredBackend == "distrobox") {
+        args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
+        if (init)
+            args << "--init" << "--additional-packages" << "systemd";
+        if (!home.isEmpty())
+            args << "--home" << home;
+        for (const QString &v : volumes) {
+            args << "--volume" << v;
+        }
+    } else if (m_preferredBackend == "toolbox") {
+        args = {"toolbox", "create", "-c", name, "-i", image, "-y"};
+    } else {
+        return i18n("Error: Failed to create Container.");
     }
     return runCommand(args);
 }
 
 QString Backend::deleteContainer(const QString &name)
 {
-    return runCommand({"distrobox", "rm", name, "--force"});
+    if (m_preferredBackend == "distrobox") {
+        return runCommand({"distrobox", "rm", name, "--force"});
+    } else if (m_preferredBackend == "toolbox") {
+        return runCommand({"toolbox", "rm", name, "--force"});
+    } else {
+        return i18n("Error: Failed to delete Container.");
+    }
 }
 
 void Backend::executeInTerminal(const QString &terminal, const QString &command)
