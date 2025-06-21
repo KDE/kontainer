@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-20 00:45+0000\n"
-"PO-Revision-Date: 2025-06-19 11:40+0300\n"
+"PO-Revision-Date: 2025-06-20 22:22+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -390,7 +390,7 @@ msgstr "מסוף:"
 #: src/mainwindow.cpp:265
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
-msgstr ""
+msgstr "לא נמצא מדמה מסוף - הפלט יוצג בחלונית"
 
 #: src/mainwindow.cpp:303
 #, kde-format
@@ -468,10 +468,9 @@ msgid "Debian Packages (*.deb)"
 msgstr "חבילות דביאן (‎*.deb)"
 
 #: src/mainwindow.cpp:454
-#, fuzzy, kde-format
-#| msgid "Install Debian/Ubuntu package"
+#, kde-format
 msgid "Installing .deb package..."
-msgstr "התקנת חבילת דביאן/אובונטו"
+msgstr "חבילת ‎.deb מותקנת…"
 
 #: src/mainwindow.cpp:480
 #, kde-format
@@ -484,10 +483,9 @@ msgid "RPM Packages (*.rpm)"
 msgstr "חבילות RPM‏ (‎*.rpm)"
 
 #: src/mainwindow.cpp:486
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing .rpm package..."
-msgstr "התקנת חבילת לינוקס ארץ׳"
+msgstr "חבילת ‎.rpm מותקנת…"
 
 #: src/mainwindow.cpp:512
 #, kde-format
@@ -500,29 +498,26 @@ msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "חבילות ארץ׳ (‎*.pkg.tar.*‎)"
 
 #: src/mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing Arch package..."
-msgstr "התקנת חבילת לינוקס ארץ׳"
+msgstr "חבילת ארץ׳ מותקנת…"
 
 #: src/mainwindow.cpp:546
-#, fuzzy, kde-format
-#| msgid "Creating container..."
+#, kde-format
 msgid "Upgrading container..."
-msgstr "המכולה נוצרת…"
+msgstr "המכולה מתעדכנת…"
 
 #: src/mainwindow.cpp:566
-#, fuzzy, kde-format
-#| msgid "Upgrades all containers"
+#, kde-format
 msgid "Upgrading all containers..."
-msgstr "שדרוג כל המכולות"
+msgstr "כל המכולות משודרגות…"
 
 #: src/mainwindow.cpp:590
 #, kde-format
 msgid "Command Output"
-msgstr ""
+msgstr "פלט פקודה"
 
 #: src/mainwindow.cpp:598
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "סגירה"

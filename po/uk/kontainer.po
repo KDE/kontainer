@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-20 00:45+0000\n"
-"PO-Revision-Date: 2025-06-19 08:56+0300\n"
+"PO-Revision-Date: 2025-06-20 11:09+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -391,7 +391,7 @@ msgstr "Термінал:"
 #: src/mainwindow.cpp:265
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
-msgstr ""
+msgstr "Не знайдено емулятора термінала — виведені дані буде показано у вікні"
 
 #: src/mainwindow.cpp:303
 #, kde-format
@@ -469,10 +469,9 @@ msgid "Debian Packages (*.deb)"
 msgstr "пакунки Debian (*.deb)"
 
 #: src/mainwindow.cpp:454
-#, fuzzy, kde-format
-#| msgid "Install Debian/Ubuntu package"
+#, kde-format
 msgid "Installing .deb package..."
-msgstr "Встановити пакунок Debian/Ubuntu"
+msgstr "Встановлення пакунка .deb…"
 
 #: src/mainwindow.cpp:480
 #, kde-format
@@ -485,10 +484,9 @@ msgid "RPM Packages (*.rpm)"
 msgstr "пакунки RPM (*.rpm)"
 
 #: src/mainwindow.cpp:486
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing .rpm package..."
-msgstr "Встановити пакунок Arch Linux"
+msgstr "Встановлення пакунка .rpm…"
 
 #: src/mainwindow.cpp:512
 #, kde-format
@@ -501,29 +499,26 @@ msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "пакунки Arch (*.pkg.tar.*)"
 
 #: src/mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing Arch package..."
-msgstr "Встановити пакунок Arch Linux"
+msgstr "Встановлення пакунка Arch…"
 
 #: src/mainwindow.cpp:546
-#, fuzzy, kde-format
-#| msgid "Creating container..."
+#, kde-format
 msgid "Upgrading container..."
-msgstr "Створення контейнера…"
+msgstr "Оновлення контейнера…"
 
 #: src/mainwindow.cpp:566
-#, fuzzy, kde-format
-#| msgid "Upgrades all containers"
+#, kde-format
 msgid "Upgrading all containers..."
-msgstr "Оновлює усі контейнери"
+msgstr "Оновлення усіх контейнерів…"
 
 #: src/mainwindow.cpp:590
 #, kde-format
 msgid "Command Output"
-msgstr ""
+msgstr "Виведення команди"
 
 #: src/mainwindow.cpp:598
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "Закрити"

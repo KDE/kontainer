@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-20 00:45+0000\n"
-"PO-Revision-Date: 2025-06-19 07:12+0200\n"
+"PO-Revision-Date: 2025-06-20 07:06+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -387,6 +387,8 @@ msgstr "Terminal:"
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
+"Terminalskega emulatorja ni mogoče najti - izhod bo prikazan v pogovornem "
+"oknu"
 
 #: src/mainwindow.cpp:303
 #, kde-format
@@ -464,10 +466,9 @@ msgid "Debian Packages (*.deb)"
 msgstr "Debian paketi (*.deb)"
 
 #: src/mainwindow.cpp:454
-#, fuzzy, kde-format
-#| msgid "Install Debian/Ubuntu package"
+#, kde-format
 msgid "Installing .deb package..."
-msgstr "Namesti paket Debian/Ubuntu"
+msgstr "Nameščanje paketa .deb..."
 
 #: src/mainwindow.cpp:480
 #, kde-format
@@ -480,10 +481,9 @@ msgid "RPM Packages (*.rpm)"
 msgstr "RPM paketi  (*.rpm)"
 
 #: src/mainwindow.cpp:486
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing .rpm package..."
-msgstr "Namesti paket Arch Linux"
+msgstr "Nameščanje paketa .rpm..."
 
 #: src/mainwindow.cpp:512
 #, kde-format
@@ -496,32 +496,29 @@ msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Arch paketi (*.pkg.tar.*)"
 
 #: src/mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing Arch package..."
-msgstr "Namesti paket Arch Linux"
+msgstr "Nameščanje paketa Arch..."
 
 #: src/mainwindow.cpp:546
-#, fuzzy, kde-format
-#| msgid "Creating container..."
+#, kde-format
 msgid "Upgrading container..."
-msgstr "Ustvarjanje vsebnika ..."
+msgstr "Posodabljanje vsebnika ..."
 
 #: src/mainwindow.cpp:566
-#, fuzzy, kde-format
-#| msgid "Upgrades all containers"
+#, kde-format
 msgid "Upgrading all containers..."
-msgstr "Nadgradi vse vsebnike"
+msgstr "Nadgrajevanje vseh vsebnikov..."
 
 #: src/mainwindow.cpp:590
 #, kde-format
 msgid "Command Output"
-msgstr ""
+msgstr "Izhod ukaza"
 
 #: src/mainwindow.cpp:598
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "Zapri"
 
 #~ msgid "Applications +AC0- "
 #~ msgstr "Aplikacije +AC0-"
