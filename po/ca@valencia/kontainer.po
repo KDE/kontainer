@@ -3,13 +3,13 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2025.
+# SPDX-FileCopyrightText: 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-20 00:45+0000\n"
-"PO-Revision-Date: 2025-06-18 10:34+0200\n"
+"PO-Revision-Date: 2025-06-20 08:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17,14 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: src/appsdialog.cpp:67
-#, fuzzy, kde-format
-#| msgid "Applications - "
+#, kde-format
 msgctxt "@title:window, %1 is a container name"
 msgid "Applications — %1"
-msgstr "Aplicacions - "
+msgstr "Aplicacions — %1"
 
 #: src/appsdialog.cpp:87
 #, kde-format
@@ -87,10 +86,9 @@ msgid "with args"
 msgstr "amb arguments"
 
 #: src/backend.cpp:272
-#, fuzzy, kde-format
-#| msgid "Error: "
+#, kde-format
 msgid "Error: %1"
-msgstr "S'ha produït un error: "
+msgstr "S'ha produït un error: %1"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -103,26 +101,22 @@ msgid "my-container"
 msgstr "meu-contenidor"
 
 #: src/createcontainerdialog.cpp:95
-#, fuzzy, kde-format
-#| msgid "Container Name:"
+#, kde-format
 msgid "Container name:"
 msgstr "Nom del contenidor:"
 
 #: src/createcontainerdialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Search images..."
+#, kde-format
 msgid "Search images…"
 msgstr "Busca imatges…"
 
 #: src/createcontainerdialog.cpp:100
-#, fuzzy, kde-format
-#| msgid "Search Images:"
+#, kde-format
 msgid "Search images:"
 msgstr "Busca imatges:"
 
 #: src/createcontainerdialog.cpp:107
-#, fuzzy, kde-format
-#| msgid "Available Images:"
+#, kde-format
 msgid "Available images:"
 msgstr "Imatges disponibles:"
 
@@ -132,8 +126,7 @@ msgid "Leave empty for default"
 msgstr "Deixeu-ho buit per a un valor predeterminat"
 
 #: src/createcontainerdialog.cpp:111
-#, fuzzy, kde-format
-#| msgid "Custom Home Path:"
+#, kde-format
 msgid "Custom home path:"
 msgstr "Camí d'inici personalitzat:"
 
@@ -143,8 +136,7 @@ msgid "e.g., /host/path:/container/path (comma separate multiple)"
 msgstr "p. ex., /host/camí:/contenidor/camí (diversos separats per comes)"
 
 #: src/createcontainerdialog.cpp:115
-#, fuzzy, kde-format
-#| msgid "Additional Volumes:"
+#, kde-format
 msgid "Additional volumes:"
 msgstr "Volums addicionals:"
 
@@ -159,8 +151,7 @@ msgid "Enable systemd as init system inside the container"
 msgstr "Activa «systemd» com sistema d'inici dins del contenidor"
 
 #: src/createcontainerdialog.cpp:119
-#, fuzzy, kde-format
-#| msgid "Init System:"
+#, kde-format
 msgid "Init system:"
 msgstr "Sistema d'inici:"
 
@@ -202,8 +193,7 @@ msgid "Creating Container"
 msgstr "Creació de contenidor"
 
 #: src/createcontainerdialog.cpp:228
-#, fuzzy, kde-format
-#| msgid "Starting container creation..."
+#, kde-format
 msgid "Starting container creation…"
 msgstr "S'està iniciant la creació del contenidor…"
 
@@ -218,10 +208,9 @@ msgid "Process output:"
 msgstr "Eixida del procés:"
 
 #: src/createcontainerdialog.cpp:286
-#, fuzzy, kde-format
-#| msgid "Process error: "
+#, kde-format
 msgid "Process error:"
-msgstr "S'ha produït un error de procés: "
+msgstr "S'ha produït un error de procés:"
 
 #: src/createcontainerdialog.cpp:289
 #, kde-format
@@ -254,8 +243,7 @@ msgid "Unknown error"
 msgstr "S'ha produït un error desconegut"
 
 #: src/createcontainerdialog.cpp:319
-#, fuzzy, kde-format
-#| msgid "Container '%1' created successfully!"
+#, kde-format
 msgid "Container “%1” created successfully!"
 msgstr "El contenidor «%1» s'ha creat correctament!"
 
@@ -404,6 +392,7 @@ msgstr "Terminal:"
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
+"No s'ha trobat cap emulador de terminal: l'eixida es mostrarà en el diàleg"
 
 #: src/mainwindow.cpp:303
 #, kde-format
@@ -451,10 +440,9 @@ msgid "Result"
 msgstr "Resultat"
 
 #: src/mainwindow.cpp:397
-#, fuzzy, kde-format
-#| msgid "Creating Container"
+#, kde-format
 msgid "Creating container…"
-msgstr "Creació de contenidor"
+msgstr "S'està creant el contenidor…"
 
 #: src/mainwindow.cpp:419
 #, kde-format
@@ -482,10 +470,9 @@ msgid "Debian Packages (*.deb)"
 msgstr "Paquets Debian (*.deb)"
 
 #: src/mainwindow.cpp:454
-#, fuzzy, kde-format
-#| msgid "Install Debian/Ubuntu package"
+#, kde-format
 msgid "Installing .deb package..."
-msgstr "Instal·la un paquet Debian/Ubuntu"
+msgstr "S'està instal·lant un paquet «.deb»…"
 
 #: src/mainwindow.cpp:480
 #, kde-format
@@ -498,10 +485,9 @@ msgid "RPM Packages (*.rpm)"
 msgstr "Paquets RPM (*.rpm)"
 
 #: src/mainwindow.cpp:486
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing .rpm package..."
-msgstr "Instal·la un paquet Arch Linux"
+msgstr "S'està instal·lant un paquet «.rpm»…"
 
 #: src/mainwindow.cpp:512
 #, kde-format
@@ -515,29 +501,26 @@ msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Paquets d'Arch (*.pkg.tar.*)"
 
 #: src/mainwindow.cpp:518
-#, fuzzy, kde-format
-#| msgid "Install Arch Linux package"
+#, kde-format
 msgid "Installing Arch package..."
-msgstr "Instal·la un paquet Arch Linux"
+msgstr "S'està instal·lant un paquet Arch…"
 
 #: src/mainwindow.cpp:546
-#, fuzzy, kde-format
-#| msgid "Creating container..."
+#, kde-format
 msgid "Upgrading container..."
-msgstr "S'està creant el contenidor…"
+msgstr "S'està actualitzant el contenidor…"
 
 #: src/mainwindow.cpp:566
-#, fuzzy, kde-format
-#| msgid "Upgrades all containers"
+#, kde-format
 msgid "Upgrading all containers..."
-msgstr "Actualitza tots els contenidors"
+msgstr "S'estan actualitzant tots els contenidors…"
 
 #: src/mainwindow.cpp:590
 #, kde-format
 msgid "Command Output"
-msgstr ""
+msgstr "Eixida de l'ordre"
 
 #: src/mainwindow.cpp:598
 #, kde-format
 msgid "Close"
-msgstr ""
+msgstr "Tanca"
