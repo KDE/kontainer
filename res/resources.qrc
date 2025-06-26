@@ -12,6 +12,7 @@
     <file alias="icons/crystal.svg">icons/crystal.svg</file>
     <file alias="icons/debian.svg">icons/debian.svg</file>
     <file alias="icons/deepin.svg">icons/deepin.svg</file>
+    <file alias="icons/distrobox.svg">icons/distrobox.svg</file>
     <file alias="icons/elementary.svg">icons/elementary.svg</file>
     <file alias="icons/fedora.svg">icons/fedora.svg</file>
     <file alias="icons/gentoo.svg">icons/gentoo.svg</file>

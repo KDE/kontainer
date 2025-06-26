@@ -330,7 +330,16 @@ void MainWindow::setupUI()
     QString currentBackend = backend->preferredBackend();
 
     for (const QString &backendName : availableBackends) {
-        QIcon icon = QIcon::fromTheme(backendName == "toolbox" ? "utilities-terminal" : "system-run");
+        QIcon icon;
+
+        if (backendName == "distrobox") {
+            icon = QIcon(":/icons/distrobox.svg");
+        } else if (backendName == "toolbox") {
+            icon = QIcon::fromTheme("utilities-terminal");
+        } else {
+            icon = QIcon::fromTheme("system-run"); // fallback
+        }
+
         backendSelector->addItem(icon, backendName);
     }
 
