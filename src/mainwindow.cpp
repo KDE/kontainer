@@ -6,6 +6,7 @@
 #include "backend.h"
 #include "createcontainerdialog.h"
 #include "terminalutils.h"
+#include <cerrno>
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate
@@ -324,57 +325,27 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
+    QComboBox *backendSelector = new QComboBox(toolBar);
     QStringList availableBackends = backend->availableBackends();
+    QString currentBackend = backend->preferredBackend();
 
-    if (availableBackends.size() >= 2) {
-        // Spacer between terminal selector and backend selector
-        QWidget *spacer2 = new QWidget(toolBar);
-        spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        toolBar->addWidget(spacer2);
-
-        // --- Backend Selector (Distrobox/Toolbox) ---
-        QLabel *backendLabel = new QLabel(i18n("Backend:"), toolBar);
-        toolBar->addWidget(backendLabel);
-
-        QComboBox *backendSelector = new QComboBox(toolBar);
-        for (const QString &backendName : availableBackends) {
-            QIcon icon = QIcon::fromTheme(backendName == "toolbox" ? "utilities-terminal" : "system-run");
-            backendSelector->addItem(icon, backendName);
-        }
-
-        QString currentBackend = backend->preferredBackend();
-        int backendIndex = backendSelector->findText(currentBackend);
-        if (backendIndex >= 0) {
-            backendSelector->setCurrentIndex(backendIndex);
-        } else {
-            currentBackend = availableBackends.first();
-            backendSelector->setCurrentIndex(0);
-            backend->setPreferredBackend(currentBackend);
-            QSettings().setValue("container/backend", currentBackend);
-        }
-
-        connect(backendSelector, &QComboBox::currentTextChanged, this, [=](const QString &backendName) {
-            backend->setPreferredBackend(backendName);
-            QSettings().setValue("container/backend", backendName);
-
-            bool isToolbox = (backendName == "toolbox");
-            assembleBtn->setVisible(!isToolbox);
-            aBtn->setVisible(!isToolbox);
-            upgradeBtn->setVisible(!isToolbox);
-
-            toolBar->update();
-            refreshContainers();
-        });
-
-        toolBar->addWidget(backendSelector);
-
-    } else if (availableBackends.size() == 1) {
-        QString onlyBackend = availableBackends.first();
-        backend->setPreferredBackend(onlyBackend);
-        QSettings().setValue("container/backend", onlyBackend);
-    } else {
-        backend->setPreferredBackend({});
+    for (const QString &backendName : availableBackends) {
+        QIcon icon = QIcon::fromTheme(backendName == "toolbox" ? "utilities-terminal" : "system-run");
+        backendSelector->addItem(icon, backendName);
     }
+
+    int backendIndex = backendSelector->findText(currentBackend);
+    if (backendIndex >= 0) {
+        backendSelector->setCurrentIndex(backendIndex);
+    }
+
+    connect(backendSelector, &QComboBox::currentTextChanged, this, [=](const QString &backendName) {
+        backend->setPreferredBackend(backendName);
+        upgradeBtn->setVisible(false);
+        refreshContainers();
+    });
+
+    toolBar->addWidget(backendSelector);
 
     qDebug() << "Preferred Terminal:" << preferredTerminal;
     qDebug() << "Preferred Backend:" << backend->preferredBackend();
@@ -405,15 +376,16 @@ void MainWindow::updateButtonStates()
     } else {
         enterBtn->setEnabled(hasSelection);
     }
-    if (preferredBackend == "toolbox") {
-        assembleBtn->hide();
-        aBtn->hide(); // Upgrade all containers
-        upgradeBtn->hide(); // Upgrade selected container
-    }
 
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
     upgradeBtn->setEnabled(hasSelection);
+
+    if (backend->preferredBackend() == "toolbox") {
+        upgradeBtn->setVisible(false); // Upgrade selected container
+    } else {
+        upgradeBtn->setVisible(true);
+    }
 
     if (hasSelection) {
         QString distro = getContainerDistro();
