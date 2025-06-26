@@ -307,12 +307,21 @@ QString Backend::createContainer(const QString &name, const QString &image, cons
 
 QString Backend::deleteContainer(const QString &name)
 {
+    QString appsPath;
+
     if (m_preferredBackend == "distrobox") {
         return runCommand({"distrobox", "rm", name, "--force"});
     } else if (m_preferredBackend == "toolbox") {
         // First remove all exported desktop files for this container
 
-        QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        if (m_isFlatpak) {
+            // Access host's ~/.local/share/applications manually
+            QString home = qEnvironmentVariable("HOME");
+            appsPath = home + "/.local/share/applications";
+        } else {
+            appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        }
+
         QDir appsDir(appsPath);
         QStringList exportedFiles = appsDir.entryList({"*-" + name + ".desktop"}, QDir::Files);
 
@@ -794,15 +803,35 @@ QStringList Backend::getAvailableApps(const QString &containerName)
 QStringList Backend::getExportedApps(const QString &containerName)
 {
     QStringList apps;
-    QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    QString appsPath;
+
+    if (m_isFlatpak) {
+        appsPath = qEnvironmentVariable("HOME") + "/.local/share/applications";
+    } else {
+        appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    }
+
     QDir dir(appsPath);
 
-    // Pattern for toolbox exported apps: *-<containerName>.desktop
-    QString pattern = QString("*-%1.desktop").arg(containerName);
+    QStringList patterns;
+    if (m_preferredBackend == "toolbox") {
+        // Toolbox format: some-app-<container>.desktop
+        patterns << QString("*-%1.desktop").arg(containerName);
+    } else if (m_preferredBackend == "distrobox") {
+        // Distrobox format: <container>-<app>.desktop
+        patterns << QString("%1-*.desktop").arg(containerName);
+    }
 
-    for (const QFileInfo &file : dir.entryInfoList({pattern}, QDir::Files)) {
-        QString fileName = file.fileName();
-        QString appId = fileName.left(fileName.length() - QString("-%1.desktop").arg(containerName).length());
+    for (const QFileInfo &file : dir.entryInfoList(patterns, QDir::Files)) {
+        QString fileName = file.baseName(); // e.g. "firefox-mycontainer" or "mycontainer-firefox"
+        QString appId;
+
+        if (m_preferredBackend == "toolbox") {
+            appId = fileName.left(fileName.length() - QString("-%1").arg(containerName).length());
+        } else if (m_preferredBackend == "distrobox") {
+            appId = fileName.mid(QString("%1-").arg(containerName).length());
+        }
+
         apps << appId;
     }
 
@@ -829,7 +858,16 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
         QString desktopContent = runCommand({"toolbox", "run", "-c", containerName, "cat", desktopFile});
 
-        QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        QString appsPath;
+
+        if (m_isFlatpak) {
+            // Access host's ~/.local/share/applications manually
+            QString home = qEnvironmentVariable("HOME");
+            appsPath = home + "/.local/share/applications";
+        } else {
+            appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        }
+
         QString exportedPath = appsPath + "/" + QFileInfo(desktopFile).completeBaseName() + "-" + containerName + ".desktop";
 
         QStringList lines = desktopContent.split('\n');
@@ -878,9 +916,28 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
 QString Backend::unexportApp(const QString &appName, const QString &containerName)
 {
-    QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
-    QString pattern = QString("%1-%2.desktop").arg(appName, containerName);
-    QString exportedFile = appsPath + "/" + pattern;
+    QString appsPath;
+
+    if (m_isFlatpak) {
+        appsPath = qEnvironmentVariable("HOME") + "/.local/share/applications";
+    } else {
+        appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    }
+
+    QString fileName;
+
+    if (m_preferredBackend == "toolbox") {
+        // Toolbox: appName-containerName.desktop
+        fileName = QString("%1-%2.desktop").arg(appName, containerName);
+    } else if (m_preferredBackend == "distrobox") {
+        // Distrobox: containerName-appName.desktop
+        fileName = QString("%1-%2.desktop").arg(containerName, appName);
+    } else {
+        // Fallback to toolbox naming
+        fileName = QString("%1-%2.desktop").arg(appName, containerName);
+    }
+
+    QString exportedFile = appsPath + "/" + fileName;
 
     if (!QFile::exists(exportedFile)) {
         return QString("No exported application %1 found for container %2").arg(appName, containerName);

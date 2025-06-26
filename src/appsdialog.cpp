@@ -172,7 +172,6 @@ void AppsDialog::loadApps()
         m_availableAppsList->addItem(item);
     }
 
-    // Sichtbarkeit & Platzhalter
     m_exportedAppsList->setVisible(!exportedApps.isEmpty());
     m_noExportedLabel->setVisible(exportedApps.isEmpty());
     m_unexportBtn->setVisible(!exportedApps.isEmpty());
