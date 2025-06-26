@@ -132,7 +132,7 @@ QStringList Backend::getAvailableTerminals() const
             if (m_isFlatpak) {
                 QProcess whichProcess;
                 whichProcess.start("flatpak-spawn", {"--host", "which", term});
-                whichProcess.waitForFinished(500);
+                whichProcess.waitForFinished(5000);
                 terminalAvailable = (whichProcess.exitCode() == 0);
             } else {
                 terminalAvailable = !QStandardPaths::findExecutable(term).isEmpty();
@@ -150,13 +150,13 @@ QStringList Backend::getAvailableTerminals() const
             if (m_isFlatpak) {
                 QProcess process;
                 process.start("flatpak-spawn", {"--host", "flatpak", "list", "--app", "--columns=application"});
-                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
+                if (process.waitForFinished(5000) && process.readAllStandardOutput().contains(term.toUtf8())) {
                     terminalAvailable = true;
                 }
             } else {
                 QProcess process;
                 process.start("flatpak", {"list", "--app", "--columns=application"});
-                if (process.waitForFinished(500) && process.readAllStandardOutput().contains(term.toUtf8())) {
+                if (process.waitForFinished(5000) && process.readAllStandardOutput().contains(term.toUtf8())) {
                     terminalAvailable = true;
                 }
             }
@@ -256,20 +256,32 @@ QString Backend::createContainer(const QString &name, const QString &image, cons
     m_createProcess = new QProcess(this);
     m_createProcess->setProcessChannelMode(QProcess::MergedChannels);
 
-    QEventLoop loop;
     QString result;
     bool success = false;
+    QEventLoop loop;
 
-    connect(m_createProcess, &QProcess::readyRead, this, [this]() {
-        emit containerOutput(QString::fromUtf8(m_createProcess->readAll()));
+    // Collect all output
+    QString output;
+    connect(m_createProcess, &QProcess::readyReadStandardOutput, this, [this, &output]() {
+        QString text = QString::fromUtf8(m_createProcess->readAllStandardOutput());
+        output += text;
+        emit containerOutput(text);
+    });
+
+    connect(m_createProcess, &QProcess::readyReadStandardError, this, [this, &output]() {
+        QString text = QString::fromUtf8(m_createProcess->readAllStandardError());
+        output += text;
+        emit containerOutput(text);
     });
 
     connect(m_createProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [&](int exitCode, QProcess::ExitStatus exitStatus) {
         success = (exitStatus == QProcess::NormalExit && exitCode == 0);
-        result = QString::fromUtf8(m_createProcess->readAll());
+        output += QString::fromUtf8(m_createProcess->readAllStandardOutput());
+        output += QString::fromUtf8(m_createProcess->readAllStandardError());
         loop.quit();
     });
 
+    // Build args
     QStringList args;
     if (m_preferredBackend == "distrobox") {
         args = {m_isFlatpak ? "flatpak-spawn" : "distrobox"};
@@ -281,28 +293,34 @@ QString Backend::createContainer(const QString &name, const QString &image, cons
             args << "--init" << "--additional-packages" << "systemd";
         if (!home.isEmpty())
             args << "--home" << home;
-        for (const QString &v : volumes) {
+        for (const QString &v : volumes)
             args << "--volume" << v;
-        }
+
     } else if (m_preferredBackend == "toolbox") {
         args = {m_isFlatpak ? "flatpak-spawn" : "toolbox"};
         if (m_isFlatpak)
             args << "--host" << "toolbox";
         args << "create" << "-c" << name << "-i" << image << "-y";
+
     } else {
         return i18n("Error: No supported backend available");
     }
 
+    // Start the process
     m_createProcess->start(args.first(), args.mid(1));
+    if (!m_createProcess->waitForStarted()) {
+        return i18n("Error: Failed to start container creation process");
+    }
+
     loop.exec();
 
     QString message = success ? i18n("Container created successfully") : i18n("Container creation failed");
-    emit containerCreationFinished(success, message + "\n\n" + result);
+    emit containerCreationFinished(success, message + "\n\n" + output);
 
     m_createProcess->deleteLater();
     m_createProcess = nullptr;
 
-    return success ? message : i18n("Error: ") + result;
+    return success ? message : i18n("Error: ") + output;
 }
 
 QString Backend::deleteContainer(const QString &name)
