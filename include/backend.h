@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
-#ifndef BACKEND_H
-#define BACKEND_H
+#pragma once
 
 #include <KLocalizedString>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
+#include <QFuture>
 #include <QMap>
 #include <QObject>
 #include <QProcess>
@@ -15,16 +15,21 @@
 #include <QStandardPaths>
 #include <QString>
 #include <QStringList>
+#include <QtConcurrent/QtConcurrent>
+#include <algorithm>
 
 class Backend : public QObject
 {
     Q_OBJECT
 public:
     explicit Backend(QObject *parent = nullptr);
+    QStringList availableBackends() const;
+    void setPreferredBackend(const QString &backend);
 
     // Container operations
     QList<QMap<QString, QString>> getContainers() const;
-    QString createContainer(const QString &name, const QString &image, const QString &home = "", bool init = false, const QStringList &volumes = QStringList());
+    QString
+    createContainer(const QString &name, const QString &image, const QString &home = QString(), bool init = false, const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
     void enterContainer(const QString &name, const QString &terminal);
     void upgradeContainer(const QString &name, const QString &terminal);
@@ -42,6 +47,7 @@ public:
     QString unexportApp(const QString &appName, const QString &containerName);
     QString getContainerDistro(const QString &containerName) const;
     QStringList getAvailableTerminals() const;
+    QString preferredBackend() const;
 
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
@@ -54,6 +60,12 @@ signals:
     void archInstallFinished(const QString &output);
     void upgradeFinished(const QString &output);
     void upgradeAllFinished(const QString &output);
+    void packageInstallFinished(const QString &signalName, const QString &result);
+    void outputReceived(const QString &output);
+    void containerCreationStarted();
+    void containerOutput(const QString &output);
+    void containerCreationFinished(bool success, const QString &message);
+    void availableBackendsChanged(const QStringList &backends);
 
 public slots:
     void assembleContainer(const QString &iniFile);
@@ -66,6 +78,16 @@ private:
     QString parseDistroFromImage(const QString &imageUrl) const;
     QString getDistroIcon(const QString &distroName) const;
     bool m_isFlatpak = false;
+    QString m_preferredBackend;
+    void checkAvailableBackends();
+    void validatePreferredBackend();
+    QString getDistroFromToolboxImage(const QString &image) const;
+    void installPackageNoTerminal(const QString &containerName, const QString &filePath, const QString &packageCommand, const QString &signalName);
+    void handlePackageInstallFinished(QProcess *process, int exitCode, const QString &signalName);
+    QStringList buildToolboxCommand(const QString &containerName, const QString &command);
+    QStringList buildDistroboxCommand(const QString &containerName, const QString &command);
+    QProcess *m_createProcess = nullptr;
+    QStringList m_cachedBackends;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",
@@ -105,8 +127,8 @@ private:
                                             {"wolfi", "wolfi.svg"},
 
                                             // Variants and derivatives
-                                            {"bazzite", "fedora.svg"},
-                                            {"bluefin", "ubuntu.svg"},
+                                            {"bazzite", "bazzite.svg"},
+                                            {"bluefin", "ublue.svg"},
                                             {"bullseye", "debian.svg"},
                                             {"buster", "debian.svg"},
                                             {"bookworm", "debian.svg"},
@@ -126,5 +148,3 @@ private:
                                             // Default fallbacks
                                             {"unknown", "tux.svg"}};
 };
-
-#endif // BACKEND_H

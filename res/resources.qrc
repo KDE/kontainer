@@ -4,6 +4,7 @@
     <file alias="icons/alpine.svg">icons/alpine.svg</file>
     <file alias="icons/amazonlinux.svg">icons/amazonlinux.svg</file>
     <file alias="icons/archlinux.svg">icons/archlinux.svg</file>
+    <file alias="icons/bazzite.svg">icons/bazzite.svg</file>
     <file alias="icons/blackarchlinux.svg">icons/blackarchlinux.svg</file>
     <file alias="icons/centos.svg">icons/centos.svg</file>
     <file alias="icons/clearlinux.svg">icons/clearlinux.svg</file>

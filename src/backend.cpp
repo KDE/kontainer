@@ -4,12 +4,88 @@
 #include "backend.h"
 #include "packagemanager.h"
 #include "terminalutils.h"
+#include <mainwindow.h>
+#include <toolboximages.h>
 
 Backend::Backend(QObject *parent)
     : QObject(parent)
 {
-    // Check if we're running as a Flatpak
     m_isFlatpak = QFile::exists("/.flatpak-info");
+
+    QSettings settings;
+    m_preferredBackend = settings.value("container/backend", "distrobox").toString();
+    checkAvailableBackends();
+}
+
+void Backend::checkAvailableBackends()
+{
+    auto isAvailable = [this](const QString &name) -> QFuture<bool> {
+        return QtConcurrent::run([this, name]() -> bool {
+            if (m_isFlatpak) {
+                QProcess whichProcess;
+                whichProcess.start("flatpak-spawn", {"--host", "which", name});
+                if (!whichProcess.waitForStarted()) {
+                    return false;
+                }
+                QEventLoop loop;
+                QObject::connect(&whichProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), &loop, &QEventLoop::quit);
+                loop.exec();
+                return (whichProcess.exitCode() == 0);
+            } else {
+                return !QStandardPaths::findExecutable(name).isEmpty();
+            }
+        });
+    };
+
+    const QList<QString> backends = {"distrobox", "toolbox"};
+    QList<QFuture<bool>> futures;
+
+    for (const auto &backend : backends) {
+        futures.append(isAvailable(backend));
+    }
+
+    // Create a combined future that waits for all checks to complete
+    auto combinedFuture = QtFuture::whenAll(futures.begin(), futures.end());
+
+    combinedFuture.then(this, [this, backends](const QList<QFuture<bool>> &results) {
+        QList<QString> availableBackends;
+        for (int i = 0; i < results.size(); ++i) {
+            if (results[i].result()) {
+                availableBackends.append(backends[i]);
+            }
+        }
+        m_cachedBackends = availableBackends;
+        validatePreferredBackend();
+        Q_EMIT availableBackendsChanged(m_cachedBackends);
+    });
+}
+
+QStringList Backend::availableBackends() const
+{
+    return m_cachedBackends;
+}
+
+QString Backend::preferredBackend() const
+{
+    return m_preferredBackend;
+}
+
+void Backend::setPreferredBackend(const QString &backend)
+{
+    if (m_preferredBackend != backend && m_cachedBackends.contains(backend)) {
+        m_preferredBackend = backend;
+        QSettings settings;
+        settings.setValue("container/backend", backend);
+    }
+}
+
+void Backend::validatePreferredBackend()
+{
+    if (!m_cachedBackends.contains(m_preferredBackend) && !m_cachedBackends.isEmpty()) {
+        m_preferredBackend = m_cachedBackends.first();
+        QSettings settings;
+        settings.setValue("container/backend", m_preferredBackend);
+    }
 }
 
 QString Backend::runCommand(const QStringList &command) const
@@ -29,70 +105,6 @@ QString Backend::runCommand(const QStringList &command) const
         return i18n("Error: Command timed out");
     }
     return process.readAllStandardOutput().trimmed();
-}
-
-QString Backend::parseDistroFromImage(const QString &imageUrl) const
-{
-    QString image = imageUrl.toLower();
-
-    // First check hardcoded URL mappings (exact matches)
-    static const QMap<QString, QString> hardcodedMappings = {{"ghcr.io/vanilla-os/vso:main", "vso"},
-                                                             {"docker.io/blackarchlinux/blackarch:latest", "blackarch"},
-                                                             {"cgr.dev/chainguard/wolfi-base", "wolfi"}};
-
-    // Check for exact matches first
-    for (auto it = hardcodedMappings.constBegin(); it != hardcodedMappings.constEnd(); ++it) {
-        if (image.startsWith(it.key())) {
-            return it.value();
-        }
-    }
-
-    // Ordered list of patterns to try (most specific to most generic)
-    QVector<QPair<QString, QString>> patterns = {
-        // 1. Explicit toolbox patterns (ubi9/toolbox, ubuntu-toolbox, etc.)
-        {"(^|/)([a-z]+)-?toolbox(:|$)", "$2"}, // ubuntu-toolbox -> ubuntu
-        {"(^|/)ubi([0-9]+)/toolbox(:|$)", "rhel"}, // ubi9/toolbox -> rhel
-        {"(^|/)([a-z]+)/toolbox(:|$)", "$2"}, // fedora/toolbox -> fedora
-
-        // 2. Versioned distro names (ubuntu:22.04, rockylinux:9)
-        {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"}, // ubuntu22.04 -> ubuntu
-
-        // 3. Standard distro names in path
-        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
-
-        // 4. Common abbreviations and aliases
-        {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
-        {"(^|/)ubi([0-9]?)(:|/|$)", "rhel"},
-        {"(^|/)nd[0-9]+(:|/|$)", "neurodebian"},
-
-        // 5. Substring fallback (least specific)
-        {"([a-z]+)(-|_)?(linux|os)", "$1"} // something-linux -> something
-    };
-
-    // Try each pattern in order
-    for (const auto &[pattern, replacement] : patterns) {
-        QRegularExpression rx(pattern);
-        QRegularExpressionMatch match = rx.match(image);
-        if (match.hasMatch()) {
-            QString matchedDistro = match.captured(replacement == "$2" ? 2 : 1);
-
-            // Validate the matched distro against our known list
-            for (const QString &distro : DISTROS) {
-                if (matchedDistro.contains(distro)) {
-                    return distro;
-                }
-            }
-        }
-    }
-
-    // Final fallback: check for any distro name as substring
-    for (const QString &distro : DISTROS) {
-        if (image.contains(distro)) {
-            return distro;
-        }
-    }
-
-    return "unknown";
 }
 
 QString Backend::getContainerDistro(const QString &containerName) const
@@ -159,52 +171,163 @@ QStringList Backend::getAvailableTerminals() const
 
 QList<QMap<QString, QString>> Backend::getContainers() const
 {
-    QString output = runCommand({"distrobox", "list", "--no-color"});
+    QString output;
+    if (m_preferredBackend == "distrobox") {
+        output = runCommand({"distrobox", "list", "--no-color"});
+    } else if (m_preferredBackend == "toolbox") {
+        output = runCommand({"toolbox", "list", "-c"});
+    } else {
+        return {};
+    }
+
     QStringList lines = output.split('\n', Qt::SkipEmptyParts);
     if (lines.isEmpty())
         return {};
 
-    QStringList headers;
-    for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
-        headers << col.trimmed();
-    }
-
     QList<QMap<QString, QString>> containers;
-    for (int i = 1; i < lines.size(); ++i) {
-        QStringList parts;
-        for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
-            parts << col.trimmed();
+
+    if (m_preferredBackend == "distrobox") {
+        // Pipe-separated table (with header)
+        QStringList headers;
+        for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
+            headers << col.trimmed();
         }
 
-        QMap<QString, QString> container;
-        container["name"] = parts[headers.indexOf("NAME")];
-        container["image"] = parts[headers.indexOf("IMAGE")];
-        container["distro"] = parseDistroFromImage(container["image"]);
-        container["status"] = parts[headers.indexOf("STATUS")];
-        container["id"] = parts[headers.indexOf("ID")];
-        container["icon"] = getDistroIcon(container["distro"]);
+        for (int i = 1; i < lines.size(); ++i) {
+            QStringList parts;
+            for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
+                parts << col.trimmed();
+            }
 
-        containers << container;
+            if (parts.size() < headers.size())
+                continue;
+
+            QMap<QString, QString> container;
+            container["id"] = parts[headers.indexOf("ID")];
+            container["name"] = parts[headers.indexOf("NAME")];
+            container["status"] = parts[headers.indexOf("STATUS")];
+            container["image"] = parts[headers.indexOf("IMAGE")];
+            container["distro"] = parseDistroFromImage(container["image"]);
+            container["icon"] = getDistroIcon(container["distro"]);
+
+            containers << container;
+        }
+    } else if (m_preferredBackend == "toolbox") {
+        // Toolbox format: ID NAME CREATED STATUS IMAGE
+        // Example: "2a16a2f1137c  fed  About an hour ago  created  registry.fedoraproject.org/fedora-toolbox:latest"
+
+        for (int i = 1; i < lines.size(); ++i) {
+            QString line = lines[i].trimmed();
+
+            // Split on two or more spaces to handle the column formatting
+            QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
+
+            // Need at least ID, NAME, and IMAGE (some columns might be missing)
+            if (parts.size() < 3)
+                continue;
+
+            QMap<QString, QString> container;
+
+            // First part is always ID
+            container["id"] = parts[0].trimmed();
+
+            // Second part is NAME (might be followed by CREATED/STATUS)
+            container["name"] = parts[1].trimmed();
+
+            // Last part is always IMAGE
+            container["image"] = parts.last().trimmed();
+
+            // Set default status
+            container["status"] = "running";
+
+            container["distro"] = getDistroFromToolboxImage(container["image"]);
+            container["icon"] = getDistroIcon(container["distro"]);
+
+            containers << container;
+        }
     }
     return containers;
 }
 
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
-    QStringList args = {"distrobox", "create", "-n", name, "-i", image, "-Y"};
-    if (init)
-        args << "--init" << "--additional-packages" << "systemd";
-    if (!home.isEmpty())
-        args << "--home" << home;
-    for (const QString &v : volumes) {
-        args << "--volume" << v;
+    emit containerCreationStarted();
+
+    m_createProcess = new QProcess(this);
+    m_createProcess->setProcessChannelMode(QProcess::MergedChannels);
+
+    QEventLoop loop;
+    QString result;
+    bool success = false;
+
+    connect(m_createProcess, &QProcess::readyRead, this, [this]() {
+        emit containerOutput(QString::fromUtf8(m_createProcess->readAll()));
+    });
+
+    connect(m_createProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [&](int exitCode, QProcess::ExitStatus exitStatus) {
+        success = (exitStatus == QProcess::NormalExit && exitCode == 0);
+        result = QString::fromUtf8(m_createProcess->readAll());
+        loop.quit();
+    });
+
+    QStringList args;
+    if (m_preferredBackend == "distrobox") {
+        args = {m_isFlatpak ? "flatpak-spawn" : "distrobox"};
+        if (m_isFlatpak)
+            args << "--host" << "distrobox";
+        args << "create" << "-n" << name << "-i" << image << "-Y";
+
+        if (init)
+            args << "--init" << "--additional-packages" << "systemd";
+        if (!home.isEmpty())
+            args << "--home" << home;
+        for (const QString &v : volumes) {
+            args << "--volume" << v;
+        }
+    } else if (m_preferredBackend == "toolbox") {
+        args = {m_isFlatpak ? "flatpak-spawn" : "toolbox"};
+        if (m_isFlatpak)
+            args << "--host" << "toolbox";
+        args << "create" << "-c" << name << "-i" << image << "-y";
+    } else {
+        return i18n("Error: No supported backend available");
     }
-    return runCommand(args);
+
+    m_createProcess->start(args.first(), args.mid(1));
+    loop.exec();
+
+    QString message = success ? i18n("Container created successfully") : i18n("Container creation failed");
+    emit containerCreationFinished(success, message + "\n\n" + result);
+
+    m_createProcess->deleteLater();
+    m_createProcess = nullptr;
+
+    return success ? message : i18n("Error: ") + result;
 }
 
 QString Backend::deleteContainer(const QString &name)
 {
-    return runCommand({"distrobox", "rm", name, "--force"});
+    if (m_preferredBackend == "distrobox") {
+        return runCommand({"distrobox", "rm", name, "--force"});
+    } else if (m_preferredBackend == "toolbox") {
+        // First remove all exported desktop files for this container
+
+        QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        QDir appsDir(appsPath);
+        QStringList exportedFiles = appsDir.entryList({"*-" + name + ".desktop"}, QDir::Files);
+
+        for (const QString &file : exportedFiles) {
+            QFile::remove(appsDir.filePath(file));
+        }
+
+        // Update desktop database after removal
+        runCommand({"update-desktop-database", appsDir.path()});
+
+        // Now remove the container
+        return runCommand({"toolbox", "rm", name, "--force"});
+    } else {
+        return i18n("Error: Failed to delete Container.");
+    }
 }
 
 void Backend::executeInTerminal(const QString &terminal, const QString &command)
@@ -284,7 +407,13 @@ void Backend::assembleContainer(const QString &iniFile)
 
 void Backend::enterContainer(const QString &name, const QString &terminal)
 {
-    executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
+    if (m_preferredBackend == "distrobox") {
+        executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
+    } else if (m_preferredBackend == "toolbox") {
+        executeInTerminal(terminal, QString("toolbox enter %1").arg(name));
+    } else {
+        // Bruh
+    }
 }
 
 void Backend::upgradeContainer(const QString &name, const QString &terminal)
@@ -300,77 +429,94 @@ void Backend::upgradeAllContainers(const QString &terminal)
 void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo apt install -y %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installDebPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installDebPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installDebPackage] Unknown backend:" << m_preferredBackend;
+    }
 }
 
 void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo dnf install -y %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installRpmPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installRpmPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installRpmPackage] Unknown backend:" << m_preferredBackend;
+    }
 }
 
 void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath)
 {
     QString command = QString("sudo pacman -U --noconfirm %1").arg(filePath);
-    executeInTerminal(terminal, QString("distrobox enter %1 -- %2").arg(containerName).arg(command));
-}
-
-QStringList Backend::getAvailableApps(const QString &containerName)
-{
-    QString output = runCommand({
-        "distrobox", "enter", containerName, "--",
-        "sh", "-c",
-        "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"
-    });
-
-    QStringList apps;
-    for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
-        apps << line.split('/').last().replace(".desktop", "");
+    if (m_preferredBackend == "distrobox") {
+        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
+        qDebug() << "[installArchPackage] Using distrobox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else if (m_preferredBackend == "toolbox") {
+        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
+        qDebug() << "[installArchPackage] Using toolbox with command:" << fullCmd;
+        executeInTerminal(terminal, fullCmd);
+    } else {
+        qWarning() << "[installArchPackage] Unknown backend:" << m_preferredBackend;
     }
-    return apps;
 }
 
-QStringList Backend::getExportedApps(const QString &containerName)
+QString Backend::getDistroFromToolboxImage(const QString &image) const
 {
-    QStringList apps;
-    QDir dir(QDir::homePath() + "/.local/share/applications");
-    QString prefix = containerName + "-";
-
-    for (const QFileInfo &file : dir.entryInfoList({prefix + "*.desktop"}, QDir::Files)) {
-        QString fileName = file.fileName(); // e.g. "mycontainer-org.kde.kcalc.desktop"
-        QString appId = fileName.mid(prefix.length());
-        appId.chop(QStringLiteral(".desktop").length());
-        apps << appId; // e.g. "org.kde.kcalc"
+    for (const auto &entry : toolboxImages) {
+        if (entry.image == image)
+            return entry.distro;
     }
-
-    return apps;
-}
-
-
-QString Backend::exportApp(const QString &appName, const QString &containerName)
-{
-    return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName});
-}
-
-QString Backend::unexportApp(const QString &appName, const QString &containerName)
-{
-    return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName, "--delete"});
+    return i18nc("If an Toolbox Image doesnt fit the list of distros for the icon and package manager intergration, we will return Unknown", "Unknown");
 }
 
 QList<QMap<QString, QString>> Backend::getAvailableImages()
 {
     QList<QMap<QString, QString>> images;
-    QString output = runCommand({"distrobox", "create", "-C"});
 
-    for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
-        QMap<QString, QString> image;
-        QString trimmed = line.trimmed();
-        image["line"] = trimmed;
-        image["url"] = trimmed;
-        image["name"] = trimmed.split('/').last();
-        image["distro"] = parseDistroFromImage(trimmed);
-        image["icon"] = getDistroIcon(image["distro"]);
-        images.append(image);
+    if (m_preferredBackend == "toolbox") {
+        // Handle toolbox images
+        for (const auto &entry : toolboxImages) {
+            QMap<QString, QString> image;
+            QString imageUrl = entry.image;
+            QString distro = entry.distro;
+            QString version = entry.version;
+
+            image["url"] = imageUrl;
+            image["name"] = imageUrl.split('/').last();
+            image["distro"] = distro;
+            image["version"] = version;
+            image["icon"] = getDistroIcon(distro);
+            image["display"] = QString("%1 %2").arg(distro, version);
+
+            images.append(image);
+        }
+    } else {
+        // Handle distrobox images
+        QString output = runCommand({"distrobox", "create", "-C"});
+        for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
+            QMap<QString, QString> image;
+            QString trimmed = line.trimmed();
+            image["url"] = trimmed;
+            image["name"] = trimmed.split('/').last();
+            image["distro"] = parseDistroFromImage(trimmed);
+            image["icon"] = getDistroIcon(image["distro"]);
+            image["display"] = trimmed;
+            images.append(image);
+        }
     }
 
     return images;
@@ -411,106 +557,42 @@ QList<QMap<QString, QString>> Backend::searchImages(const QString &query)
     return filteredImages;
 }
 
-void Backend::installDebPackageNoTerminal(const QString &containerName, const QString &filePath)
+// Modified implementation:
+void Backend::installPackageNoTerminal(const QString &containerName, const QString &filePath, const QString &packageCommand, const QString &signalName)
 {
-    qDebug() << "[installDebPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+    qDebug().nospace() << "[installPackageNoTerminal] Installing " << filePath << " in container " << containerName << " (Flatpak:" << m_isFlatpak
+                       << ", Backend:" << m_preferredBackend << ")";
 
     QProcess *process = new QProcess(this);
     QStringList args;
+    QString fullCommand = QString("sudo %1 %2").arg(packageCommand, filePath);
 
-    if (m_isFlatpak) {
-        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "apt" << "install" << "-y" << filePath;
+    if (m_preferredBackend == "distrobox") {
+        args = buildDistroboxCommand(containerName, fullCommand);
+    } else if (m_preferredBackend == "toolbox") {
+        args = buildToolboxCommand(containerName, fullCommand);
     } else {
-        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "apt" << "install" << "-y" << filePath;
+        qWarning() << "[installPackageNoTerminal] Unknown backend:" << m_preferredBackend;
+        emit packageInstallFinished(signalName, "Error: Unknown container backend");
+        process->deleteLater();
+        return;
     }
 
-    qDebug() << "[installDebPackageNoTerminal] Command:" << args;
+    qDebug() << "[installPackageNoTerminal] Command:" << args;
 
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString stdoutData = process->readAllStandardOutput();
-        QString stderrData = process->readAllStandardError();
-
-        qDebug() << "[installDebPackageNoTerminal] Exit code:" << exitCode;
-        qDebug() << "[installDebPackageNoTerminal] Stdout:" << stdoutData;
-        qDebug() << "[installDebPackageNoTerminal] Stderr:" << stderrData;
-
-        QString result = stdoutData;
-        if (exitCode != 0) {
-            result += "\nError: " + stderrData;
-        }
-
-        emit debInstallFinished(result);
-        process->deleteLater();
+    // Connect real-time output signals
+    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
+        QString output = process->readAllStandardOutput();
+        emit outputReceived(output);
     });
 
-    process->start(args[0], args.mid(1));
-}
-
-void Backend::installRpmPackageNoTerminal(const QString &containerName, const QString &filePath)
-{
-    qDebug() << "[installRpmPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
-
-    QProcess *process = new QProcess(this);
-    QStringList args;
-
-    if (m_isFlatpak) {
-        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "dnf" << "install" << "-y" << filePath;
-    } else {
-        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "dnf" << "install" << "-y" << filePath;
-    }
-
-    qDebug() << "[installRpmPackageNoTerminal] Command:" << args;
-
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString stdoutData = process->readAllStandardOutput();
-        QString stderrData = process->readAllStandardError();
-
-        qDebug() << "[installRpmPackageNoTerminal] Exit code:" << exitCode;
-        qDebug() << "[installRpmPackageNoTerminal] Stdout:" << stdoutData;
-        qDebug() << "[installRpmPackageNoTerminal] Stderr:" << stderrData;
-
-        QString result = stdoutData;
-        if (exitCode != 0) {
-            result += "\nError: " + stderrData;
-        }
-
-        emit rpmInstallFinished(result);
-        process->deleteLater();
+    connect(process, &QProcess::readyReadStandardError, [this, process]() {
+        QString output = process->readAllStandardError();
+        emit outputReceived(output);
     });
 
-    process->start(args[0], args.mid(1));
-}
-
-void Backend::installArchPackageNoTerminal(const QString &containerName, const QString &filePath)
-{
-    qDebug() << "[installArchPackageNoTerminal] Installing" << filePath << "in container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
-
-    QProcess *process = new QProcess(this);
-    QStringList args;
-
-    if (m_isFlatpak) {
-        args << "flatpak-spawn" << "--host" << "distrobox" << "enter" << containerName << "--" << "sudo" << "pacman" << "-U" << "--noconfirm" << filePath;
-    } else {
-        args << "distrobox" << "enter" << containerName << "--" << "sudo" << "pacman" << "-U" << "--noconfirm" << filePath;
-    }
-
-    qDebug() << "[installArchPackageNoTerminal] Command:" << args;
-
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString stdoutData = process->readAllStandardOutput();
-        QString stderrData = process->readAllStandardError();
-
-        qDebug() << "[installArchPackageNoTerminal] Exit code:" << exitCode;
-        qDebug() << "[installArchPackageNoTerminal] Stdout:" << stdoutData;
-        qDebug() << "[installArchPackageNoTerminal] Stderr:" << stderrData;
-
-        QString result = stdoutData;
-        if (exitCode != 0) {
-            result += "\nError: " + stderrData;
-        }
-
-        emit archInstallFinished(result);
-        process->deleteLater();
+    connect(process, &QProcess::finished, this, [this, process, signalName](int exitCode) {
+        handlePackageInstallFinished(process, exitCode, signalName);
     });
 
     process->start(args[0], args.mid(1));
@@ -530,6 +612,17 @@ void Backend::upgradeContainerNoTerminal(const QString &containerName)
     }
 
     qDebug() << "[upgradeContainerNoTerminal] Command:" << args;
+
+    // Connect real-time output signals
+    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
+        QString output = process->readAllStandardOutput();
+        emit outputReceived(output);
+    });
+
+    connect(process, &QProcess::readyReadStandardError, [this, process]() {
+        QString output = process->readAllStandardError();
+        emit outputReceived(output);
+    });
 
     connect(process, &QProcess::finished, this, [this, process](int exitCode) {
         QString stdoutData = process->readAllStandardOutput();
@@ -566,6 +659,17 @@ void Backend::upgradeAllContainersNoTerminal()
 
     qDebug() << "[upgradeAllContainersNoTerminal] Command:" << args;
 
+    // Connect real-time output signals
+    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
+        QString output = process->readAllStandardOutput();
+        emit outputReceived(output);
+    });
+
+    connect(process, &QProcess::readyReadStandardError, [this, process]() {
+        QString output = process->readAllStandardError();
+        emit outputReceived(output);
+    });
+
     connect(process, &QProcess::finished, this, [this, process](int exitCode) {
         QString stdoutData = process->readAllStandardOutput();
         QString stderrData = process->readAllStandardError();
@@ -584,4 +688,273 @@ void Backend::upgradeAllContainersNoTerminal()
     });
 
     process->start(args[0], args.mid(1));
+}
+
+QStringList Backend::buildDistroboxCommand(const QString &containerName, const QString &command)
+{
+    QStringList args;
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host";
+    }
+    args << "distrobox" << "enter" << containerName << "--" << command.split(" ");
+    return args;
+}
+
+QStringList Backend::buildToolboxCommand(const QString &containerName, const QString &command)
+{
+    QStringList args;
+    if (m_isFlatpak) {
+        args << "flatpak-spawn" << "--host";
+    }
+    args << "toolbox" << "run" << "-c" << containerName << "--";
+
+    // Handle quoted paths properly
+    QStringList commandParts = command.split(" ", Qt::SkipEmptyParts);
+    for (const QString &part : commandParts) {
+        args << (part.startsWith('/') ? QDir::toNativeSeparators(part) : part);
+    }
+
+    return args;
+}
+
+void Backend::handlePackageInstallFinished(QProcess *process, int exitCode, const QString &signalName)
+{
+    QString stdoutData = process->readAllStandardOutput();
+    QString stderrData = process->readAllStandardError();
+
+    qDebug() << "[handlePackageInstallFinished] Exit code:" << exitCode;
+    qDebug() << "[handlePackageInstallFinished] Stdout:" << stdoutData;
+    qDebug() << "[handlePackageInstallFinished] Stderr:" << stderrData;
+
+    QString result = stdoutData;
+    if (exitCode != 0) {
+        result += "\nError: " + stderrData;
+    }
+
+    // Emit the specific signal based on signalName
+    if (signalName == "debInstallFinished") {
+        emit debInstallFinished(result);
+    } else if (signalName == "rpmInstallFinished") {
+        emit rpmInstallFinished(result);
+    } else if (signalName == "archInstallFinished") {
+        emit archInstallFinished(result);
+    }
+
+    // Also emit the generic signal
+    emit packageInstallFinished(signalName, result);
+
+    process->deleteLater();
+}
+
+void Backend::installDebPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    installPackageNoTerminal(containerName, filePath, "apt install -y", "debInstallFinished");
+}
+
+void Backend::installRpmPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    installPackageNoTerminal(containerName, filePath, "dnf install -y", "rpmInstallFinished");
+}
+
+void Backend::installArchPackageNoTerminal(const QString &containerName, const QString &filePath)
+{
+    installPackageNoTerminal(containerName, filePath, "pacman -U --noconfirm", "archInstallFinished");
+}
+
+QStringList Backend::getAvailableApps(const QString &containerName)
+{
+    QString output;
+    if (m_preferredBackend == "distrobox") {
+        output = runCommand({"distrobox",
+                             "enter",
+                             containerName,
+                             "--",
+                             "sh",
+                             "-c",
+                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+    } else if (m_preferredBackend == "toolbox") {
+        output = runCommand({"toolbox",
+                             "run",
+                             "-c",
+                             containerName,
+                             "sh",
+                             "-c",
+                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+    } else {
+        output = "";
+    }
+
+    QStringList apps;
+    for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
+        apps << line.split('/').last().replace(".desktop", "");
+    }
+    return apps;
+}
+
+QStringList Backend::getExportedApps(const QString &containerName)
+{
+    QStringList apps;
+    QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    QDir dir(appsPath);
+
+    // Pattern for toolbox exported apps: *-<containerName>.desktop
+    QString pattern = QString("*-%1.desktop").arg(containerName);
+
+    for (const QFileInfo &file : dir.entryInfoList({pattern}, QDir::Files)) {
+        QString fileName = file.fileName();
+        QString appId = fileName.left(fileName.length() - QString("-%1.desktop").arg(containerName).length());
+        apps << appId;
+    }
+
+    return apps;
+}
+
+QString Backend::exportApp(const QString &appName, const QString &containerName)
+{
+    if (m_preferredBackend == "distrobox") {
+        return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName});
+    } else {
+        QString checkCmd = QString("toolbox run -c %1 which %2").arg(containerName, appName);
+        if (runCommand({"sh", "-c", checkCmd}).isEmpty()) {
+            return QString("Application %1 not found in container %2").arg(appName, containerName);
+        }
+
+        QString desktopFile =
+            runCommand({"toolbox", "run", "-c", containerName, "sh", "-c", QString("find /usr/share/applications -name '*%1*.desktop' | head -1").arg(appName)})
+                .trimmed();
+
+        if (desktopFile.isEmpty()) {
+            return QString("Could not find desktop file for %1 in container %2").arg(appName, containerName);
+        }
+
+        QString desktopContent = runCommand({"toolbox", "run", "-c", containerName, "cat", desktopFile});
+
+        QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+        QString exportedPath = appsPath + "/" + QFileInfo(desktopFile).completeBaseName() + "-" + containerName + ".desktop";
+
+        QStringList lines = desktopContent.split('\n');
+        QStringList newLines;
+        bool hasNameTranslations = false;
+
+        for (QString line : lines) {
+            if (line.startsWith("Exec=")) {
+                line = QString("Exec=toolbox run -c %1 %2").arg(containerName, line.mid(5));
+            } else if (line.startsWith("Name=")) {
+                line = QString("Name=%1 (on %2)").arg(line.mid(5), containerName);
+            } else if (line.startsWith("Name[")) {
+                hasNameTranslations = true;
+            } else if (line.startsWith("GenericName=")) {
+                line = QString("GenericName=%1 (on %2)").arg(line.mid(12), containerName);
+            } else if (line.startsWith("TryExec=") || line == "DBusActivatable=true") {
+                continue;
+            }
+            newLines << line;
+        }
+
+        if (hasNameTranslations) {
+            for (int i = 0; i < newLines.size(); i++) {
+                if (newLines[i].startsWith("Name[")) {
+                    QString lang = newLines[i].section('[', 1).section(']', 0, 0);
+                    QString value = newLines[i].section('=', 1);
+                    newLines[i] = QString("Name[%1]=%2 (on %3)").arg(lang, value, containerName);
+                }
+            }
+        }
+
+        QFile file(exportedPath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            return QString("Failed to create desktop file: %1").arg(exportedPath);
+        }
+
+        QTextStream out(&file);
+        out << newLines.join('\n');
+        file.close();
+
+        runCommand({"update-desktop-database", appsPath});
+
+        return QString("Successfully exported %1 from %2").arg(appName, containerName);
+    }
+}
+
+QString Backend::unexportApp(const QString &appName, const QString &containerName)
+{
+    QString appsPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation);
+    QString pattern = QString("%1-%2.desktop").arg(appName, containerName);
+    QString exportedFile = appsPath + "/" + pattern;
+
+    if (!QFile::exists(exportedFile)) {
+        return QString("No exported application %1 found for container %2").arg(appName, containerName);
+    }
+
+    if (!QFile::remove(exportedFile)) {
+        return QString("Failed to remove desktop file: %1").arg(exportedFile);
+    }
+
+    runCommand({"update-desktop-database", appsPath});
+
+    return QString("Successfully unexported %1 from %2").arg(appName, containerName);
+}
+
+QString Backend::parseDistroFromImage(const QString &imageUrl) const
+{
+    QString image = imageUrl.toLower();
+
+    // First check hardcoded URL mappings (exact matches)
+    static const QMap<QString, QString> hardcodedMappings = {{"ghcr.io/vanilla-os/vso:main", "vso"},
+                                                             {"docker.io/blackarchlinux/blackarch:latest", "blackarch"},
+                                                             {"cgr.dev/chainguard/wolfi-base", "wolfi"}};
+
+    // Check for exact matches first
+    for (auto it = hardcodedMappings.constBegin(); it != hardcodedMappings.constEnd(); ++it) {
+        if (image.startsWith(it.key())) {
+            return it.value();
+        }
+    }
+
+    // Ordered list of patterns to try (most specific to most generic)
+    QVector<QPair<QString, QString>> patterns = {
+        // 1. Explicit toolbox patterns (ubi9/toolbox, ubuntu-toolbox, etc.)
+        {"(^|/)([a-z]+)-?toolbox(:|$)", "$2"}, // ubuntu-toolbox -> ubuntu
+        {"(^|/)ubi([0-9]+)/toolbox(:|$)", "rhel"}, // ubi9/toolbox -> rhel
+        {"(^|/)([a-z]+)/toolbox(:|$)", "$2"}, // fedora/toolbox -> fedora
+
+        // 2. Versioned distro names (ubuntu:22.04, rockylinux:9)
+        {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"}, // ubuntu22.04 -> ubuntu
+
+        // 3. Standard distro names in path
+        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
+
+        // 4. Common abbreviations and aliases
+        {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
+        {"(^|/)ubi([0-9]?)(:|/|$)", "rhel"},
+        {"(^|/)nd[0-9]+(:|/|$)", "neurodebian"},
+
+        // 5. Substring fallback (least specific)
+        {"([a-z]+)(-|_)?(linux|os)", "$1"} // something-linux -> something
+    };
+
+    // Try each pattern in order
+    for (const auto &[pattern, replacement] : patterns) {
+        QRegularExpression rx(pattern);
+        QRegularExpressionMatch match = rx.match(image);
+        if (match.hasMatch()) {
+            QString matchedDistro = match.captured(replacement == "$2" ? 2 : 1);
+
+            // Validate the matched distro against our known list
+            for (const QString &distro : DISTROS) {
+                if (matchedDistro.contains(distro)) {
+                    return distro;
+                }
+            }
+        }
+    }
+
+    // Final fallback: check for any distro name as substring
+    for (const QString &distro : DISTROS) {
+        if (image.contains(distro)) {
+            return distro;
+        }
+    }
+
+    return "unknown";
 }

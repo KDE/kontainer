@@ -2,8 +2,7 @@
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
 // include/packagemanager.h
-#ifndef PACKAGEMANAGER_H
-#define PACKAGEMANAGER_H
+#pragma once
 
 #include <QString>
 #include <QStringList>
@@ -36,5 +35,3 @@ public:
         return "";
     }
 };
-
-#endif // PACKAGEMANAGER_H

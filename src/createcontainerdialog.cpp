@@ -90,63 +90,96 @@ CreateContainerDialog::CreateContainerDialog(Backend *backend, const QString &te
     formLayout->setContentsMargins(8, 8, 8, 8);
     formLayout->setSpacing(12);
 
+    // Container name input
     m_nameEdit = new QLineEdit(this);
     m_nameEdit->setPlaceholderText(i18n("my-container"));
     formLayout->addRow(i18n("Container name:"), m_nameEdit);
 
-    m_searchEdit = new QLineEdit(this);
-    m_searchEdit->setPlaceholderText(i18n("Search images…"));
-    connect(m_searchEdit, &QLineEdit::textChanged, this, &CreateContainerDialog::searchImages);
-    formLayout->addRow(i18n("Search images:"), m_searchEdit);
+    // Image search and list layout
+    QVBoxLayout *imageSearchLayout = new QVBoxLayout();
+    imageSearchLayout->setSpacing(5); // Reduced spacing between search and list
 
+    // Search bar layout
+    QHBoxLayout *searchLayout = new QHBoxLayout();
+    m_searchEdit = new QLineEdit(this);
+    m_searchEdit->setPlaceholderText(i18n("Search images..."));
+    m_searchEdit->setClearButtonEnabled(true);
+    m_searchEdit->setStyleSheet("QLineEdit { padding: 3px; }");
+    connect(m_searchEdit, &QLineEdit::textChanged, this, &CreateContainerDialog::searchImages);
+
+    // Add search edit to search layout
+    searchLayout->addWidget(m_searchEdit);
+    imageSearchLayout->addLayout(searchLayout);
+
+    // Image list widget
     m_imageList = new QListWidget(this);
     m_imageList->setItemDelegate(new ImageListItemDelegate(this));
     m_imageList->setIconSize(QSize(32, 32));
     m_imageList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_imageList->setAlternatingRowColors(true);
-    formLayout->addRow(i18n("Available images:"), m_imageList);
+    m_imageList->setFrameShape(QFrame::StyledPanel);
+    m_imageList->setStyleSheet("QListWidget { border-top: none; }"); // Visually connected with search
+    imageSearchLayout->addWidget(m_imageList);
 
-    m_homeEdit = new QLineEdit(this);
-    m_homeEdit->setPlaceholderText(i18n("Leave empty for default"));
-    formLayout->addRow(i18n("Custom home path:"), m_homeEdit);
+    // Container widget for image search section
+    QWidget *imageSearchWidget = new QWidget(this);
+    imageSearchWidget->setLayout(imageSearchLayout);
+    formLayout->addRow(i18n("Available images:"), imageSearchWidget);
 
-    m_volumesEdit = new QLineEdit(this);
-    m_volumesEdit->setPlaceholderText(i18n("e.g., /host/path:/container/path (comma separate multiple)"));
-    formLayout->addRow(i18n("Additional volumes:"), m_volumesEdit);
+    // Additional fields only for non-toolbox backends (e.g., Distrobox)
+    if (backend->preferredBackend() != "toolbox") {
+        m_homeEdit = new QLineEdit(this);
+        m_homeEdit->setPlaceholderText(i18n("Leave empty for default"));
+        formLayout->addRow(i18n("Custom home path:"), m_homeEdit);
 
-    m_initCheckbox = new QCheckBox(i18n("Enable systemd init"), this);
-    m_initCheckbox->setToolTip(i18n("Enable systemd as init system inside the container"));
-    formLayout->addRow(i18n("Init system:"), m_initCheckbox);
+        m_volumesEdit = new QLineEdit(this);
+        m_volumesEdit->setPlaceholderText(i18n("e.g., /host/path:/container/path (comma separate multiple)"));
+        formLayout->addRow(i18n("Additional volumes:"), m_volumesEdit);
 
-    // Setup buttons
+        m_initCheckbox = new QCheckBox(i18n("Enable systemd init"), this);
+        m_initCheckbox->setToolTip(i18n("Enable systemd as init system inside the container"));
+        formLayout->addRow(i18n("Init system:"), m_initCheckbox);
+    } else {
+        m_homeEdit = nullptr;
+        m_volumesEdit = nullptr;
+        m_initCheckbox = nullptr;
+    }
+
+    // Buttons layout
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     buttonLayout->setSpacing(10);
     buttonLayout->setContentsMargins(0, 10, 0, 0);
 
-    QPushButton *refreshButton = new QPushButton(i18n("Refresh Images"), this);
-    refreshButton->setIcon(QIcon::fromTheme("view-refresh"));
-    connect(refreshButton, &QPushButton::clicked, this, &CreateContainerDialog::refreshImages);
-    buttonLayout->addWidget(refreshButton);
+    // Refresh images button (hidden for toolbox backend)
+    if (backend->preferredBackend() != "toolbox") {
+        QPushButton *refreshButton = new QPushButton(i18n("Refresh Images"), this);
+        refreshButton->setIcon(QIcon::fromTheme("view-refresh"));
+        connect(refreshButton, &QPushButton::clicked, this, &CreateContainerDialog::refreshImages);
+        buttonLayout->addWidget(refreshButton);
+    }
 
     buttonLayout->addStretch();
 
+    // Cancel button
     QPushButton *cancelButton = new QPushButton(i18n("Cancel"), this);
     cancelButton->setIcon(QIcon::fromTheme("dialog-cancel"));
     connect(cancelButton, &QPushButton::clicked, this, &QDialog::reject);
     buttonLayout->addWidget(cancelButton);
 
+    // Create button
     QPushButton *createButton = new QPushButton(i18n("Create"), this);
     createButton->setIcon(QIcon::fromTheme("dialog-ok"));
     createButton->setDefault(true);
     connect(createButton, &QPushButton::clicked, this, &CreateContainerDialog::startContainerCreation);
     buttonLayout->addWidget(createButton);
 
-    // Main layout
+    // Main vertical layout
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(8, 8, 8, 8);
     mainLayout->addLayout(formLayout);
     mainLayout->addLayout(buttonLayout);
 
+    // Initial images load
     refreshImages();
 }
 
@@ -168,15 +201,15 @@ void CreateContainerDialog::refreshImages()
     QList<QMap<QString, QString>> images = m_backend->getAvailableImages();
 
     for (const auto &image : images) {
-        QString url = image["url"];
+        QString displayText = image.value("display", image["url"]);
         QString distro = image["distro"];
         QString iconPath = image["icon"];
 
-        QListWidgetItem *item = new QListWidgetItem(url, m_imageList);
-        item->setData(Qt::UserRole, url); // Store URL in UserRole
+        QListWidgetItem *item = new QListWidgetItem(displayText, m_imageList);
+        item->setData(Qt::UserRole, image["url"]); // Store URL in UserRole
         item->setData(Qt::UserRole + 1, distro); // Store distro in UserRole + 1
         item->setData(Qt::UserRole + 2, iconPath); // Store icon path in UserRole + 2
-        item->setToolTip(url);
+        item->setToolTip(image["url"]);
     }
 }
 
@@ -207,9 +240,9 @@ void CreateContainerDialog::startContainerCreation()
 {
     QString name = containerName();
     QString image = imageUrl();
-    QString home = homePath();
-    bool init = useInit();
-    QStringList volumes = this->volumes();
+    QString home = m_homeEdit ? m_homeEdit->text().trimmed() : QString();
+    bool init = m_initCheckbox ? m_initCheckbox->isChecked() : false;
+    QStringList volumes = m_volumesEdit ? m_volumesEdit->text().split(',', Qt::SkipEmptyParts) : QStringList();
 
     // Validate inputs
     if (name.isEmpty()) {
@@ -223,52 +256,52 @@ void CreateContainerDialog::startContainerCreation()
     }
 
     // Setup progress dialog
+    if (m_progressDialog) {
+        m_progressDialog->deleteLater();
+    }
     m_progressDialog = new QProgressDialog(this);
     m_progressDialog->setWindowTitle(i18n("Creating Container"));
-    m_progressDialog->setLabelText(i18n("Starting container creation…"));
-    m_progressDialog->setRange(0, 0); // Indeterminate progress
+    m_progressDialog->setLabelText(i18n("Starting container creation..."));
+    m_progressDialog->setRange(0, 0);
     m_progressDialog->setCancelButton(nullptr);
-    m_progressDialog->setModal(true);
     m_progressDialog->show();
 
-    // Setup process
-    m_createProcess = new QProcess(this);
-    m_createProcess->setProcessChannelMode(QProcess::MergedChannels);
+    // Disconnect any existing connections
+    disconnect(m_backend, &Backend::containerOutput, this, nullptr);
+    disconnect(m_backend, &Backend::containerCreationFinished, this, nullptr);
 
-    connect(m_createProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &CreateContainerDialog::handleCreateFinished);
-    connect(m_createProcess, &QProcess::readyRead, this, &CreateContainerDialog::handleReadyRead);
-    connect(m_createProcess, &QProcess::errorOccurred, this, &CreateContainerDialog::handleErrorOccurred);
-
-    // Build command arguments
-    QStringList args = {"create", "-n", name, "-i", image, "-Y"};
-    if (init) {
-        args << "--init" << "--additional-packages" << "systemd";
-    }
-    if (!home.isEmpty()) {
-        args << "--home" << home;
-    }
-    for (const QString &volume : volumes) {
-        if (!volume.trimmed().isEmpty()) {
-            args << "--volume" << volume.trimmed();
+    // Connect signals
+    connect(m_backend, &Backend::containerOutput, this, [this](const QString &output) {
+        if (m_progressDialog) {
+            m_progressDialog->setLabelText(output);
         }
-    }
+    });
 
-    // Detect if running inside Flatpak
-    bool isFlatpak = QFile::exists("/.flatpak-info");
+    connect(m_backend, &Backend::containerCreationFinished, this, [this, name](bool success, const QString &message) {
+        if (m_progressDialog) {
+            m_progressDialog->cancel();
+            m_progressDialog->deleteLater();
+            m_progressDialog = nullptr;
+        }
 
-    QString program;
-    QStringList programArgs;
-    if (isFlatpak) {
-        program = "flatpak-spawn";
-        programArgs << "--host" << "distrobox";
-        programArgs.append(args);
-    } else {
-        program = "distrobox";
-        programArgs = args;
-    }
+        if (success) {
+            QString successMsg = i18n(
+                "Container '%1' created successfully!\n\n"
+                "A terminal session with the new container will now open.",
+                name);
+            QMessageBox::information(this, i18n("Success"), successMsg);
 
-    qDebug() << i18n("Executing:") << program << programArgs;
-    m_createProcess->start(program, programArgs);
+            if (m_backend) {
+                m_backend->enterContainer(name, m_terminal);
+            }
+            accept();
+        } else {
+            QMessageBox::critical(this, i18n("Error"), message);
+        }
+    });
+
+    // Start container creation
+    m_backend->createContainer(name, image, home, init, volumes);
 }
 
 void CreateContainerDialog::handleReadyRead()
@@ -349,15 +382,15 @@ QString CreateContainerDialog::imageUrl() const
 
 QString CreateContainerDialog::homePath() const
 {
-    return m_homeEdit->text().trimmed();
-}
-
-bool CreateContainerDialog::useInit() const
-{
-    return m_initCheckbox->isChecked();
+    return m_homeEdit ? m_homeEdit->text().trimmed() : QString();
 }
 
 QStringList CreateContainerDialog::volumes() const
 {
-    return m_volumesEdit->text().split(',', Qt::SkipEmptyParts);
+    return m_volumesEdit ? m_volumesEdit->text().split(',', Qt::SkipEmptyParts) : QStringList();
+}
+
+bool CreateContainerDialog::useInit() const
+{
+    return m_initCheckbox ? m_initCheckbox->isChecked() : false;
 }

@@ -89,18 +89,52 @@ public:
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , backend(new Backend(this))
-    , preferredTerminal("xterm")
 {
+    // Show loading UI immediately
+    setupLoadingUI();
+
     // Load saved terminal preference
     QSettings settings;
     preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
+
+    backend = new Backend(this);
+    connect(backend, &Backend::availableBackendsChanged, this, &MainWindow::onBackendsAvailable);
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
 
-    setWindowTitle(i18n("Kontainer"));
-    resize(800, 600);
+    setWindowTitle(tr("Kontainer"));
+    resize(850, 600);
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
+}
 
+void MainWindow::setupLoadingUI()
+{
+    QWidget *loadingWidget = new QWidget(this);
+    QVBoxLayout *loadingLayout = new QVBoxLayout(loadingWidget);
+    loadingLayout->setAlignment(Qt::AlignCenter);
+
+    // Create a simple text-based loading indicator
+    QLabel *loadingText = new QLabel(i18n("Checking for available container backends..."), loadingWidget);
+    loadingText->setAlignment(Qt::AlignCenter);
+
+    // Add a progress bar as a simple spinner replacement
+    QProgressBar *progressBar = new QProgressBar(loadingWidget);
+    progressBar->setRange(0, 0); // Indeterminate mode
+    progressBar->setTextVisible(false);
+
+    loadingLayout->addWidget(loadingText);
+    loadingLayout->addWidget(progressBar);
+
+    setCentralWidget(loadingWidget);
+}
+
+void MainWindow::onBackendsAvailable(const QStringList &backends)
+{
+    if (backends.isEmpty()) {
+        QMessageBox::critical(this, i18n("Error"), i18n("No container backends found. Please install either distrobox or toolbox."));
+        // Setup minimal UI even without backends
+    }
+
+    // Now setup the full UI
     setupUI();
     refreshContainers();
 }
@@ -114,6 +148,11 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUI()
 {
+    // Clear loading widget
+    if (centralWidget()) {
+        centralWidget()->deleteLater();
+    }
+
     QWidget *centralWidget = new QWidget(this);
     QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
     mainLayout->setContentsMargins(8, 8, 8, 8);
@@ -285,7 +324,61 @@ void MainWindow::setupUI()
     toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
-    // Main layout
+    QStringList availableBackends = backend->availableBackends();
+
+    if (availableBackends.size() >= 2) {
+        // Spacer between terminal selector and backend selector
+        QWidget *spacer2 = new QWidget(toolBar);
+        spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        toolBar->addWidget(spacer2);
+
+        // --- Backend Selector (Distrobox/Toolbox) ---
+        QLabel *backendLabel = new QLabel(i18n("Backend:"), toolBar);
+        toolBar->addWidget(backendLabel);
+
+        QComboBox *backendSelector = new QComboBox(toolBar);
+        for (const QString &backendName : availableBackends) {
+            QIcon icon = QIcon::fromTheme(backendName == "toolbox" ? "utilities-terminal" : "system-run");
+            backendSelector->addItem(icon, backendName);
+        }
+
+        QString currentBackend = backend->preferredBackend();
+        int backendIndex = backendSelector->findText(currentBackend);
+        if (backendIndex >= 0) {
+            backendSelector->setCurrentIndex(backendIndex);
+        } else {
+            currentBackend = availableBackends.first();
+            backendSelector->setCurrentIndex(0);
+            backend->setPreferredBackend(currentBackend);
+            QSettings().setValue("container/backend", currentBackend);
+        }
+
+        connect(backendSelector, &QComboBox::currentTextChanged, this, [=](const QString &backendName) {
+            backend->setPreferredBackend(backendName);
+            QSettings().setValue("container/backend", backendName);
+
+            bool isToolbox = (backendName == "toolbox");
+            assembleBtn->setVisible(!isToolbox);
+            aBtn->setVisible(!isToolbox);
+            upgradeBtn->setVisible(!isToolbox);
+
+            toolBar->update();
+            refreshContainers();
+        });
+
+        toolBar->addWidget(backendSelector);
+
+    } else if (availableBackends.size() == 1) {
+        QString onlyBackend = availableBackends.first();
+        backend->setPreferredBackend(onlyBackend);
+        QSettings().setValue("container/backend", onlyBackend);
+    } else {
+        backend->setPreferredBackend({});
+    }
+
+    qDebug() << "Preferred Terminal:" << preferredTerminal;
+    qDebug() << "Preferred Backend:" << backend->preferredBackend();
+
     mainLayout->addWidget(containerList, 1);
     mainLayout->addWidget(rightPanel);
     setCentralWidget(centralWidget);
@@ -312,6 +405,12 @@ void MainWindow::updateButtonStates()
     } else {
         enterBtn->setEnabled(hasSelection);
     }
+    if (preferredBackend == "toolbox") {
+        assembleBtn->hide();
+        aBtn->hide(); // Upgrade all containers
+        upgradeBtn->hide(); // Upgrade selected container
+    }
+
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
     upgradeBtn->setEnabled(hasSelection);
@@ -394,16 +493,6 @@ void MainWindow::createNewContainer()
 {
     CreateContainerDialog dialog(backend, preferredTerminal, this);
     if (dialog.exec() == QDialog::Accepted) {
-        QProgressDialog progress(i18n("Creating container…"), i18n("Cancel"), 0, 0, this);
-        progress.setWindowModality(Qt::WindowModal);
-        progress.show();
-
-        QApplication::processEvents();
-
-        QString result = backend->createContainer(dialog.containerName(), dialog.imageUrl(), dialog.homePath(), dialog.useInit(), dialog.volumes());
-
-        progress.close();
-        QMessageBox::information(this, i18n("Result"), result);
         refreshContainers();
     }
 }
@@ -414,25 +503,104 @@ QString MainWindow::getContainerDistro() const
     return distro;
 }
 
+void MainWindow::enterContainer()
+{
+    if (currentContainer.isEmpty())
+        return;
+    backend->enterContainer(currentContainer, preferredTerminal);
+}
+
 void MainWindow::assembleContainer()
 {
+    // Get the current backend from the Backend instance
+    QString currentBackend = backend->preferredBackend();
+
+    if (currentBackend == "toolbox") {
+        QMessageBox::information(this,
+                                 i18n("Function Not Supported"),
+                                 i18n("Toolbox backend doesn't support container assembly.\n\n"
+                                      "Please switch to Distrobox backend to use this feature."));
+        return;
+    }
+
     QString iniFile = QFileDialog::getOpenFileName(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
 
     if (!iniFile.isEmpty()) {
         progressDialog = new QProgressDialog(i18n("Assembling container..."), i18n("Cancel"), 0, 0, this);
         progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr); // Remove cancel button
+        progressDialog->setCancelButton(nullptr);
         progressDialog->show();
 
         backend->assembleContainer(iniFile);
     }
 }
 
-void MainWindow::enterContainer()
+void MainWindow::upgradeAllContainers()
 {
-    if (currentContainer.isEmpty())
+    // Get the current backend from the Backend instance
+    QString currentBackend = backend->preferredBackend();
+
+    if (currentBackend == "toolbox") {
+        QMessageBox::information(this,
+                                 i18n("Function Not Supported"),
+                                 i18n("Toolbox backend doesn't support mass container upgrades.\n\n"
+                                      "Please switch to Distrobox backend to use this feature."));
         return;
-    backend->enterContainer(currentContainer, preferredTerminal);
+    }
+
+    qDebug() << "[upgradeAllContainers] Called with backend:" << currentBackend;
+
+    if (preferredTerminal.isEmpty()) {
+        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
+        setupProgressDialog(i18n("Upgrading all containers..."));
+
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            progressDialog->close();
+            progressDialog->deleteLater();
+            progressDialog = nullptr;
+        });
+        backend->upgradeAllContainersNoTerminal();
+    } else {
+        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
+        connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
+            // Terminal will handle its own output
+        });
+        backend->upgradeAllContainers(preferredTerminal);
+    }
+}
+
+// New helper function to create and show progress dialog with output
+void MainWindow::setupProgressDialog(const QString &title)
+{
+    progressDialog = new QProgressDialog(this);
+    progressDialog->setWindowTitle(title);
+    progressDialog->setLabelText(i18n("Processing..."));
+    progressDialog->setWindowModality(Qt::WindowModal);
+    progressDialog->setCancelButton(nullptr);
+
+    progressOutput = new QTextEdit(progressDialog);
+    progressOutput->setReadOnly(true);
+    progressOutput->setWordWrapMode(QTextOption::NoWrap);
+
+    QVBoxLayout *layout = new QVBoxLayout(progressDialog);
+    layout->addWidget(progressOutput);
+    progressDialog->setLayout(layout);
+    progressDialog->resize(600, 400);
+    progressDialog->show();
+}
+
+// New function to append output to the progress dialog
+void MainWindow::appendCommandOutput(const QString &output)
+{
+    if (progressOutput) {
+        progressOutput->append(output);
+        // Auto-scroll to bottom
+        QTextCursor cursor = progressOutput->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        progressOutput->setTextCursor(cursor);
+    }
 }
 
 void MainWindow::installDebPackage()
@@ -450,17 +618,21 @@ void MainWindow::installDebPackage()
     if (!filePath.isEmpty()) {
         if (preferredTerminal.isEmpty()) {
             qDebug() << "[installDebPackage] No preferred terminal. Using internal install.";
+            setupProgressDialog(i18n("Installing .deb package..."));
 
-            progressDialog = new QProgressDialog(i18n("Installing .deb package..."), QString(), 0, 0, this);
-            progressDialog->setWindowModality(Qt::WindowModal);
-            progressDialog->setCancelButton(nullptr);
-            progressDialog->show();
-
-            connect(backend, &Backend::debInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+            connect(backend, &Backend::debInstallFinished, this, [this](const QString &output) {
+                appendCommandOutput(output);
+                progressDialog->close();
+                progressDialog->deleteLater();
+                progressDialog = nullptr;
+            });
             backend->installDebPackageNoTerminal(currentContainer, filePath);
         } else {
             qDebug() << "[installDebPackage] Using preferred terminal:" << preferredTerminal;
-            connect(backend, &Backend::debInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::debInstallFinished, this, [](const QString &) {
+                // Terminal will handle its own output
+            });
             backend->installDebPackage(preferredTerminal, currentContainer, filePath);
         }
     } else {
@@ -483,16 +655,21 @@ void MainWindow::installRpmPackage()
     if (!filePath.isEmpty()) {
         if (preferredTerminal.isEmpty()) {
             qDebug() << "[installRpmPackage] No preferred terminal. Using internal install.";
-            progressDialog = new QProgressDialog(i18n("Installing .rpm package..."), QString(), 0, 0, this);
-            progressDialog->setWindowModality(Qt::WindowModal);
-            progressDialog->setCancelButton(nullptr);
-            progressDialog->show();
+            setupProgressDialog(i18n("Installing .rpm package..."));
 
-            connect(backend, &Backend::rpmInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+            connect(backend, &Backend::rpmInstallFinished, this, [this](const QString &output) {
+                appendCommandOutput(output);
+                progressDialog->close();
+                progressDialog->deleteLater();
+                progressDialog = nullptr;
+            });
             backend->installRpmPackageNoTerminal(currentContainer, filePath);
         } else {
             qDebug() << "[installRpmPackage] Using preferred terminal:" << preferredTerminal;
-            connect(backend, &Backend::rpmInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::rpmInstallFinished, this, [](const QString &) {
+                // Terminal will handle its own output
+            });
             backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
         }
     } else {
@@ -515,16 +692,21 @@ void MainWindow::installArchPackage()
     if (!filePath.isEmpty()) {
         if (preferredTerminal.isEmpty()) {
             qDebug() << "[installArchPackage] No preferred terminal. Using internal install.";
-            progressDialog = new QProgressDialog(i18n("Installing Arch package..."), QString(), 0, 0, this);
-            progressDialog->setWindowModality(Qt::WindowModal);
-            progressDialog->setCancelButton(nullptr);
-            progressDialog->show();
+            setupProgressDialog(i18n("Installing Arch package..."));
 
-            connect(backend, &Backend::archInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+            connect(backend, &Backend::archInstallFinished, this, [this](const QString &output) {
+                appendCommandOutput(output);
+                progressDialog->close();
+                progressDialog->deleteLater();
+                progressDialog = nullptr;
+            });
             backend->installArchPackageNoTerminal(currentContainer, filePath);
         } else {
             qDebug() << "[installArchPackage] Using preferred terminal:" << preferredTerminal;
-            connect(backend, &Backend::archInstallFinished, this, &MainWindow::showCommandOutput);
+            connect(backend, &Backend::archInstallFinished, this, [](const QString &) {
+                // Terminal will handle its own output
+            });
             backend->installArchPackage(preferredTerminal, currentContainer, filePath);
         }
     } else {
@@ -543,64 +725,21 @@ void MainWindow::upgradeContainer()
 
     if (preferredTerminal.isEmpty()) {
         qDebug() << "[upgradeContainer] No preferred terminal. Using internal upgrade.";
-        progressDialog = new QProgressDialog(i18n("Upgrading container..."), QString(), 0, 0, this);
-        progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr);
-        progressDialog->show();
+        setupProgressDialog(i18n("Upgrading container..."));
 
-        connect(backend, &Backend::upgradeFinished, this, &MainWindow::showCommandOutput);
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::upgradeFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            progressDialog->close();
+            progressDialog->deleteLater();
+            progressDialog = nullptr;
+        });
         backend->upgradeContainerNoTerminal(currentContainer);
     } else {
         qDebug() << "[upgradeContainer] Using preferred terminal:" << preferredTerminal;
-        connect(backend, &Backend::upgradeFinished, this, &MainWindow::showCommandOutput);
+        connect(backend, &Backend::upgradeFinished, this, [](const QString &) {
+            // Terminal will handle its own output
+        });
         backend->upgradeContainer(currentContainer, preferredTerminal);
     }
-}
-
-void MainWindow::upgradeAllContainers()
-{
-    qDebug() << "[upgradeAllContainers] Called";
-
-    if (preferredTerminal.isEmpty()) {
-        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
-        progressDialog = new QProgressDialog(i18n("Upgrading all containers..."), QString(), 0, 0, this);
-        progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr);
-        progressDialog->show();
-
-        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
-        backend->upgradeAllContainersNoTerminal();
-    } else {
-        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
-        connect(backend, &Backend::upgradeAllFinished, this, &MainWindow::showCommandOutput);
-        backend->upgradeAllContainers(preferredTerminal);
-    }
-}
-
-void MainWindow::showCommandOutput(const QString &output)
-{
-    qDebug() << "Command output received:" << output;
-    if (progressDialog) {
-        progressDialog->close();
-        progressDialog->deleteLater();
-        progressDialog = nullptr;
-    }
-
-    QDialog *dialog = new QDialog(this);
-    dialog->setWindowTitle(i18n("Command Output"));
-    QVBoxLayout *layout = new QVBoxLayout(dialog);
-
-    QTextEdit *outputText = new QTextEdit(dialog);
-    outputText->setReadOnly(true);
-    outputText->setPlainText(output);
-    outputText->setWordWrapMode(QTextOption::NoWrap);
-
-    QPushButton *closeBtn = new QPushButton(i18n("Close"), dialog);
-    connect(closeBtn, &QPushButton::clicked, dialog, &QDialog::accept);
-
-    layout->addWidget(outputText);
-    layout->addWidget(closeBtn);
-    dialog->resize(600, 400);
-    dialog->exec();
-    dialog->deleteLater();
 }

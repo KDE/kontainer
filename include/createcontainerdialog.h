@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
-#ifndef CREATECONTAINERDIALOG_H
-#define CREATECONTAINERDIALOG_H
+#pragma once
 
 #include <KLocalizedString>
 #include <QApplication>
@@ -23,6 +22,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QStyledItemDelegate>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 class Backend;
@@ -64,5 +64,3 @@ private:
     QProgressDialog *m_progressDialog;
     QProcess *m_createProcess;
 };
-
-#endif // CREATECONTAINERDIALOG_H

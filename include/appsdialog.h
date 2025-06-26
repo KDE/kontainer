@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
-#ifndef APPSDIALOG_H
-#define APPSDIALOG_H
+#pragma once
 
 #include <QApplication>
 #include <QDialog>
@@ -35,5 +34,3 @@ private:
     QListWidget *m_exportedAppsList;
     QListWidget *m_availableAppsList;
 };
-
-#endif // APPSDIALOG_H

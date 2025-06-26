@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR LicenseRef-KDE-Accepted-GPL
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QApplication>
 #include <QComboBox>
@@ -16,6 +15,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QPainter>
+#include <QProgressBar>
 #include <QProgressDialog>
 #include <QPushButton>
 #include <QSettings>
@@ -42,6 +42,7 @@ public:
     ~MainWindow();
     QString preferredTerminal;
     void showCommandOutput(const QString &output);
+    QString preferredBackend;
 
 private slots:
     void refreshContainers();
@@ -56,9 +57,11 @@ private slots:
     void installDebPackage();
     void installRpmPackage();
     void installArchPackage();
+    void onBackendsAvailable(const QStringList &backends);
 
 private:
     void setupUI();
+    void setupLoadingUI();
     void setupContainerList();
     void setupActionButtons();
     void showAppsForContainer(const QString &name);
@@ -70,6 +73,9 @@ private:
     QPushButton *installArchBtn;
     QString getContainerDistro() const;
     bool hasTerminal = false;
+    QTextEdit *progressOutput;
+    void setupProgressDialog(const QString &title);
+    void appendCommandOutput(const QString &output);
 
     Backend *backend;
     QListWidget *containerList;
@@ -81,5 +87,3 @@ private:
     QToolButton *aBtn;
     QString currentContainer;
 };
-
-#endif // MAINWINDOW_H

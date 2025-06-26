@@ -1,62 +1,61 @@
-# Distrobox Qt GUI
+# Kontainer – Qt Container Manager for Distrobox & Toolbox
 
-This is a **fully-featured** graphical user interface for [Distrobox](https://github.com/89luca89/distrobox), written in **C++** using **Qt 6.9**.
+Kontainer is a **feature-rich graphical interface** for managing containerized environments using [Distrobox](https://github.com/89luca89/distrobox) and [Toolbox](https://github.com/containers/toolbox), written in **C++ with Qt 6.9**.
 
-Inspired by [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS/), this application now reaches **feature parity**, providing a clean, native, and powerful GUI for managing your Distrobox containers — with seamless integration into KDE Plasma and adherence to KDE development standards.
+> 🧠 **Inspired by** [BoxBuddy](https://github.com/Dvlv/BoxBuddyRS) and later by [DistroShelf](https://github.com/kirbylife/distroshelf), Kontainer has **surpassed BoxBuddy** in both features and usability, and is **close to surpassing DistroShelf**, with ongoing work on Toolbox integration, optimizations, and KDE-native APIs.
 
-## Project Status
+---
 
-- ✅ **Backend:** Fully implemented, including container and app management  
-- ✅ **UI:** Functional and stable, built with Qt 6.9 (C++)  
-- ✅ **Features:** Parity with BoxBuddy (create, delete, enter, upgrade, export/unexport apps)  
-- ✅ **Refactoring:** Planned to improve modularity and maintainability    
-- ✅ **Configuration system:** Planned — support for dynamic user preferences  
-- ✅ **Packaging:** Flatpak support
-- ✅️ **i18n:** Via KI18n 
+## 🧪 Project Status
 
+- **Backends:**  
+  - ✅ **Distrobox:** Fully supported  
+  - 🧪 **Toolbox:** Experimental, nearly complete (export/unexport, container management, RPM/DEB/pkg.tar install support)
+- **UI:**  
+  - ✅ Qt 6.9 with strong KDE integration  
+- **Feature Set:**  
+  - ✅ Surpasses BoxBuddy  
+  - ⚙️ Almost on par with DistroShelf — Toolbox upgrade and deeper API integration planned  
+- **i18n:**  
+  - ✅ KDE-style translations with `KLocalizedString`  
+- **User Configuration:**  
+  - ✅ Users can choose backend and terminal emulator  
+- **Packaging:**  
+  - ✅ Flatpak (recommended)  
+  - ✅ AUR available
 
-## Features
+---
 
-- ✅ View all Distrobox containers  
-- ✅ Create new containers  
-- ✅ Enter containers (interactive shell)  
-- ✅ Delete containers  
-- ✅ Export and unexport container apps  
-- ✅ Upgrade all containers  
-- ✅ Manage apps via host or container context  
-- ✅️ KDE-style full i18n (using `KLocalizedString`)  
+## ✨ Features
 
-## Goals
+- View, create, delete, and enter containers  
+- Export and unexport apps (including Toolbox apps — downstream addition)  
+- Install `.rpm`, `.deb`, `.pkg.tar` packages into containers  
+- Full Distrobox backend support including upgrades  
+- Toolbox backend (experimental but usable)  
+- App and Distro icons with proper export handling  
+- KDE Plasma integration and theming  
+- Configurable terminal backend and container backend  
+- KDE i18n via `KLocalizedString`
 
-- Adhere to [KDE Coding Style](https://community.kde.org/Policies/Frameworks_Coding_Style)  
-- Use KDE’s **KLocalizedString** or Qt-compatible i18n tooling  
-- Integrate with KDE system themes, icons, and color schemes  
-- Enable user-friendly configuration and customization  
-- Package as a **Flatpak** for sandboxed deployment
+---
 
-## Requirements
+## 🚧 Roadmap
 
-- Qt 6.9 or higher (with C++17 support)  
-- A working `distrobox` installation
+- Replace hardcoded logic with KDE APIs  
+- Add **Toolbox upgrade** capability  
+- Optimize Toolbox backend and final stabilization  
+- Possibly rewrite UI in **Kirigami** for responsiveness  
+- Move past KDE Playground and go through **official KDE review**  
+- Expand user settings and UX polish
 
-## Build Instructions
+> ⚠️ **Note:** Kontainer is currently in **Playground** stage. Please do **not ship or package it** until it passes KDE Review and is marked stable.
 
-1. Ensure Qt 6.9+ is installed
-2. Clone and enter the project directory
-3. Build the project:
+---
 
-```bash
-cmake .
-make
-```
+## 📦 Build & Install
 
-4. This will build the project completely and produce the executable.
-
-## Installation
-
-### 🟢 Recommended: Flatpak
-
-You can install Kontainer using Flatpak for an isolated and consistent environment:
+### 🟢 Flatpak (Recommended)
 
 ```bash
 git clone https://invent.kde.org/system/kontainer
@@ -64,24 +63,34 @@ flatpak install org.kde.Sdk//6.9
 flatpak-builder --force-clean build-dir kontainer.flatpak.yaml --user --install
 ```
 
-This will install Kontainer as a user Flatpak and ensure it runs with the correct dependencies and KDE integration.
-
-### 🟡 Alternative: AUR (Arch Linux)
-
-If you're on Arch Linux or a derivative, you can also install Kontainer from the AUR:
+### 🟡 AUR (Arch Linux)
 
 ```bash
 yay -S kontainer-git
 ```
 
-> **Note:** While the AUR package works, Flatpak is the **recommended method** for the most consistent and sandboxed setup.
+---
 
-## License
+## 🔧 Build from Source
 
-Licensed under the **GNU General Public License v2.0 or later**. See `LICENSES` and the 'SPDX Headers' for details.
+1. Install Qt 6.9+ with C++17 support  
+2. Clone and build:
 
-## Trademark and Attribution
+```bash
+git clone https://invent.kde.org/system/kontainer
+cd kontainer
+cmake .
+make
+```
 
-All icons used in this application belong to their respective trademark owners.
+---
 
-Detailed attribution, usage justifications, and permissions (including correspondence such as emails or screenshots) are documented in the `res/trademarks/` folder, organized by distribution name. Each subfolder includes a `README.md` with trademark ownership, licensing details, and the basis for use in this project.
+## 📜 License
+
+Licensed under **GPL-2.0-or-later**. See `LICENSES/` and SPDX headers.
+
+---
+
+## 🖼️ Trademark & Attribution
+
+All icons and branding are owned by their respective trademark holders. Justifications and documentation are located in `res/trademarks/`, organized per distro.

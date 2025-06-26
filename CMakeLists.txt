@@ -40,6 +40,7 @@ set(HEADERS
     include/mainwindow.h
     include/packagemanager.h
     include/terminalutils.h
+    include/toolboximages.h
 )
 
 qt_add_resources(RESOURCES
@@ -52,6 +53,7 @@ target_link_libraries(kontainer PRIVATE
     Qt6::Core
     Qt6::Widgets
     Qt6::Gui
+    Qt6::Concurrent
     KF6::I18n
 )
 
