@@ -335,7 +335,7 @@ void MainWindow::setupUI()
         if (backendName == "distrobox") {
             icon = QIcon(":/icons/distrobox.svg");
         } else if (backendName == "toolbox") {
-            icon = QIcon::fromTheme("utilities-terminal");
+            icon = QIcon(":/icons/toolbx.svg");
         } else {
             icon = QIcon::fromTheme("system-run"); // fallback
         }
