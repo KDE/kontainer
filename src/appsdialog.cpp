@@ -20,7 +20,6 @@ public:
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        // Draw selection background
         if (opt.state & QStyle::State_Selected) {
             painter->fillRect(opt.rect, opt.palette.highlight());
         } else if (opt.state & QStyle::State_MouseOver) {
@@ -29,19 +28,16 @@ public:
             painter->fillRect(opt.rect, hoverColor);
         }
 
-        // Draw icon
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
         QIcon icon = opt.icon;
         if (!icon.isNull()) {
             icon.paint(painter, iconRect, Qt::AlignCenter, opt.state & QStyle::State_Selected ? QIcon::Selected : QIcon::Normal);
         } else {
-            // Fallback icon
             QIcon fallback = QIcon::fromTheme("application-x-executable");
             fallback.paint(painter, iconRect, Qt::AlignCenter, opt.state & QStyle::State_Selected ? QIcon::Selected : QIcon::Normal);
         }
 
-        // Draw text
         painter->setPen(opt.state & QStyle::State_Selected ? opt.palette.highlightedText().color() : opt.palette.text().color());
         QRect textRect = opt.rect.adjusted(iconSize + 12, 0, -4, 0);
         QString elidedText = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, textRect.width());
@@ -53,7 +49,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
         QSize size = QStyledItemDelegate::sizeHint(option, index);
-        size.setHeight(qMax(size.height(), 36)); // Minimum row height
+        size.setHeight(qMax(size.height(), 36));
         return size;
     }
 };
@@ -63,7 +59,6 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     , m_backend(backend)
     , m_containerName(containerName)
 {
-    // Window setup
     setWindowTitle(i18nc("@title:window, %1 is a container name", "Applications — %1", containerName));
     resize(600, 500);
     setWindowIcon(QIcon::fromTheme("applications-other"));
@@ -84,10 +79,14 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     m_exportedAppsList->setIconSize(QSize(32, 32));
     m_exportedAppsList->setAlternatingRowColors(true);
 
-    QPushButton *unexportBtn = new QPushButton(i18n("Unexport"));
-    unexportBtn->setIcon(QIcon::fromTheme("list-remove"));
-    unexportBtn->setToolTip(i18n("Remove the selected application from your host system"));
-    connect(unexportBtn, &QPushButton::clicked, [this]() {
+    m_noExportedLabel = new QLabel(i18n("No exported applications"));
+    m_noExportedLabel->setAlignment(Qt::AlignCenter);
+    m_noExportedLabel->setVisible(false);
+
+    m_unexportBtn = new QPushButton(i18n("Unexport"));
+    m_unexportBtn->setIcon(QIcon::fromTheme("list-remove"));
+    m_unexportBtn->setToolTip(i18n("Remove the selected application from your host system"));
+    connect(m_unexportBtn, &QPushButton::clicked, [this]() {
         if (m_exportedAppsList->currentItem()) {
             QString app = m_exportedAppsList->currentItem()->text();
             QString result = m_backend->unexportApp(app, m_containerName);
@@ -97,10 +96,11 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     });
 
     exportedLayout->addWidget(m_exportedAppsList);
+    exportedLayout->addWidget(m_noExportedLabel);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     buttonLayout->addStretch();
-    buttonLayout->addWidget(unexportBtn);
+    buttonLayout->addWidget(m_unexportBtn);
     exportedLayout->addLayout(buttonLayout);
 
     // Available apps tab
@@ -114,10 +114,14 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     m_availableAppsList->setIconSize(QSize(32, 32));
     m_availableAppsList->setAlternatingRowColors(true);
 
-    QPushButton *exportBtn = new QPushButton(i18n("Export"));
-    exportBtn->setIcon(QIcon::fromTheme("list-add"));
-    exportBtn->setToolTip(i18n("Make the selected application available on your host system"));
-    connect(exportBtn, &QPushButton::clicked, [this]() {
+    m_noAvailableLabel = new QLabel(i18n("No available applications"));
+    m_noAvailableLabel->setAlignment(Qt::AlignCenter);
+    m_noAvailableLabel->setVisible(false);
+
+    m_exportBtn = new QPushButton(i18n("Export"));
+    m_exportBtn->setIcon(QIcon::fromTheme("list-add"));
+    m_exportBtn->setToolTip(i18n("Make the selected application available on your host system"));
+    connect(m_exportBtn, &QPushButton::clicked, [this]() {
         if (m_availableAppsList->currentItem()) {
             QString app = m_availableAppsList->currentItem()->text();
             QString result = m_backend->exportApp(app, m_containerName);
@@ -127,10 +131,11 @@ AppsDialog::AppsDialog(Backend *backend, const QString &containerName, QWidget *
     });
 
     availableLayout->addWidget(m_availableAppsList);
+    availableLayout->addWidget(m_noAvailableLabel);
 
     QHBoxLayout *exportButtonLayout = new QHBoxLayout();
     exportButtonLayout->addStretch();
-    exportButtonLayout->addWidget(exportBtn);
+    exportButtonLayout->addWidget(m_exportBtn);
     availableLayout->addLayout(exportButtonLayout);
 
     m_tabs->addTab(exportedTab, QIcon::fromTheme("emblem-shared"), i18n("Exported Apps"));
@@ -150,7 +155,7 @@ void AppsDialog::loadApps()
     for (const QString &app : exportedApps) {
         QIcon icon = QIcon::fromTheme(app.toLower());
         if (icon.isNull()) {
-            icon = QIcon::fromTheme("package-x-generic"); // Fallback icon
+            icon = QIcon::fromTheme("package-x-generic");
         }
         QListWidgetItem *item = new QListWidgetItem(icon, app);
         m_exportedAppsList->addItem(item);
@@ -161,13 +166,21 @@ void AppsDialog::loadApps()
     for (const QString &app : availableApps) {
         QIcon icon = QIcon::fromTheme(app.toLower());
         if (icon.isNull()) {
-            icon = QIcon::fromTheme("package-x-generic"); // Fallback icon
+            icon = QIcon::fromTheme("package-x-generic");
         }
         QListWidgetItem *item = new QListWidgetItem(icon, app);
         m_availableAppsList->addItem(item);
     }
 
-    // Switch to Available Apps tab if Exported Apps is empty
+    // Sichtbarkeit & Platzhalter
+    m_exportedAppsList->setVisible(!exportedApps.isEmpty());
+    m_noExportedLabel->setVisible(exportedApps.isEmpty());
+    m_unexportBtn->setVisible(!exportedApps.isEmpty());
+
+    m_availableAppsList->setVisible(!availableApps.isEmpty());
+    m_noAvailableLabel->setVisible(availableApps.isEmpty());
+    m_exportBtn->setVisible(!availableApps.isEmpty());
+
     if (exportedApps.isEmpty() && m_tabs->currentIndex() == 0) {
         m_tabs->setCurrentIndex(1);
     }

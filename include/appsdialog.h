@@ -8,6 +8,7 @@
 #include <QFontMetrics>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QLabel>
 #include <QListWidget>
 #include <QMessageBox>
 #include <QPainter>
@@ -33,4 +34,8 @@ private:
     QTabWidget *m_tabs;
     QListWidget *m_exportedAppsList;
     QListWidget *m_availableAppsList;
+    QLabel *m_noExportedLabel;
+    QLabel *m_noAvailableLabel;
+    QPushButton *m_exportBtn;
+    QPushButton *m_unexportBtn;
 };
