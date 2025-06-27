@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-20 00:45+0000\n"
+"POT-Creation-Date: 2025-06-27 00:45+0000\n"
 "PO-Revision-Date: 2025-06-20 08:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19,245 +19,300 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 25.04.2\n"
 
-#: src/appsdialog.cpp:67
+#: src/appsdialog.cpp:62
 #, kde-format
 msgctxt "@title:window, %1 is a container name"
 msgid "Applications — %1"
 msgstr "Aplicacions — %1"
 
-#: src/appsdialog.cpp:87
+#: src/appsdialog.cpp:82
+#, fuzzy, kde-format
+#| msgid "Manage exported applications"
+msgid "No exported applications"
+msgstr "Gestiona les aplicacions exportades"
+
+#: src/appsdialog.cpp:86
 #, kde-format
 msgid "Unexport"
 msgstr "Desfés l'exportació"
 
-#: src/appsdialog.cpp:89
+#: src/appsdialog.cpp:88
 #, kde-format
 msgid "Remove the selected application from your host system"
 msgstr "Elimina l'aplicació seleccionada del sistema amfitrió"
 
-#: src/appsdialog.cpp:94
+#: src/appsdialog.cpp:93
 #, kde-format
 msgid "Unexport App"
 msgstr "Desfés l'exportació de l'aplicació"
 
 #: src/appsdialog.cpp:117
+#, fuzzy, kde-format
+#| msgid "Available Apps"
+msgid "No available applications"
+msgstr "Aplicacions disponibles"
+
+#: src/appsdialog.cpp:121
 #, kde-format
 msgid "Export"
 msgstr "Export"
 
-#: src/appsdialog.cpp:119
+#: src/appsdialog.cpp:123
 #, kde-format
 msgid "Make the selected application available on your host system"
 msgstr "Fa disponible l'aplicació seleccionada en el sistema amfitrió"
 
-#: src/appsdialog.cpp:124
+#: src/appsdialog.cpp:128
 #, kde-format
 msgid "Export App"
 msgstr "Exporta l'aplicació"
 
-#: src/appsdialog.cpp:136
+#: src/appsdialog.cpp:141
 #, kde-format
 msgid "Exported Apps"
 msgstr "Aplicacions exportades"
 
-#: src/appsdialog.cpp:137
+#: src/appsdialog.cpp:142
 #, kde-format
 msgid "Available Apps"
 msgstr "Aplicacions disponibles"
 
-#: src/backend.cpp:29
+#: src/backend.cpp:105
 #, kde-format
 msgid "Error: Command timed out"
 msgstr "S'ha produït un error: l'ordre ha excedit el temps"
 
-#: src/backend.cpp:214
+#: src/backend.cpp:306
+#, kde-format
+msgid "Error: No supported backend available"
+msgstr ""
+
+#: src/backend.cpp:312
+#, kde-format
+msgid "Error: Failed to start container creation process"
+msgstr ""
+
+#: src/backend.cpp:317
+#, fuzzy, kde-format
+#| msgid "Container “%1” created successfully!"
+msgid "Container created successfully"
+msgstr "El contenidor «%1» s'ha creat correctament!"
+
+#: src/backend.cpp:317
+#, fuzzy, kde-format
+#| msgid "Container creation failed (exit code: %1)"
+msgid "Container creation failed"
+msgstr "No s'ha pogut crear el contenidor (codi d'eixida: %1)"
+
+#: src/backend.cpp:323
+#, fuzzy, kde-format
+#| msgid "Error: %1"
+msgid "Error: "
+msgstr "S'ha produït un error: %1"
+
+#: src/backend.cpp:356
+#, fuzzy, kde-format
+#| msgid "Upgrade the selected container"
+msgid "Error: Failed to delete Container."
+msgstr "Actualitza el contenidor seleccionat"
+
+#: src/backend.cpp:364
 #, kde-format
 msgid "Unknown terminal:"
 msgstr "Terminal desconegut:"
 
-#: src/backend.cpp:247 src/backend.cpp:257
+#: src/backend.cpp:397 src/backend.cpp:407
 #, kde-format
 msgid "Failed to start terminal"
 msgstr "No s'ha pogut iniciar el terminal"
 
-#: src/backend.cpp:247 src/backend.cpp:257
+#: src/backend.cpp:397 src/backend.cpp:407
 #, kde-format
 msgid "with args"
 msgstr "amb arguments"
 
-#: src/backend.cpp:272
+#: src/backend.cpp:422
 #, kde-format
 msgid "Error: %1"
 msgstr "S'ha produït un error: %1"
+
+#: src/backend.cpp:510
+#, fuzzy, kde-format
+#| msgid "Unknown error"
+msgctxt ""
+"If an Toolbox Image doesnt fit the list of distros for the icon and package "
+"manager intergration, we will return Unknown"
+msgid "Unknown"
+msgstr "S'ha produït un error desconegut"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
 msgid "Create New Container"
 msgstr "Crea un contenidor nou"
 
-#: src/createcontainerdialog.cpp:94
+#: src/createcontainerdialog.cpp:95
 #, kde-format
 msgid "my-container"
 msgstr "meu-contenidor"
 
-#: src/createcontainerdialog.cpp:95
+#: src/createcontainerdialog.cpp:96
 #, kde-format
 msgid "Container name:"
 msgstr "Nom del contenidor:"
 
-#: src/createcontainerdialog.cpp:98
-#, kde-format
-msgid "Search images…"
-msgstr "Busca imatges…"
-
-#: src/createcontainerdialog.cpp:100
-#, kde-format
-msgid "Search images:"
+#: src/createcontainerdialog.cpp:105
+#, fuzzy, kde-format
+#| msgid "Search images:"
+msgid "Search images..."
 msgstr "Busca imatges:"
 
-#: src/createcontainerdialog.cpp:107
+#: src/createcontainerdialog.cpp:127
 #, kde-format
 msgid "Available images:"
 msgstr "Imatges disponibles:"
 
-#: src/createcontainerdialog.cpp:110
+#: src/createcontainerdialog.cpp:132
 #, kde-format
 msgid "Leave empty for default"
 msgstr "Deixeu-ho buit per a un valor predeterminat"
 
-#: src/createcontainerdialog.cpp:111
+#: src/createcontainerdialog.cpp:133
 #, kde-format
 msgid "Custom home path:"
 msgstr "Camí d'inici personalitzat:"
 
-#: src/createcontainerdialog.cpp:114
+#: src/createcontainerdialog.cpp:136
 #, kde-format
 msgid "e.g., /host/path:/container/path (comma separate multiple)"
 msgstr "p. ex., /host/camí:/contenidor/camí (diversos separats per comes)"
 
-#: src/createcontainerdialog.cpp:115
+#: src/createcontainerdialog.cpp:137
 #, kde-format
 msgid "Additional volumes:"
 msgstr "Volums addicionals:"
 
-#: src/createcontainerdialog.cpp:117
+#: src/createcontainerdialog.cpp:139
 #, kde-format
 msgid "Enable systemd init"
 msgstr "Activa l'inici «systemd»"
 
-#: src/createcontainerdialog.cpp:118
+#: src/createcontainerdialog.cpp:140
 #, kde-format
 msgid "Enable systemd as init system inside the container"
 msgstr "Activa «systemd» com sistema d'inici dins del contenidor"
 
-#: src/createcontainerdialog.cpp:119
+#: src/createcontainerdialog.cpp:141
 #, kde-format
 msgid "Init system:"
 msgstr "Sistema d'inici:"
 
-#: src/createcontainerdialog.cpp:126
+#: src/createcontainerdialog.cpp:155
 #, kde-format
 msgid "Refresh Images"
 msgstr "Actualitza les imatges"
 
-#: src/createcontainerdialog.cpp:133 src/mainwindow.cpp:397
-#: src/mainwindow.cpp:422
+#: src/createcontainerdialog.cpp:164 src/mainwindow.cpp:510
 #, kde-format
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: src/createcontainerdialog.cpp:138
+#: src/createcontainerdialog.cpp:170
 #, kde-format
 msgid "Create"
 msgstr "Crea"
 
-#: src/createcontainerdialog.cpp:216 src/createcontainerdialog.cpp:221
-#: src/createcontainerdialog.cpp:309 src/createcontainerdialog.cpp:330
+#: src/createcontainerdialog.cpp:249 src/createcontainerdialog.cpp:254
+#: src/createcontainerdialog.cpp:299 src/createcontainerdialog.cpp:342
+#: src/createcontainerdialog.cpp:363 src/mainwindow.cpp:134
 #, kde-format
 msgid "Error"
 msgstr "S'ha produït un error"
 
-#: src/createcontainerdialog.cpp:216
+#: src/createcontainerdialog.cpp:249
 #, kde-format
 msgid "Please enter a container name"
 msgstr "Introduïu un nom de contenidor"
 
-#: src/createcontainerdialog.cpp:221
+#: src/createcontainerdialog.cpp:254
 #, kde-format
 msgid "Please select an image"
 msgstr "Seleccioneu una imatge"
 
-#: src/createcontainerdialog.cpp:227
+#: src/createcontainerdialog.cpp:263
 #, kde-format
 msgid "Creating Container"
 msgstr "Creació de contenidor"
 
-#: src/createcontainerdialog.cpp:228
-#, kde-format
-msgid "Starting container creation…"
+#: src/createcontainerdialog.cpp:264
+#, fuzzy, kde-format
+#| msgid "Starting container creation…"
+msgid "Starting container creation..."
 msgstr "S'està iniciant la creació del contenidor…"
-
-#: src/createcontainerdialog.cpp:270
-#, kde-format
-msgid "Executing:"
-msgstr "En execució:"
-
-#: src/createcontainerdialog.cpp:279
-#, kde-format
-msgid "Process output:"
-msgstr "Eixida del procés:"
-
-#: src/createcontainerdialog.cpp:286
-#, kde-format
-msgid "Process error:"
-msgstr "S'ha produït un error de procés:"
 
 #: src/createcontainerdialog.cpp:289
 #, kde-format
-msgid "Failed to start"
-msgstr "No s'ha pogut iniciar"
+msgid ""
+"Container '%1' created successfully!\n"
+"\n"
+"A terminal session with the new container will now open."
+msgstr ""
 
-#: src/createcontainerdialog.cpp:292
-#, kde-format
-msgid "Crashed"
-msgstr "No s'ha pogut"
-
-#: src/createcontainerdialog.cpp:295
-#, kde-format
-msgid "Timed out"
-msgstr "Ha excedit el temps"
-
-#: src/createcontainerdialog.cpp:298
-#, kde-format
-msgid "Write error"
-msgstr "S'ha produït un error mentre s'escrivia"
-
-#: src/createcontainerdialog.cpp:301
-#, kde-format
-msgid "Read error"
-msgstr "S'ha produït un error de lectura"
-
-#: src/createcontainerdialog.cpp:304
-#, kde-format
-msgid "Unknown error"
-msgstr "S'ha produït un error desconegut"
-
-#: src/createcontainerdialog.cpp:319
-#, kde-format
-msgid "Container “%1” created successfully!"
-msgstr "El contenidor «%1» s'ha creat correctament!"
-
-#: src/createcontainerdialog.cpp:321
+#: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
 msgid "Success"
 msgstr "Correcte"
 
-#: src/createcontainerdialog.cpp:326
+#: src/createcontainerdialog.cpp:312
+#, kde-format
+msgid "Process output:"
+msgstr "Eixida del procés:"
+
+#: src/createcontainerdialog.cpp:319
+#, kde-format
+msgid "Process error:"
+msgstr "S'ha produït un error de procés:"
+
+#: src/createcontainerdialog.cpp:322
+#, kde-format
+msgid "Failed to start"
+msgstr "No s'ha pogut iniciar"
+
+#: src/createcontainerdialog.cpp:325
+#, kde-format
+msgid "Crashed"
+msgstr "No s'ha pogut"
+
+#: src/createcontainerdialog.cpp:328
+#, kde-format
+msgid "Timed out"
+msgstr "Ha excedit el temps"
+
+#: src/createcontainerdialog.cpp:331
+#, kde-format
+msgid "Write error"
+msgstr "S'ha produït un error mentre s'escrivia"
+
+#: src/createcontainerdialog.cpp:334
+#, kde-format
+msgid "Read error"
+msgstr "S'ha produït un error de lectura"
+
+#: src/createcontainerdialog.cpp:337
+#, kde-format
+msgid "Unknown error"
+msgstr "S'ha produït un error desconegut"
+
+#: src/createcontainerdialog.cpp:352
+#, kde-format
+msgid "Container “%1” created successfully!"
+msgstr "El contenidor «%1» s'ha creat correctament!"
+
+#: src/createcontainerdialog.cpp:359
 #, kde-format
 msgid "Container creation failed (exit code: %1)"
 msgstr "No s'ha pogut crear el contenidor (codi d'eixida: %1)"
 
-#: src/createcontainerdialog.cpp:328
+#: src/createcontainerdialog.cpp:361
 #, kde-format
 msgid ""
 "Container creation failed (exit code: %1)\n"
@@ -268,259 +323,294 @@ msgstr ""
 "\n"
 "Eixida d'error: %2\n"
 
-#: src/mainwindow.cpp:100
+#: src/mainwindow.cpp:117
 #, kde-format
-msgid "Kontainer"
-msgstr "Kontainer"
+msgid "Checking for available container backends..."
+msgstr ""
 
-#: src/mainwindow.cpp:142
+#: src/mainwindow.cpp:134
+#, kde-format
+msgid ""
+"No container backends found. Please install either distrobox or toolbox."
+msgstr ""
+
+#: src/mainwindow.cpp:182
 #, kde-format
 msgid "Enter"
 msgstr "Entrada"
 
-#: src/mainwindow.cpp:143
+#: src/mainwindow.cpp:183
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Entra en el contenidor seleccionat"
 
-#: src/mainwindow.cpp:146
+#: src/mainwindow.cpp:186
 #, kde-format
 msgid "Delete"
 msgstr "Suprimix"
 
-#: src/mainwindow.cpp:147
+#: src/mainwindow.cpp:187
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Suprimix el contenidor seleccionat"
 
-#: src/mainwindow.cpp:150
+#: src/mainwindow.cpp:190
 #, kde-format
 msgid "Applications"
 msgstr "Aplicacions"
 
-#: src/mainwindow.cpp:151
+#: src/mainwindow.cpp:191
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Gestiona les aplicacions exportades"
 
-#: src/mainwindow.cpp:154
+#: src/mainwindow.cpp:194
 #, kde-format
 msgid "Upgrade"
 msgstr "Actualitza"
 
-#: src/mainwindow.cpp:155
+#: src/mainwindow.cpp:195
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Actualitza el contenidor seleccionat"
 
-#: src/mainwindow.cpp:162
+#: src/mainwindow.cpp:202
 #, kde-format
 msgid "Refresh"
 msgstr "Actualitza la llista"
 
-#: src/mainwindow.cpp:163
+#: src/mainwindow.cpp:203
 #, kde-format
 msgid "Refresh container list"
 msgstr "Actualitza la llista de contenidors"
 
-#: src/mainwindow.cpp:167
+#: src/mainwindow.cpp:207
 #, kde-format
 msgid "Install .deb"
 msgstr "Instal·la un «.deb»"
 
-#: src/mainwindow.cpp:168
+#: src/mainwindow.cpp:208
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Instal·la un paquet Debian/Ubuntu"
 
-#: src/mainwindow.cpp:171
+#: src/mainwindow.cpp:211
 #, kde-format
 msgid "Install .rpm"
 msgstr "Instal·la un «.rpm»"
 
-#: src/mainwindow.cpp:172
+#: src/mainwindow.cpp:212
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Instal·la un paquet Fedora/OpenSUSE"
 
-#: src/mainwindow.cpp:175
+#: src/mainwindow.cpp:215
 #, kde-format
 msgid "Install .pkg"
 msgstr "Instal·la un «.pkg»"
 
-#: src/mainwindow.cpp:176
+#: src/mainwindow.cpp:216
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Instal·la un paquet Arch Linux"
 
-#: src/mainwindow.cpp:199
+#: src/mainwindow.cpp:239
 #, kde-format
 msgid "New Container"
 msgstr "Contenidor nou"
 
-#: src/mainwindow.cpp:201
+#: src/mainwindow.cpp:241
 #, kde-format
 msgid "Create new container"
 msgstr "Crea un contenidor nou"
 
-#: src/mainwindow.cpp:207
+#: src/mainwindow.cpp:247
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Actualitza tots els contenidors"
 
-#: src/mainwindow.cpp:209
+#: src/mainwindow.cpp:249
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Actualitza tots els contenidors"
 
-#: src/mainwindow.cpp:215
+#: src/mainwindow.cpp:255
 #, kde-format
 msgid "Assemble"
 msgstr "Assembla"
 
-#: src/mainwindow.cpp:217
+#: src/mainwindow.cpp:257
 #, kde-format
 msgid "Create container from INI file"
 msgstr "Crear un contenidor a partir d'un fitxer INI"
 
-#: src/mainwindow.cpp:227
+#: src/mainwindow.cpp:267
 #, kde-format
 msgid "Terminal:"
 msgstr "Terminal:"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:305
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
 "No s'ha trobat cap emulador de terminal: l'eixida es mostrarà en el diàleg"
 
-#: src/mainwindow.cpp:303
+#: src/mainwindow.cpp:376
 #, kde-format
 msgid "Assemble Result"
 msgstr "Resultat de l'assemblatge"
 
-#: src/mainwindow.cpp:342
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Container:"
 msgstr "Contenidor:"
 
-#: src/mainwindow.cpp:342
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Distro:"
 msgstr "Distribució:"
 
-#: src/mainwindow.cpp:342
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Icon:"
 msgstr "Icona:"
 
-#: src/mainwindow.cpp:346 src/mainwindow.cpp:351
+#: src/mainwindow.cpp:426 src/mainwindow.cpp:431
 #, kde-format
 msgid "No containers found"
 msgstr "No s'ha trobat cap contenidor"
 
-#: src/mainwindow.cpp:364
+#: src/mainwindow.cpp:444
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Confirma la supressió"
 
-#: src/mainwindow.cpp:365
+#: src/mainwindow.cpp:445
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Voleu suprimir el contenidor <b>%1</b>?"
 
-#: src/mainwindow.cpp:366
+#: src/mainwindow.cpp:446
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Esta acció no es podrà desfer."
 
-#: src/mainwindow.cpp:373 src/mainwindow.cpp:406
+#: src/mainwindow.cpp:453
 #, kde-format
 msgid "Result"
 msgstr "Resultat"
 
-#: src/mainwindow.cpp:397
+#: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
-msgid "Creating container…"
-msgstr "S'està creant el contenidor…"
+msgid "Function Not Supported"
+msgstr ""
 
-#: src/mainwindow.cpp:419
+#: src/mainwindow.cpp:502
+#, kde-format
+msgid ""
+"Toolbox backend doesn't support container assembly.\n"
+"\n"
+"Please switch to Distrobox backend to use this feature."
+msgstr ""
+
+#: src/mainwindow.cpp:507
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Seleccioneu el fitxer INI de Distrobox"
 
-#: src/mainwindow.cpp:419
+#: src/mainwindow.cpp:507
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "Fitxers INI (*.ini);;Tots els fitxers (*)"
 
-#: src/mainwindow.cpp:422
+#: src/mainwindow.cpp:510
 #, kde-format
 msgid "Assembling container..."
 msgstr "S'està assemblant el contenidor…"
 
-#: src/mainwindow.cpp:447
+#: src/mainwindow.cpp:527
+#, kde-format
+msgid ""
+"Toolbox backend doesn't support mass container upgrades.\n"
+"\n"
+"Please switch to Distrobox backend to use this feature."
+msgstr ""
+
+#: src/mainwindow.cpp:536
+#, kde-format
+msgid "Upgrading all containers..."
+msgstr "S'estan actualitzant tots els contenidors…"
+
+#: src/mainwindow.cpp:560
+#, kde-format
+msgid "Processing..."
+msgstr ""
+
+#: src/mainwindow.cpp:596
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Seleccioneu un paquet «.deb»"
 
-#: src/mainwindow.cpp:447
+#: src/mainwindow.cpp:596
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Paquets Debian (*.deb)"
 
-#: src/mainwindow.cpp:454
+#: src/mainwindow.cpp:602
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "S'està instal·lant un paquet «.deb»…"
 
-#: src/mainwindow.cpp:480
+#: src/mainwindow.cpp:633
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Seleccioneu un paquet «.rpm»"
 
-#: src/mainwindow.cpp:480
+#: src/mainwindow.cpp:633
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "Paquets RPM (*.rpm)"
 
-#: src/mainwindow.cpp:486
+#: src/mainwindow.cpp:639
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "S'està instal·lant un paquet «.rpm»…"
 
-#: src/mainwindow.cpp:512
+#: src/mainwindow.cpp:670
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Seleccioneu un paquet d'Arch"
 
 # skip-rule: t-pu_sp
-#: src/mainwindow.cpp:512
+#: src/mainwindow.cpp:670
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Paquets d'Arch (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:518
+#: src/mainwindow.cpp:676
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "S'està instal·lant un paquet Arch…"
 
-#: src/mainwindow.cpp:546
+#: src/mainwindow.cpp:709
 #, kde-format
 msgid "Upgrading container..."
 msgstr "S'està actualitzant el contenidor…"
 
-#: src/mainwindow.cpp:566
-#, kde-format
-msgid "Upgrading all containers..."
-msgstr "S'estan actualitzant tots els contenidors…"
+#~ msgid "Search images…"
+#~ msgstr "Busca imatges…"
 
-#: src/mainwindow.cpp:590
-#, kde-format
-msgid "Command Output"
-msgstr "Eixida de l'ordre"
+#~ msgid "Executing:"
+#~ msgstr "En execució:"
 
-#: src/mainwindow.cpp:598
-#, kde-format
-msgid "Close"
-msgstr "Tanca"
+#~ msgid "Kontainer"
+#~ msgstr "Kontainer"
+
+#~ msgid "Creating container…"
+#~ msgstr "S'està creant el contenidor…"
+
+#~ msgid "Command Output"
+#~ msgstr "Eixida de l'ordre"
+
+#~ msgid "Close"
+#~ msgstr "Tanca"
