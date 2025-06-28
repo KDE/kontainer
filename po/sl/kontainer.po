@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-27 00:45+0000\n"
-"PO-Revision-Date: 2025-06-20 07:06+0200\n"
+"PO-Revision-Date: 2025-06-27 06:36+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -21,10 +21,9 @@ msgid "Applications — %1"
 msgstr "Aplikacije — %1"
 
 #: src/appsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Manage exported applications"
+#, kde-format
 msgid "No exported applications"
-msgstr "Upravljaj izvožene aplikacije"
+msgstr "Ni izvoženih aplikacij"
 
 #: src/appsdialog.cpp:86
 #, kde-format
@@ -42,10 +41,9 @@ msgid "Unexport App"
 msgstr "Odizvozi aplikacijo"
 
 #: src/appsdialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Available Apps"
+#, kde-format
 msgid "No available applications"
-msgstr "Razpoložljive aplikacije"
+msgstr "Ni razpoložljivih aplikacij"
 
 #: src/appsdialog.cpp:121
 #, kde-format
@@ -80,36 +78,32 @@ msgstr "Napaka: Časovna omejitev ukaza je potekla"
 #: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
-msgstr ""
+msgstr "Napaka: Ni podprtega zaledja"
 
 #: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
-msgstr ""
+msgstr "Napaka: Postopek zagona ustvarjanja vsebnika ni uspel"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container “%1” created successfully!"
+#, kde-format
 msgid "Container created successfully"
-msgstr "Vsebnik “%1” je bil uspešno ustvarjen!"
+msgstr "Vsebnik uspešno ustvarjen"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container creation failed (exit code: %1)"
+#, kde-format
 msgid "Container creation failed"
-msgstr "Ustvarjanje vsebnika ni uspelo (izhodna koda:  %1)"
+msgstr "Ustvarjanje vsebnika ni uspelo"
 
 #: src/backend.cpp:323
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Error: "
-msgstr "Napaka: %1"
+msgstr "Napaka: "
 
 #: src/backend.cpp:356
-#, fuzzy, kde-format
-#| msgid "Upgrade the selected container"
+#, kde-format
 msgid "Error: Failed to delete Container."
-msgstr "Nadgradi izbrani vsebnik"
+msgstr "Napaka: Vsebnika ni bilo mogoče izbrisati."
 
 #: src/backend.cpp:364
 #, kde-format
@@ -132,13 +126,12 @@ msgid "Error: %1"
 msgstr "Napaka: %1"
 
 #: src/backend.cpp:510
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
-msgstr "Neznana napaka"
+msgstr "Neznano"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -156,10 +149,9 @@ msgid "Container name:"
 msgstr "Ime vsebnika:"
 
 #: src/createcontainerdialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Search images:"
+#, kde-format
 msgid "Search images..."
-msgstr "Iskanje slik:"
+msgstr "Iskanje slik..."
 
 #: src/createcontainerdialog.cpp:127
 #, kde-format
@@ -239,10 +231,9 @@ msgid "Creating Container"
 msgstr "Ustvarjanje vsebnika"
 
 #: src/createcontainerdialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Starting container creation…"
+#, kde-format
 msgid "Starting container creation..."
-msgstr "Začetek ustvarjanja vsebnika…"
+msgstr "Zagon ustvarjanja vsebnika…"
 
 #: src/createcontainerdialog.cpp:289
 #, kde-format
@@ -251,6 +242,9 @@ msgid ""
 "\n"
 "A terminal session with the new container will now open."
 msgstr ""
+"Vsebnik '%1' je bil uspešno ustvarjen!\n"
+"\n"
+"Sedaj se bo odprla terminalska seja z novim vsebnikom."
 
 #: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
@@ -321,13 +315,13 @@ msgstr ""
 #: src/mainwindow.cpp:117
 #, kde-format
 msgid "Checking for available container backends..."
-msgstr ""
+msgstr "Preverjanje razpoložljivih zalednih sistemov vsebnikov..."
 
 #: src/mainwindow.cpp:134
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
-msgstr ""
+msgstr "Ni najdenih ozadij vsebnikov. Namestite bodisi Distrobox ali Toolbox."
 
 #: src/mainwindow.cpp:182
 #, kde-format
@@ -499,7 +493,7 @@ msgstr "Rezultat"
 #: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
 msgid "Function Not Supported"
-msgstr ""
+msgstr "Funkcija ni podprta"
 
 #: src/mainwindow.cpp:502
 #, kde-format
@@ -508,6 +502,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"Zaledni sistem Toolbox ne podpira sestavljanja vsebnikov.\n"
+"\n"
+"Za uporabo te zmožnosti preklopite na zaledni sistem Distrobox."
 
 #: src/mainwindow.cpp:507
 #, kde-format
@@ -531,6 +528,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"Zaledni sistem Toolbox ne podpira množičnih nadgradenj vsebnikov.\n"
+"\n"
+"Za uporabo te zmožnosti preklopite na zaledni sistem Distrobox."
 
 #: src/mainwindow.cpp:536
 #, kde-format
@@ -540,7 +540,7 @@ msgstr "Nadgrajevanje vseh vsebnikov..."
 #: src/mainwindow.cpp:560
 #, kde-format
 msgid "Processing..."
-msgstr ""
+msgstr "Obdelovanje..."
 
 #: src/mainwindow.cpp:596
 #, kde-format

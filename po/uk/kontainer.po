@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-27 00:45+0000\n"
-"PO-Revision-Date: 2025-06-20 11:09+0300\n"
+"PO-Revision-Date: 2025-06-27 11:35+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -25,10 +25,9 @@ msgid "Applications — %1"
 msgstr "Програми – %1"
 
 #: src/appsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Manage exported applications"
+#, kde-format
 msgid "No exported applications"
-msgstr "Керування експортованими програмами"
+msgstr "Немає експортованих програм"
 
 #: src/appsdialog.cpp:86
 #, kde-format
@@ -46,10 +45,9 @@ msgid "Unexport App"
 msgstr "Скасувати експорт програми"
 
 #: src/appsdialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Available Apps"
+#, kde-format
 msgid "No available applications"
-msgstr "Доступні програми"
+msgstr "Немає доступних програм"
 
 #: src/appsdialog.cpp:121
 #, kde-format
@@ -84,36 +82,32 @@ msgstr "Помилка: перевищено час очікування на в
 #: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
-msgstr ""
+msgstr "Помилка: немає підтримуваного модуля обробки"
 
 #: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
-msgstr ""
+msgstr "Помилка: не вдалося запустити процес створення контейнера"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container “%1” created successfully!"
+#, kde-format
 msgid "Container created successfully"
-msgstr "Контейнер «%1» успішно створено!"
+msgstr "Контейнер успішно створено"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container creation failed (exit code: %1)"
+#, kde-format
 msgid "Container creation failed"
-msgstr "Не вдалося створити контейнер (код виходу: %1)"
+msgstr "Не вдалося створити контейнер"
 
 #: src/backend.cpp:323
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Error: "
-msgstr "Помилка: %1"
+msgstr "Помилка: "
 
 #: src/backend.cpp:356
-#, fuzzy, kde-format
-#| msgid "Upgrade the selected container"
+#, kde-format
 msgid "Error: Failed to delete Container."
-msgstr "Оновити позначений контейнер"
+msgstr "Помилка: не вдалося вилучити контейнер."
 
 #: src/backend.cpp:364
 #, kde-format
@@ -136,13 +130,12 @@ msgid "Error: %1"
 msgstr "Помилка: %1"
 
 #: src/backend.cpp:510
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
-msgstr "Невідома помилка"
+msgstr "Невідомий"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -160,10 +153,9 @@ msgid "Container name:"
 msgstr "Назва контейнера:"
 
 #: src/createcontainerdialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Search images:"
+#, kde-format
 msgid "Search images..."
-msgstr "Шукати образи:"
+msgstr "Шукати образи…"
 
 #: src/createcontainerdialog.cpp:127
 #, kde-format
@@ -244,8 +236,7 @@ msgid "Creating Container"
 msgstr "Створення контейнера"
 
 #: src/createcontainerdialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Starting container creation…"
+#, kde-format
 msgid "Starting container creation..."
 msgstr "Починаємо створення контейнера…"
 
@@ -256,6 +247,9 @@ msgid ""
 "\n"
 "A terminal session with the new container will now open."
 msgstr ""
+"Контейнер «%1» успішно створено!\n"
+"\n"
+"Тепер буде відкрито сеанс термінала з новим контейнером."
 
 #: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
@@ -326,13 +320,15 @@ msgstr ""
 #: src/mainwindow.cpp:117
 #, kde-format
 msgid "Checking for available container backends..."
-msgstr ""
+msgstr "Перевіряємо доступність модулів обробки контейнерів…"
 
 #: src/mainwindow.cpp:134
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr ""
+"Не знайдено модуля обробки контейнерів. Будь ласка, встановіть або "
+"distrobox, або toolbox."
 
 #: src/mainwindow.cpp:182
 #, kde-format
@@ -502,7 +498,7 @@ msgstr "Результат"
 #: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
 msgid "Function Not Supported"
-msgstr ""
+msgstr "Підтримки функції не передбачено"
 
 #: src/mainwindow.cpp:502
 #, kde-format
@@ -511,6 +507,10 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"У модулі обробки Toolbox не передбачено підтримки збирання контейнера.\n"
+"\n"
+"Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
+"можливістю."
 
 #: src/mainwindow.cpp:507
 #, kde-format
@@ -534,6 +534,11 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"У модулі обробки Toolbox не передбачено підтримки пакетного оновлення "
+"контейнерів.\n"
+"\n"
+"Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
+"можливістю."
 
 #: src/mainwindow.cpp:536
 #, kde-format
@@ -543,7 +548,7 @@ msgstr "Оновлення усіх контейнерів…"
 #: src/mainwindow.cpp:560
 #, kde-format
 msgid "Processing..."
-msgstr ""
+msgstr "Обробка…"
 
 #: src/mainwindow.cpp:596
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-27 00:45+0000\n"
-"PO-Revision-Date: 2025-06-20 08:31+0200\n"
+"PO-Revision-Date: 2025-06-27 09:37+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: src/appsdialog.cpp:62
 #, kde-format
@@ -26,10 +26,9 @@ msgid "Applications — %1"
 msgstr "Aplicacions — %1"
 
 #: src/appsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Manage exported applications"
+#, kde-format
 msgid "No exported applications"
-msgstr "Gestiona les aplicacions exportades"
+msgstr "Sense aplicacions exportades"
 
 #: src/appsdialog.cpp:86
 #, kde-format
@@ -47,10 +46,9 @@ msgid "Unexport App"
 msgstr "Desfés l'exportació de l'aplicació"
 
 #: src/appsdialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Available Apps"
+#, kde-format
 msgid "No available applications"
-msgstr "Aplicacions disponibles"
+msgstr "Sense aplicacions disponibles"
 
 #: src/appsdialog.cpp:121
 #, kde-format
@@ -85,36 +83,34 @@ msgstr "S'ha produït un error: l'ordre ha excedit el temps"
 #: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
-msgstr ""
+msgstr "S'ha produït un error: no hi ha disponible cap dorsal compatible"
 
 #: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
 msgstr ""
+"S'ha produït un error: ha fallat en iniciar el procés de creació del "
+"contenidor"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container “%1” created successfully!"
+#, kde-format
 msgid "Container created successfully"
-msgstr "El contenidor «%1» s'ha creat correctament!"
+msgstr "Contenidor creat correctament"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container creation failed (exit code: %1)"
+#, kde-format
 msgid "Container creation failed"
-msgstr "No s'ha pogut crear el contenidor (codi d'eixida: %1)"
+msgstr "No s'ha pogut crear el contenidor"
 
 #: src/backend.cpp:323
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Error: "
-msgstr "S'ha produït un error: %1"
+msgstr "S'ha produït un error: "
 
 #: src/backend.cpp:356
-#, fuzzy, kde-format
-#| msgid "Upgrade the selected container"
+#, kde-format
 msgid "Error: Failed to delete Container."
-msgstr "Actualitza el contenidor seleccionat"
+msgstr "S'ha produït un error: ha fallat a suprimir el contenidor."
 
 #: src/backend.cpp:364
 #, kde-format
@@ -137,13 +133,12 @@ msgid "Error: %1"
 msgstr "S'ha produït un error: %1"
 
 #: src/backend.cpp:510
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
-msgstr "S'ha produït un error desconegut"
+msgstr "Desconegut"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -161,10 +156,9 @@ msgid "Container name:"
 msgstr "Nom del contenidor:"
 
 #: src/createcontainerdialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Search images:"
+#, kde-format
 msgid "Search images..."
-msgstr "Busca imatges:"
+msgstr "Busca imatges…"
 
 #: src/createcontainerdialog.cpp:127
 #, kde-format
@@ -244,8 +238,7 @@ msgid "Creating Container"
 msgstr "Creació de contenidor"
 
 #: src/createcontainerdialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Starting container creation…"
+#, kde-format
 msgid "Starting container creation..."
 msgstr "S'està iniciant la creació del contenidor…"
 
@@ -256,6 +249,9 @@ msgid ""
 "\n"
 "A terminal session with the new container will now open."
 msgstr ""
+"El contenidor «%1» s'ha creat correctament!\n"
+"\n"
+"Ara s'obrirà una sessió de terminal amb el contenidor nou."
 
 #: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
@@ -326,13 +322,15 @@ msgstr ""
 #: src/mainwindow.cpp:117
 #, kde-format
 msgid "Checking for available container backends..."
-msgstr ""
+msgstr "S'està comprovant si hi ha dorsals disponibles de contenidors…"
 
+# skip-rule: kct-toolbox
 #: src/mainwindow.cpp:134
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr ""
+"No s'ha trobat cap dorsal de contenidor. Instal·leu «distrobox» o «toolbox»."
 
 #: src/mainwindow.cpp:182
 #, kde-format
@@ -503,8 +501,9 @@ msgstr "Resultat"
 #: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
 msgid "Function Not Supported"
-msgstr ""
+msgstr "Funció no implementada"
 
+# skip-rule: kct-toolbox
 #: src/mainwindow.cpp:502
 #, kde-format
 msgid ""
@@ -512,6 +511,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"El dorsal Toolbox no admet l'assemblatge de contenidors.\n"
+"\n"
+"Canvieu al dorsal Distrobox per a utilitzar esta característica."
 
 #: src/mainwindow.cpp:507
 #, kde-format
@@ -528,6 +530,7 @@ msgstr "Fitxers INI (*.ini);;Tots els fitxers (*)"
 msgid "Assembling container..."
 msgstr "S'està assemblant el contenidor…"
 
+# skip-rule: kct-toolbox
 #: src/mainwindow.cpp:527
 #, kde-format
 msgid ""
@@ -535,6 +538,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"El dorsal Toolbox no admet actualitzacions massives de contenidors.\n"
+"\n"
+"Canvieu al dorsal Distrobox per a utilitzar esta característica."
 
 #: src/mainwindow.cpp:536
 #, kde-format
@@ -544,7 +550,7 @@ msgstr "S'estan actualitzant tots els contenidors…"
 #: src/mainwindow.cpp:560
 #, kde-format
 msgid "Processing..."
-msgstr ""
+msgstr "Està processant…"
 
 #: src/mainwindow.cpp:596
 #, kde-format
@@ -596,21 +602,3 @@ msgstr "S'està instal·lant un paquet Arch…"
 #, kde-format
 msgid "Upgrading container..."
 msgstr "S'està actualitzant el contenidor…"
-
-#~ msgid "Search images…"
-#~ msgstr "Busca imatges…"
-
-#~ msgid "Executing:"
-#~ msgstr "En execució:"
-
-#~ msgid "Kontainer"
-#~ msgstr "Kontainer"
-
-#~ msgid "Creating container…"
-#~ msgstr "S'està creant el contenidor…"
-
-#~ msgid "Command Output"
-#~ msgstr "Eixida de l'ordre"
-
-#~ msgid "Close"
-#~ msgstr "Tanca"

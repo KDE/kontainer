@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-27 00:45+0000\n"
-"PO-Revision-Date: 2025-06-20 22:43+0300\n"
+"PO-Revision-Date: 2025-06-27 10:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24,10 +24,9 @@ msgid "Applications — %1"
 msgstr "Uygulamalar ― %1"
 
 #: src/appsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Manage exported applications"
+#, kde-format
 msgid "No exported applications"
-msgstr "Dışa aktarılan uygulamaları yönet"
+msgstr "Dışa aktarılan uygulama yok"
 
 #: src/appsdialog.cpp:86
 #, kde-format
@@ -45,10 +44,9 @@ msgid "Unexport App"
 msgstr "Uygulamanın Aktarımını Geri Al"
 
 #: src/appsdialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Available Apps"
+#, kde-format
 msgid "No available applications"
-msgstr "Kullanılabilir Uygulamalar"
+msgstr "Kullanılabilir uygulama yok"
 
 #: src/appsdialog.cpp:121
 #, kde-format
@@ -83,36 +81,32 @@ msgstr "Hata: Komut zaman aşımına uğradı."
 #: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
-msgstr ""
+msgstr "Hata: Desteklenen arka uç yok"
 
 #: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
-msgstr ""
+msgstr "Hata: Kapsayıcı oluşturma süreci başlatılamadı"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container “%1” created successfully!"
+#, kde-format
 msgid "Container created successfully"
-msgstr "“%1” kapsayıcısı başarıyla oluşturuldu!"
+msgstr "Kapsayıcı başarıyla oluşturuldu"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container creation failed (exit code: %1)"
+#, kde-format
 msgid "Container creation failed"
-msgstr "Kapsayıcı oluşturma başarısız (çıkış kodu: %1)"
+msgstr "Kapsayıcı oluşturulamadı"
 
 #: src/backend.cpp:323
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Error: "
-msgstr "Hata: %1"
+msgstr "Hata: "
 
 #: src/backend.cpp:356
-#, fuzzy, kde-format
-#| msgid "Upgrade the selected container"
+#, kde-format
 msgid "Error: Failed to delete Container."
-msgstr "Seçili kapsayıcıyı yükselt"
+msgstr "Hata: Kapsayıcı silinemedi"
 
 #: src/backend.cpp:364
 #, kde-format
@@ -135,13 +129,12 @@ msgid "Error: %1"
 msgstr "Hata: %1"
 
 #: src/backend.cpp:510
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
-msgstr "Bilinmeyen hata"
+msgstr "Bilinmiyor"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -159,10 +152,9 @@ msgid "Container name:"
 msgstr "Kapsayıcı adı:"
 
 #: src/createcontainerdialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Search images:"
+#, kde-format
 msgid "Search images..."
-msgstr "Görseller ara:"
+msgstr "Görseller ara…"
 
 #: src/createcontainerdialog.cpp:127
 #, kde-format
@@ -242,8 +234,7 @@ msgid "Creating Container"
 msgstr "Kapsayıcı Oluşturuluyor"
 
 #: src/createcontainerdialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Starting container creation…"
+#, kde-format
 msgid "Starting container creation..."
 msgstr "Kapsayıcı oluşturmaya başlanıyor…"
 
@@ -254,6 +245,9 @@ msgid ""
 "\n"
 "A terminal session with the new container will now open."
 msgstr ""
+"“%1” kapsayıcısı başarıyla oluşturuldu!\n"
+"\n"
+"Şimdi yeni kapsayıcıyı içeren bir uçbirim oturumu açılacak."
 
 #: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
@@ -324,13 +318,15 @@ msgstr ""
 #: src/mainwindow.cpp:117
 #, kde-format
 msgid "Checking for available container backends..."
-msgstr ""
+msgstr "Kullanılabilir kapsayıcı arka uçları denetleniyor…"
 
 #: src/mainwindow.cpp:134
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr ""
+"Bulunan kapsayıcı arka ucu yok. Lütfen “distrobox” veya “toolbox” "
+"araçlarından birini kurun."
 
 #: src/mainwindow.cpp:182
 #, kde-format
@@ -435,7 +431,7 @@ msgstr "Tüm kapsayıcıları yükseltir"
 #: src/mainwindow.cpp:255
 #, kde-format
 msgid "Assemble"
-msgstr "İmal Et"
+msgstr "Topla"
 
 #: src/mainwindow.cpp:257
 #, kde-format
@@ -457,7 +453,7 @@ msgstr ""
 #: src/mainwindow.cpp:376
 #, kde-format
 msgid "Assemble Result"
-msgstr "Sonucu İmal Et"
+msgstr "Sonucu Topla"
 
 #: src/mainwindow.cpp:422
 #, kde-format
@@ -502,7 +498,7 @@ msgstr "Sonuç"
 #: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
 msgid "Function Not Supported"
-msgstr ""
+msgstr "İşlev Desteklenmiyor"
 
 #: src/mainwindow.cpp:502
 #, kde-format
@@ -511,6 +507,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"Toolbox arka ucu kapsayıcı toplamayı desteklemiyor.\n"
+"\n"
+"Bu özelliği kullanmak için Distrobox arka ucuna geçin."
 
 #: src/mainwindow.cpp:507
 #, kde-format
@@ -525,7 +524,7 @@ msgstr "INI dosyaları (*.ini);;Tüm dosyalar (*)"
 #: src/mainwindow.cpp:510
 #, kde-format
 msgid "Assembling container..."
-msgstr "Kapsayıcı imal ediliyor…"
+msgstr "Kapsayıcı toplanıyor…"
 
 #: src/mainwindow.cpp:527
 #, kde-format
@@ -534,6 +533,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"Toolbox arka ucu toplu kapsayıcı yükseltmelerini desteklemiyor.\n"
+"\n"
+"Bu özelliği kullanmak için Distrobox arka ucuna geçin."
 
 #: src/mainwindow.cpp:536
 #, kde-format
@@ -543,7 +545,7 @@ msgstr "Tüm kapsayıcılar yükseltiliyor…"
 #: src/mainwindow.cpp:560
 #, kde-format
 msgid "Processing..."
-msgstr ""
+msgstr "İşleniyor…"
 
 #: src/mainwindow.cpp:596
 #, kde-format

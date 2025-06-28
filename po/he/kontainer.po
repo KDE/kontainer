@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-06-27 00:45+0000\n"
-"PO-Revision-Date: 2025-06-20 22:22+0300\n"
+"PO-Revision-Date: 2025-06-27 11:28+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.1\n"
+"X-Generator: Lokalize 25.04.2\n"
 
 #: src/appsdialog.cpp:62
 #, kde-format
@@ -25,10 +25,9 @@ msgid "Applications — %1"
 msgstr "יישומים - %1"
 
 #: src/appsdialog.cpp:82
-#, fuzzy, kde-format
-#| msgid "Manage exported applications"
+#, kde-format
 msgid "No exported applications"
-msgstr "ניהול יישומים מיוצאים"
+msgstr "אין יישומים מיוצאים"
 
 #: src/appsdialog.cpp:86
 #, kde-format
@@ -46,10 +45,9 @@ msgid "Unexport App"
 msgstr "ביטול ייצוא יישום"
 
 #: src/appsdialog.cpp:117
-#, fuzzy, kde-format
-#| msgid "Available Apps"
+#, kde-format
 msgid "No available applications"
-msgstr "יישומים זמינים"
+msgstr "אין יישומים זמינים"
 
 #: src/appsdialog.cpp:121
 #, kde-format
@@ -84,36 +82,32 @@ msgstr "שגיאה: הזמן שהוקצה לפעולה נגמר"
 #: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
-msgstr ""
+msgstr "שגיאה: אין מנגנון נתמך זמין"
 
 #: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
-msgstr ""
+msgstr "שגיאה: התחלת תהליך יצירת המכולה נכשלה"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container “%1” created successfully!"
+#, kde-format
 msgid "Container created successfully"
-msgstr "המכולה „%1” נוצרה בהצלחה!"
+msgstr "המכולה נוצרה בהצלחה"
 
 #: src/backend.cpp:317
-#, fuzzy, kde-format
-#| msgid "Container creation failed (exit code: %1)"
+#, kde-format
 msgid "Container creation failed"
-msgstr "יצירת המכולה נכשלה (קוד יציאה: %1)"
+msgstr "יצירת המכולה נכשלה"
 
 #: src/backend.cpp:323
-#, fuzzy, kde-format
-#| msgid "Error: %1"
+#, kde-format
 msgid "Error: "
-msgstr "שגיאה: %1"
+msgstr "שגיאה:"
 
 #: src/backend.cpp:356
-#, fuzzy, kde-format
-#| msgid "Upgrade the selected container"
+#, kde-format
 msgid "Error: Failed to delete Container."
-msgstr "שדרוג המכולה הנבחרת"
+msgstr "שגיאה: מחיקת המכולה נכשלה."
 
 #: src/backend.cpp:364
 #, kde-format
@@ -136,13 +130,12 @@ msgid "Error: %1"
 msgstr "שגיאה: %1"
 
 #: src/backend.cpp:510
-#, fuzzy, kde-format
-#| msgid "Unknown error"
+#, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
-msgstr "שגיאה לא ידועה"
+msgstr "לא ידועה"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -160,10 +153,9 @@ msgid "Container name:"
 msgstr "שם המכולה:"
 
 #: src/createcontainerdialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Search images:"
+#, kde-format
 msgid "Search images..."
-msgstr "חיפוש תמונות:"
+msgstr "חיפוש דמויות…"
 
 #: src/createcontainerdialog.cpp:127
 #, kde-format
@@ -243,8 +235,7 @@ msgid "Creating Container"
 msgstr "המכולה נוצרת"
 
 #: src/createcontainerdialog.cpp:264
-#, fuzzy, kde-format
-#| msgid "Starting container creation…"
+#, kde-format
 msgid "Starting container creation..."
 msgstr "יצירת המכולה מתחילה…"
 
@@ -255,6 +246,9 @@ msgid ""
 "\n"
 "A terminal session with the new container will now open."
 msgstr ""
+"המכולה ‚%1’ נוצרה בהצלחה!\n"
+"\n"
+"הפעלת מסוף עם המכולה החדשה תיפתח כעת."
 
 #: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
 #, kde-format
@@ -325,13 +319,13 @@ msgstr ""
 #: src/mainwindow.cpp:117
 #, kde-format
 msgid "Checking for available container backends..."
-msgstr ""
+msgstr "מתבצעת בדיקה לאיתור מנגנוני מכולות זמינים."
 
 #: src/mainwindow.cpp:134
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
-msgstr ""
+msgstr "לא נמצאו מנגנוני מכונות. נא להתקין את distrobox או את toolbox."
 
 #: src/mainwindow.cpp:182
 #, kde-format
@@ -501,7 +495,7 @@ msgstr "תוצאה"
 #: src/mainwindow.cpp:501 src/mainwindow.cpp:526
 #, kde-format
 msgid "Function Not Supported"
-msgstr ""
+msgstr "הפונקציה לא נתמכת"
 
 #: src/mainwindow.cpp:502
 #, kde-format
@@ -510,6 +504,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"המנגנון של Toolbox לא תומך בהרכבת מכולות.\n"
+"\n"
+"נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
 
 #: src/mainwindow.cpp:507
 #, kde-format
@@ -533,6 +530,9 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
+"המנגנון של Toolbox לא תומך בעדכון מכולות במרוכז.\n"
+"\n"
+"נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
 
 #: src/mainwindow.cpp:536
 #, kde-format
@@ -542,7 +542,7 @@ msgstr "כל המכולות משודרגות…"
 #: src/mainwindow.cpp:560
 #, kde-format
 msgid "Processing..."
-msgstr ""
+msgstr "מתבצע עיבוד…"
 
 #: src/mainwindow.cpp:596
 #, kde-format
