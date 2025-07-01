@@ -1,0 +1,16 @@
+Subject: Re: Request for Permission to Use Arch Linux Logo in KDE Application (#489)
+Sent: 30 June 2025 19:56:15 CEST
+From: "Levente Polyak (@anthraxx)" <gitlab@archlinux.org>
+To: hadichokr@icloud.com
+
+
+
+New response for issue #489:
+
+Author: Levente Polyak
+
+Using our logo next to officially maintained images from within Arch Linux, specifically "docker.io/library/archlinux:latest" and "quay.io/toolbx/arch-toolbox:latest" is fine.
+
+We'd just like to make sure unofficial third-party images are not confused to be official. Feel free to go ahead for the two mentioned images.
+
+https://gitlab.archlinux.org/-/sent_notifications/20cbdee5b19e78b14133cf6ad3f0b163/unsubscribe
