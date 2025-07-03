@@ -66,12 +66,14 @@ signals:
     void containerOutput(const QString &output);
     void containerCreationFinished(bool success, const QString &message);
     void availableBackendsChanged(const QStringList &backends);
+    void containersFetched(const QList<QMap<QString, QString>> &containers);
 
 public slots:
     void assembleContainer(const QString &iniFile);
     void installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath);
     void installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath);
     void installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath);
+    void fetchContainersAsync();
 
 private:
     QString runCommand(const QStringList &command) const;

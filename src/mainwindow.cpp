@@ -101,10 +101,67 @@ MainWindow::MainWindow(QWidget *parent)
     backend = new Backend(this);
     connect(backend, &Backend::availableBackendsChanged, this, &MainWindow::onBackendsAvailable);
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
+    connect(backend, &Backend::containersFetched, this, &MainWindow::handleContainersFetched);
 
     setWindowTitle(tr("Kontainer"));
     resize(850, 600);
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
+}
+
+void MainWindow::showLoadingDialog(const QString &message)
+{
+    if (!loadingDialog) {
+        loadingDialog = new QProgressDialog(this);
+        loadingDialog->setCancelButton(nullptr);
+        loadingDialog->setWindowModality(Qt::WindowModal);
+        loadingDialog->setMinimumDuration(0); // Show immediately
+    }
+
+    loadingDialog->setLabelText(message);
+    loadingDialog->setRange(0, 0); // Indeterminate progress
+    loadingDialog->show();
+}
+
+// New method to hide loading dialog
+void MainWindow::hideLoadingDialog()
+{
+    if (loadingDialog) {
+        loadingDialog->hide();
+    }
+}
+
+// Modified refresh method
+void MainWindow::refreshContainers()
+{
+    containerList->clear();
+    showLoadingDialog(i18n("Fetching containers..."));
+    backend->fetchContainersAsync();
+}
+
+// New slot to handle fetched containers
+void MainWindow::handleContainersFetched(const QList<QMap<QString, QString>> &containers)
+{
+    hideLoadingDialog();
+
+    for (const auto &container : containers) {
+        QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
+        item->setData(Qt::UserRole + 3, container["image"]);
+        item->setData(Qt::UserRole + 4, container["distro"]);
+        item->setData(Qt::UserRole + 5, container["icon"]);
+
+        qDebug() << i18n("Container:") << container["name"] << i18n("Distro:") << container["distro"] << i18n("Icon:") << container["icon"];
+    }
+
+    if (containers.isEmpty()) {
+        QListWidgetItem *item = new QListWidgetItem(i18n("No containers found"), containerList);
+        item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
+        QPixmap fallback(":/icons/tux.svg");
+        item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        qDebug() << i18n("No containers found");
+    }
+
+    currentContainer.clear();
+    updateButtonStates();
 }
 
 void MainWindow::setupLoadingUI()
@@ -406,33 +463,6 @@ void MainWindow::updateButtonStates()
         installRpmBtn->setVisible(false);
         installArchBtn->setVisible(false);
     }
-}
-
-void MainWindow::refreshContainers()
-{
-    containerList->clear();
-    QList<QMap<QString, QString>> containers = backend->getContainers();
-
-    for (const auto &container : containers) {
-        QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
-        item->setData(Qt::UserRole + 3, container["image"]); // Store image name
-        item->setData(Qt::UserRole + 4, container["distro"]); // Store distro name
-        item->setData(Qt::UserRole + 5, container["icon"]); // Store icon path from backend
-
-        qDebug() << i18n("Container:") << container["name"] << i18n("Distro:") << container["distro"] << i18n("Icon:") << container["icon"];
-    }
-
-    if (containers.isEmpty()) {
-        QListWidgetItem *item = new QListWidgetItem(i18n("No containers found"), containerList);
-        item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
-        // Use shipped fallback icon
-        QPixmap fallback(":/icons/tux.svg");
-        item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-        qDebug() << i18n("No containers found");
-    }
-
-    currentContainer.clear();
-    updateButtonStates();
 }
 
 void MainWindow::deleteContainer()

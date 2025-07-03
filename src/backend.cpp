@@ -249,6 +249,90 @@ QList<QMap<QString, QString>> Backend::getContainers() const
     return containers;
 }
 
+void Backend::fetchContainersAsync()
+{
+    QtConcurrent::run([this]() {
+        QList<QMap<QString, QString>> containers;
+
+        QString output;
+        if (m_preferredBackend == "distrobox") {
+            output = runCommand({"distrobox", "list", "--no-color"});
+        } else if (m_preferredBackend == "toolbox") {
+            output = runCommand({"toolbox", "list", "-c"});
+        } else {
+            emit containersFetched({});
+            return;
+        }
+
+        QStringList lines = output.split('\n', Qt::SkipEmptyParts);
+        if (lines.isEmpty()) {
+            emit containersFetched({});
+            return;
+        }
+
+        if (m_preferredBackend == "distrobox") {
+            // Pipe-separated table (with header)
+            QStringList headers;
+            for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
+                headers << col.trimmed();
+            }
+
+            for (int i = 1; i < lines.size(); ++i) {
+                QStringList parts;
+                for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
+                    parts << col.trimmed();
+                }
+
+                if (parts.size() < headers.size())
+                    continue;
+
+                QMap<QString, QString> container;
+                container["id"] = parts[headers.indexOf("ID")];
+                container["name"] = parts[headers.indexOf("NAME")];
+                container["status"] = parts[headers.indexOf("STATUS")];
+                container["image"] = parts[headers.indexOf("IMAGE")];
+                container["distro"] = parseDistroFromImage(container["image"]);
+                container["icon"] = getDistroIcon(container["distro"]);
+
+                containers << container;
+            }
+        } else if (m_preferredBackend == "toolbox") {
+            // Toolbox format: ID NAME CREATED STATUS IMAGE
+            for (int i = 1; i < lines.size(); ++i) {
+                QString line = lines[i].trimmed();
+
+                // Split on two or more spaces to handle the column formatting
+                QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
+
+                // Need at least ID, NAME, and IMAGE (some columns might be missing)
+                if (parts.size() < 3)
+                    continue;
+
+                QMap<QString, QString> container;
+
+                // First part is always ID
+                container["id"] = parts[0].trimmed();
+
+                // Second part is NAME (might be followed by CREATED/STATUS)
+                container["name"] = parts[1].trimmed();
+
+                // Last part is always IMAGE
+                container["image"] = parts.last().trimmed();
+
+                // Set default status
+                container["status"] = "running";
+
+                container["distro"] = getDistroFromToolboxImage(container["image"]);
+                container["icon"] = getDistroIcon(container["distro"]);
+
+                containers << container;
+            }
+        }
+
+        emit containersFetched(containers);
+    });
+}
+
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
 {
     emit containerCreationStarted();
