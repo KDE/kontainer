@@ -108,48 +108,47 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowIcon(QIcon::fromTheme("preferences-virtualization-container"));
 }
 
-void MainWindow::showLoadingDialog(const QString &message)
-{
-    if (!loadingDialog) {
-        loadingDialog = new QProgressDialog(this);
-        loadingDialog->setCancelButton(nullptr);
-        loadingDialog->setWindowModality(Qt::WindowModal);
-        loadingDialog->setMinimumDuration(0); // Show immediately
-    }
-
-    loadingDialog->setLabelText(message);
-    loadingDialog->setRange(0, 0); // Indeterminate progress
-    loadingDialog->show();
-}
-
-// New method to hide loading dialog
-void MainWindow::hideLoadingDialog()
-{
-    if (loadingDialog) {
-        loadingDialog->hide();
-    }
-}
-
-// Modified refresh method
 void MainWindow::refreshContainers()
 {
     containerList->clear();
-    showLoadingDialog(i18n("Fetching containers..."));
+
+    // Add inline spinner
+    QListWidgetItem *loadingItem = new QListWidgetItem(containerList);
+    containerList->addItem(loadingItem);
+
+    QWidget *loadingWidget = new QWidget();
+    QHBoxLayout *layout = new QHBoxLayout(loadingWidget);
+    layout->setContentsMargins(6, 6, 6, 6);
+
+    QLabel *label = new QLabel(i18n("Fetching containers..."));
+    QProgressBar *progress = new QProgressBar();
+    progress->setRange(0, 0); // Indeterminate
+    progress->setMaximumHeight(16);
+    progress->setTextVisible(false);
+    progress->setFixedWidth(100);
+
+    layout->addWidget(progress);
+    layout->addSpacing(10);
+    layout->addWidget(label);
+    layout->addStretch();
+
+    loadingWidget->setLayout(layout);
+
+    containerList->setItemWidget(loadingItem, loadingWidget);
+
     backend->fetchContainersAsync();
 }
 
 // New slot to handle fetched containers
 void MainWindow::handleContainersFetched(const QList<QMap<QString, QString>> &containers)
 {
-    hideLoadingDialog();
+    containerList->clear(); // This removes the spinner
 
     for (const auto &container : containers) {
         QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
         item->setData(Qt::UserRole + 3, container["image"]);
         item->setData(Qt::UserRole + 4, container["distro"]);
         item->setData(Qt::UserRole + 5, container["icon"]);
-
-        qDebug() << i18n("Container:") << container["name"] << i18n("Distro:") << container["distro"] << i18n("Icon:") << container["icon"];
     }
 
     if (containers.isEmpty()) {
@@ -157,7 +156,6 @@ void MainWindow::handleContainersFetched(const QList<QMap<QString, QString>> &co
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
         QPixmap fallback(":/icons/tux.svg");
         item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
-        qDebug() << i18n("No containers found");
     }
 
     currentContainer.clear();
