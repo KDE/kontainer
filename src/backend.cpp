@@ -331,7 +331,6 @@ QString Backend::deleteContainer(const QString &name)
         return runCommand({"distrobox", "rm", name, "--force"});
     } else if (m_preferredBackend == "toolbox") {
         // First remove all exported desktop files for this container
-
         if (m_isFlatpak) {
             // Access host's ~/.local/share/applications manually
             QString home = qEnvironmentVariable("HOME");
@@ -348,10 +347,18 @@ QString Backend::deleteContainer(const QString &name)
         }
 
         // Update desktop database after removal
-        runCommand({"update-desktop-database", appsDir.path()});
+        QString updateResult = runCommand({"update-desktop-database", appsDir.path()});
+        if (updateResult.startsWith("Error:")) {
+            qWarning() << "Failed to update desktop database:" << updateResult;
+        }
 
         // Now remove the container
-        return runCommand({"toolbox", "rm", name, "--force"});
+        QString result = runCommand({"toolbox", "rm", name, "--force"});
+        if (result.startsWith("Error:")) {
+            return i18nc("Error message when toolbox deletion fails", "Failed to delete Toolbox %1. Error: %2", name, result);
+        }
+
+        return i18nc("Inform the User that the Toolbox Deletion Completed since it returns no output on its own", "Toolbox %1 deleted successfully.", name);
     } else {
         return i18n("Error: Failed to delete Container.");
     }
