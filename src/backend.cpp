@@ -870,7 +870,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
     } else {
         QString checkCmd = QString("toolbox run -c %1 which %2").arg(containerName, appName);
         if (runCommand({"sh", "-c", checkCmd}).isEmpty()) {
-            return QString("Application %1 not found in container %2").arg(appName, containerName);
+            return i18nc("Error message when application is not found in container", "Application %1 not found in container %2", appName, containerName);
         }
 
         QString desktopFile =
@@ -878,7 +878,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
                 .trimmed();
 
         if (desktopFile.isEmpty()) {
-            return QString("Could not find desktop file for %1 in container %2").arg(appName, containerName);
+            return i18nc("Error message when desktop file is not found", "Could not find desktop file for %1 in container %2", appName, containerName);
         }
 
         QString desktopContent = runCommand({"toolbox", "run", "-c", containerName, "cat", desktopFile});
@@ -886,7 +886,6 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
         QString appsPath;
 
         if (m_isFlatpak) {
-            // Access host's ~/.local/share/applications manually
             QString home = qEnvironmentVariable("HOME");
             appsPath = home + "/.local/share/applications";
         } else {
@@ -926,7 +925,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
         QFile file(exportedPath);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            return QString("Failed to create desktop file: %1").arg(exportedPath);
+            return i18nc("Error message when desktop file creation fails", "Failed to create desktop file: %1", exportedPath);
         }
 
         QTextStream out(&file);
@@ -935,7 +934,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
         runCommand({"update-desktop-database", appsPath});
 
-        return QString("Successfully exported %1 from %2").arg(appName, containerName);
+        return i18nc("Success message after exporting application", "Successfully exported %1 from %2", appName, containerName);
     }
 }
 
@@ -952,29 +951,26 @@ QString Backend::unexportApp(const QString &appName, const QString &containerNam
     QString fileName;
 
     if (m_preferredBackend == "toolbox") {
-        // Toolbox: appName-containerName.desktop
         fileName = QString("%1-%2.desktop").arg(appName, containerName);
     } else if (m_preferredBackend == "distrobox") {
-        // Distrobox: containerName-appName.desktop
         fileName = QString("%1-%2.desktop").arg(containerName, appName);
     } else {
-        // Fallback to toolbox naming
         fileName = QString("%1-%2.desktop").arg(appName, containerName);
     }
 
     QString exportedFile = appsPath + "/" + fileName;
 
     if (!QFile::exists(exportedFile)) {
-        return QString("No exported application %1 found for container %2").arg(appName, containerName);
+        return i18nc("Error message when no exported app is found", "No exported application %1 found for container %2", appName, containerName);
     }
 
     if (!QFile::remove(exportedFile)) {
-        return QString("Failed to remove desktop file: %1").arg(exportedFile);
+        return i18nc("Error message when desktop file removal fails", "Failed to remove desktop file: %1", exportedFile);
     }
 
     runCommand({"update-desktop-database", appsPath});
 
-    return QString("Successfully unexported %1 from %2").arg(appName, containerName);
+    return i18nc("Success message after unexporting application", "Successfully unexported %1 from %2", appName, containerName);
 }
 
 QString Backend::parseDistroFromImage(const QString &imageUrl) const
