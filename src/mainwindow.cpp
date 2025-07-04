@@ -6,7 +6,6 @@
 #include "backend.h"
 #include "createcontainerdialog.h"
 #include "terminalutils.h"
-#include <cerrno>
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate
@@ -24,7 +23,7 @@ public:
         QStyleOptionViewItem opt = option;
         initStyleOption(&opt, index);
 
-        // Draw background (keep existing hover/selection logic)
+        // Draw background (hover/selection)
         if (opt.state & QStyle::State_Selected) {
             painter->fillRect(opt.rect, opt.palette.highlight());
         } else if (opt.state & QStyle::State_MouseOver) {
@@ -33,38 +32,57 @@ public:
             painter->fillRect(opt.rect, hoverColor);
         }
 
-        // Get container data
+        // Container data
         QString image = index.data(Qt::UserRole + 3).toString();
         QString distro = index.data(Qt::UserRole + 4).toString();
         QString iconPath = index.data(Qt::UserRole + 5).toString();
+        bool isReady = index.data(Qt::UserRole + 6).toBool();
+        bool isEmptyPlaceholder = index.data(Qt::UserRole + 7).toBool();
 
-        // Draw icon using shipped resources
+        // Icon rectangle
         int iconSize = opt.rect.height() - 8;
         QRect iconRect(opt.rect.x() + 4, opt.rect.y() + 4, iconSize, iconSize);
 
+        // Load icon
         QPixmap icon;
+
         if (!iconPath.isEmpty()) {
-            icon.load(iconPath); // Will load from resources (":/icons/...")
+            icon.load(iconPath);
         }
 
         if (icon.isNull()) {
-            icon = QIcon(":/icons/tux.svg").pixmap(iconSize, iconSize);
-            if (icon.isNull()) {
-                // Final fallback, in case embedded icon also fails
+            if (isEmptyPlaceholder) {
+                icon = QIcon(":/icons/tux.svg").pixmap(iconSize, iconSize);
+            } else if (isReady) {
                 icon = QIcon::fromTheme("preferences-virtualization-container").pixmap(iconSize, iconSize);
             }
         }
 
-        icon = icon.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        painter->drawPixmap(iconRect, icon);
+        // Falls weiterhin kein Icon da ist, versuche es mit altIconPath
+        if (icon.isNull()) {
+            QVariant altIconData = index.data(Qt::UserRole + 5);
+            if (altIconData.isValid() && !altIconData.isNull()) {
+                QString altPath = altIconData.toString();
+                QPixmap altIcon;
+                altIcon.load(altPath);
+                if (!altIcon.isNull()) {
+                    icon = altIcon;
+                }
+            }
+        }
 
-        // Keep existing text drawing logic
-        painter->setPen(opt.state & QStyle::State_Selected ? opt.palette.highlightedText().color() : opt.palette.text().color());
+        // Zeichne Icon
+        if (!icon.isNull()) {
+            icon = icon.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            painter->drawPixmap(iconRect, icon);
+        }
 
+        // Haupttext (Name)
         QRect nameRect = opt.rect.adjusted(iconSize + 12, 0, -30, -opt.rect.height() / 2);
         QString elidedName = opt.fontMetrics.elidedText(opt.text, Qt::ElideRight, nameRect.width());
         painter->drawText(nameRect, Qt::AlignLeft | Qt::AlignVCenter, elidedName);
 
+        // Sekundärtext (Image)
         QFont smallFont = opt.font;
         smallFont.setPointSize(smallFont.pointSize() - 2);
         painter->setFont(smallFont);
@@ -142,20 +160,22 @@ void MainWindow::refreshContainers()
 // New slot to handle fetched containers
 void MainWindow::handleContainersFetched(const QList<QMap<QString, QString>> &containers)
 {
-    containerList->clear(); // This removes the spinner
+    qDebug() << "handleContainersFetched(): received" << containers.size() << "containers";
 
-    for (const auto &container : containers) {
-        QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
-        item->setData(Qt::UserRole + 3, container["image"]);
-        item->setData(Qt::UserRole + 4, container["distro"]);
-        item->setData(Qt::UserRole + 5, container["icon"]);
-    }
+    containerList->clear(); // removes spinner etc.
 
     if (containers.isEmpty()) {
+        qDebug() << "No containers found. Adding placeholder with Tux icon.";
         QListWidgetItem *item = new QListWidgetItem(i18n("No containers found"), containerList);
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
-        QPixmap fallback(":/icons/tux.svg");
-        item->setIcon(QIcon(fallback.scaled(24, 24, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+        item->setData(Qt::UserRole + 5, QString(":/icons/tux.svg")); // Set icon path for delegate
+    } else {
+        for (const auto &container : containers) {
+            QListWidgetItem *item = new QListWidgetItem(container["name"], containerList);
+            item->setData(Qt::UserRole + 3, container["image"]);
+            item->setData(Qt::UserRole + 4, container["distro"]);
+            item->setData(Qt::UserRole + 5, container["icon"]);
+        }
     }
 
     currentContainer.clear();
