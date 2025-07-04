@@ -27,7 +27,6 @@ public:
     void setPreferredBackend(const QString &backend);
 
     // Container operations
-    QList<QMap<QString, QString>> getContainers() const;
     QString
     createContainer(const QString &name, const QString &image, const QString &home = QString(), bool init = false, const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
@@ -90,6 +89,7 @@ private:
     QStringList buildDistroboxCommand(const QString &containerName, const QString &command);
     QProcess *m_createProcess = nullptr;
     QStringList m_cachedBackends;
+    QList<QMap<QString, QString>> m_currentContainers;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

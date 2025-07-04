@@ -14,6 +14,11 @@ Backend::Backend(QObject *parent)
 
     QSettings settings;
     m_preferredBackend = settings.value("container/backend", "distrobox").toString();
+
+    connect(this, &Backend::containersFetched, this, [this](const QList<QMap<QString, QString>> &containers) {
+        m_currentContainers = containers;
+    });
+
     checkAvailableBackends();
 }
 
@@ -112,8 +117,7 @@ QString Backend::getContainerDistro(const QString &containerName) const
     if (containerName.isEmpty())
         return "";
 
-    QList<QMap<QString, QString>> containers = getContainers();
-    for (const auto &container : containers) {
+    for (const auto &container : m_currentContainers) {
         if (container["name"] == containerName) {
             return PackageManager::getDistroFromImage(container["image"]);
         }
@@ -169,104 +173,46 @@ QStringList Backend::getAvailableTerminals() const
     return availableTerminals;
 }
 
-QList<QMap<QString, QString>> Backend::getContainers() const
-{
-    QString output;
-    if (m_preferredBackend == "distrobox") {
-        output = runCommand({"distrobox", "list", "--no-color"});
-    } else if (m_preferredBackend == "toolbox") {
-        output = runCommand({"toolbox", "list", "-c"});
-    } else {
-        return {};
-    }
-
-    QStringList lines = output.split('\n', Qt::SkipEmptyParts);
-    if (lines.isEmpty())
-        return {};
-
-    QList<QMap<QString, QString>> containers;
-
-    if (m_preferredBackend == "distrobox") {
-        // Pipe-separated table (with header)
-        QStringList headers;
-        for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
-            headers << col.trimmed();
-        }
-
-        for (int i = 1; i < lines.size(); ++i) {
-            QStringList parts;
-            for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
-                parts << col.trimmed();
-            }
-
-            if (parts.size() < headers.size())
-                continue;
-
-            QMap<QString, QString> container;
-            container["id"] = parts[headers.indexOf("ID")];
-            container["name"] = parts[headers.indexOf("NAME")];
-            container["status"] = parts[headers.indexOf("STATUS")];
-            container["image"] = parts[headers.indexOf("IMAGE")];
-            container["distro"] = parseDistroFromImage(container["image"]);
-            container["icon"] = getDistroIcon(container["distro"]);
-
-            containers << container;
-        }
-    } else if (m_preferredBackend == "toolbox") {
-        // Toolbox format: ID NAME CREATED STATUS IMAGE
-        // Example: "2a16a2f1137c  fed  About an hour ago  created  registry.fedoraproject.org/fedora-toolbox:latest"
-
-        for (int i = 1; i < lines.size(); ++i) {
-            QString line = lines[i].trimmed();
-
-            // Split on two or more spaces to handle the column formatting
-            QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
-
-            // Need at least ID, NAME, and IMAGE (some columns might be missing)
-            if (parts.size() < 3)
-                continue;
-
-            QMap<QString, QString> container;
-
-            // First part is always ID
-            container["id"] = parts[0].trimmed();
-
-            // Second part is NAME (might be followed by CREATED/STATUS)
-            container["name"] = parts[1].trimmed();
-
-            // Last part is always IMAGE
-            container["image"] = parts.last().trimmed();
-
-            // Set default status
-            container["status"] = "running";
-
-            container["distro"] = getDistroFromToolboxImage(container["image"]);
-            container["icon"] = getDistroIcon(container["distro"]);
-
-            containers << container;
-        }
-    }
-    return containers;
-}
-
 void Backend::fetchContainersAsync()
 {
-    QtConcurrent::run([this]() {
+    auto *process = new QProcess(this);
+    process->setProcessChannelMode(QProcess::MergedChannels);
+
+    QStringList command;
+    if (m_preferredBackend == "distrobox") {
+        command = {"distrobox", "list", "--no-color"};
+    } else if (m_preferredBackend == "toolbox") {
+        command = {"toolbox", "list", "-c"};
+    } else {
+        emit containersFetched({});
+        return;
+    }
+
+    // Apply Flatpak wrapper if needed
+    QStringList actualCommand;
+    if (m_isFlatpak) {
+        actualCommand << "flatpak-spawn" << "--host" << command;
+    } else {
+        actualCommand = command;
+    }
+
+    process->start(actualCommand[0], actualCommand.mid(1));
+
+    connect(process, &QProcess::finished, this, [this, process](int exitCode, QProcess::ExitStatus exitStatus) {
         QList<QMap<QString, QString>> containers;
 
-        QString output;
-        if (m_preferredBackend == "distrobox") {
-            output = runCommand({"distrobox", "list", "--no-color"});
-        } else if (m_preferredBackend == "toolbox") {
-            output = runCommand({"toolbox", "list", "-c"});
-        } else {
+        if (exitStatus != QProcess::NormalExit || exitCode != 0) {
             emit containersFetched({});
+            process->deleteLater();
             return;
         }
 
+        QString output = QString::fromUtf8(process->readAllStandardOutput());
         QStringList lines = output.split('\n', Qt::SkipEmptyParts);
+
         if (lines.isEmpty()) {
             emit containersFetched({});
+            process->deleteLater();
             return;
         }
 
@@ -330,6 +276,14 @@ void Backend::fetchContainersAsync()
         }
 
         emit containersFetched(containers);
+        process->deleteLater();
+    });
+
+    // Handle error case
+    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error) {
+        qWarning() << "Failed to fetch containers:" << process->errorString();
+        emit containersFetched({});
+        process->deleteLater();
     });
 }
 
