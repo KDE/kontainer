@@ -14,6 +14,11 @@ Backend::Backend(QObject *parent)
 
     QSettings settings;
     m_preferredBackend = settings.value("container/backend", "distrobox").toString();
+
+    connect(this, &Backend::containersFetched, this, [this](const QList<QMap<QString, QString>> &containers) {
+        m_currentContainers = containers;
+    });
+
     checkAvailableBackends();
 }
 
@@ -112,8 +117,7 @@ QString Backend::getContainerDistro(const QString &containerName) const
     if (containerName.isEmpty())
         return "";
 
-    QList<QMap<QString, QString>> containers = getContainers();
-    for (const auto &container : containers) {
+    for (const auto &container : m_currentContainers) {
         if (container["name"] == containerName) {
             return PackageManager::getDistroFromImage(container["image"]);
         }
@@ -169,84 +173,118 @@ QStringList Backend::getAvailableTerminals() const
     return availableTerminals;
 }
 
-QList<QMap<QString, QString>> Backend::getContainers() const
+void Backend::fetchContainersAsync()
 {
-    QString output;
+    auto *process = new QProcess(this);
+    process->setProcessChannelMode(QProcess::MergedChannels);
+
+    QStringList command;
     if (m_preferredBackend == "distrobox") {
-        output = runCommand({"distrobox", "list", "--no-color"});
+        command = {"distrobox", "list", "--no-color"};
     } else if (m_preferredBackend == "toolbox") {
-        output = runCommand({"toolbox", "list", "-c"});
+        command = {"toolbox", "list", "-c"};
     } else {
-        return {};
+        emit containersFetched({});
+        return;
     }
 
-    QStringList lines = output.split('\n', Qt::SkipEmptyParts);
-    if (lines.isEmpty())
-        return {};
+    // Apply Flatpak wrapper if needed
+    QStringList actualCommand;
+    if (m_isFlatpak) {
+        actualCommand << "flatpak-spawn" << "--host" << command;
+    } else {
+        actualCommand = command;
+    }
 
-    QList<QMap<QString, QString>> containers;
+    process->start(actualCommand[0], actualCommand.mid(1));
 
-    if (m_preferredBackend == "distrobox") {
-        // Pipe-separated table (with header)
-        QStringList headers;
-        for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
-            headers << col.trimmed();
+    connect(process, &QProcess::finished, this, [this, process](int exitCode, QProcess::ExitStatus exitStatus) {
+        QList<QMap<QString, QString>> containers;
+
+        if (exitStatus != QProcess::NormalExit || exitCode != 0) {
+            emit containersFetched({});
+            process->deleteLater();
+            return;
         }
 
-        for (int i = 1; i < lines.size(); ++i) {
-            QStringList parts;
-            for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
-                parts << col.trimmed();
+        QString output = QString::fromUtf8(process->readAllStandardOutput());
+        QStringList lines = output.split('\n', Qt::SkipEmptyParts);
+
+        if (lines.isEmpty()) {
+            emit containersFetched({});
+            process->deleteLater();
+            return;
+        }
+
+        if (m_preferredBackend == "distrobox") {
+            // Pipe-separated table (with header)
+            QStringList headers;
+            for (const QString &col : lines[0].split('|', Qt::SkipEmptyParts)) {
+                headers << col.trimmed();
             }
 
-            if (parts.size() < headers.size())
-                continue;
+            for (int i = 1; i < lines.size(); ++i) {
+                QStringList parts;
+                for (const QString &col : lines[i].split('|', Qt::SkipEmptyParts)) {
+                    parts << col.trimmed();
+                }
 
-            QMap<QString, QString> container;
-            container["id"] = parts[headers.indexOf("ID")];
-            container["name"] = parts[headers.indexOf("NAME")];
-            container["status"] = parts[headers.indexOf("STATUS")];
-            container["image"] = parts[headers.indexOf("IMAGE")];
-            container["distro"] = parseDistroFromImage(container["image"]);
-            container["icon"] = getDistroIcon(container["distro"]);
+                if (parts.size() < headers.size())
+                    continue;
 
-            containers << container;
+                QMap<QString, QString> container;
+                container["id"] = parts[headers.indexOf("ID")];
+                container["name"] = parts[headers.indexOf("NAME")];
+                container["status"] = parts[headers.indexOf("STATUS")];
+                container["image"] = parts[headers.indexOf("IMAGE")];
+                container["distro"] = parseDistroFromImage(container["image"]);
+                container["icon"] = getDistroIcon(container["distro"]);
+
+                containers << container;
+            }
+        } else if (m_preferredBackend == "toolbox") {
+            // Toolbox format: ID NAME CREATED STATUS IMAGE
+            for (int i = 1; i < lines.size(); ++i) {
+                QString line = lines[i].trimmed();
+
+                // Split on two or more spaces to handle the column formatting
+                QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
+
+                // Need at least ID, NAME, and IMAGE (some columns might be missing)
+                if (parts.size() < 3)
+                    continue;
+
+                QMap<QString, QString> container;
+
+                // First part is always ID
+                container["id"] = parts[0].trimmed();
+
+                // Second part is NAME (might be followed by CREATED/STATUS)
+                container["name"] = parts[1].trimmed();
+
+                // Last part is always IMAGE
+                container["image"] = parts.last().trimmed();
+
+                // Set default status
+                container["status"] = "running";
+
+                container["distro"] = getDistroFromToolboxImage(container["image"]);
+                container["icon"] = getDistroIcon(container["distro"]);
+
+                containers << container;
+            }
         }
-    } else if (m_preferredBackend == "toolbox") {
-        // Toolbox format: ID NAME CREATED STATUS IMAGE
-        // Example: "2a16a2f1137c  fed  About an hour ago  created  registry.fedoraproject.org/fedora-toolbox:latest"
 
-        for (int i = 1; i < lines.size(); ++i) {
-            QString line = lines[i].trimmed();
+        emit containersFetched(containers);
+        process->deleteLater();
+    });
 
-            // Split on two or more spaces to handle the column formatting
-            QStringList parts = line.split(QRegularExpression("\\s{2,}"), Qt::SkipEmptyParts);
-
-            // Need at least ID, NAME, and IMAGE (some columns might be missing)
-            if (parts.size() < 3)
-                continue;
-
-            QMap<QString, QString> container;
-
-            // First part is always ID
-            container["id"] = parts[0].trimmed();
-
-            // Second part is NAME (might be followed by CREATED/STATUS)
-            container["name"] = parts[1].trimmed();
-
-            // Last part is always IMAGE
-            container["image"] = parts.last().trimmed();
-
-            // Set default status
-            container["status"] = "running";
-
-            container["distro"] = getDistroFromToolboxImage(container["image"]);
-            container["icon"] = getDistroIcon(container["distro"]);
-
-            containers << container;
-        }
-    }
-    return containers;
+    // Handle error case
+    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error) {
+        qWarning() << "Failed to fetch containers:" << process->errorString();
+        emit containersFetched({});
+        process->deleteLater();
+    });
 }
 
 QString Backend::createContainer(const QString &name, const QString &image, const QString &home, bool init, const QStringList &volumes)
@@ -331,7 +369,6 @@ QString Backend::deleteContainer(const QString &name)
         return runCommand({"distrobox", "rm", name, "--force"});
     } else if (m_preferredBackend == "toolbox") {
         // First remove all exported desktop files for this container
-
         if (m_isFlatpak) {
             // Access host's ~/.local/share/applications manually
             QString home = qEnvironmentVariable("HOME");
@@ -348,10 +385,18 @@ QString Backend::deleteContainer(const QString &name)
         }
 
         // Update desktop database after removal
-        runCommand({"update-desktop-database", appsDir.path()});
+        QString updateResult = runCommand({"update-desktop-database", appsDir.path()});
+        if (updateResult.startsWith("Error:")) {
+            qWarning() << "Failed to update desktop database:" << updateResult;
+        }
 
         // Now remove the container
-        return runCommand({"toolbox", "rm", name, "--force"});
+        QString result = runCommand({"toolbox", "rm", name, "--force"});
+        if (result.startsWith("Error:")) {
+            return i18nc("Error message when toolbox deletion fails", "Failed to delete Toolbox %1. Error: %2", name, result);
+        }
+
+        return i18nc("Inform the User that the Toolbox Deletion Completed since it returns no output on its own", "Toolbox %1 deleted successfully.", name);
     } else {
         return i18n("Error: Failed to delete Container.");
     }
@@ -863,7 +908,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
     } else {
         QString checkCmd = QString("toolbox run -c %1 which %2").arg(containerName, appName);
         if (runCommand({"sh", "-c", checkCmd}).isEmpty()) {
-            return QString("Application %1 not found in container %2").arg(appName, containerName);
+            return i18nc("Error message when application is not found in container", "Application %1 not found in container %2", appName, containerName);
         }
 
         QString desktopFile =
@@ -871,7 +916,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
                 .trimmed();
 
         if (desktopFile.isEmpty()) {
-            return QString("Could not find desktop file for %1 in container %2").arg(appName, containerName);
+            return i18nc("Error message when desktop file is not found", "Could not find desktop file for %1 in container %2", appName, containerName);
         }
 
         QString desktopContent = runCommand({"toolbox", "run", "-c", containerName, "cat", desktopFile});
@@ -879,7 +924,6 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
         QString appsPath;
 
         if (m_isFlatpak) {
-            // Access host's ~/.local/share/applications manually
             QString home = qEnvironmentVariable("HOME");
             appsPath = home + "/.local/share/applications";
         } else {
@@ -919,7 +963,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
         QFile file(exportedPath);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            return QString("Failed to create desktop file: %1").arg(exportedPath);
+            return i18nc("Error message when desktop file creation fails", "Failed to create desktop file: %1", exportedPath);
         }
 
         QTextStream out(&file);
@@ -928,7 +972,7 @@ QString Backend::exportApp(const QString &appName, const QString &containerName)
 
         runCommand({"update-desktop-database", appsPath});
 
-        return QString("Successfully exported %1 from %2").arg(appName, containerName);
+        return i18nc("Success message after exporting application", "Successfully exported %1 from %2", appName, containerName);
     }
 }
 
@@ -945,29 +989,26 @@ QString Backend::unexportApp(const QString &appName, const QString &containerNam
     QString fileName;
 
     if (m_preferredBackend == "toolbox") {
-        // Toolbox: appName-containerName.desktop
         fileName = QString("%1-%2.desktop").arg(appName, containerName);
     } else if (m_preferredBackend == "distrobox") {
-        // Distrobox: containerName-appName.desktop
         fileName = QString("%1-%2.desktop").arg(containerName, appName);
     } else {
-        // Fallback to toolbox naming
         fileName = QString("%1-%2.desktop").arg(appName, containerName);
     }
 
     QString exportedFile = appsPath + "/" + fileName;
 
     if (!QFile::exists(exportedFile)) {
-        return QString("No exported application %1 found for container %2").arg(appName, containerName);
+        return i18nc("Error message when no exported app is found", "No exported application %1 found for container %2", appName, containerName);
     }
 
     if (!QFile::remove(exportedFile)) {
-        return QString("Failed to remove desktop file: %1").arg(exportedFile);
+        return i18nc("Error message when desktop file removal fails", "Failed to remove desktop file: %1", exportedFile);
     }
 
     runCommand({"update-desktop-database", appsPath});
 
-    return QString("Successfully unexported %1 from %2").arg(appName, containerName);
+    return i18nc("Success message after unexporting application", "Successfully unexported %1 from %2", appName, containerName);
 }
 
 QString Backend::parseDistroFromImage(const QString &imageUrl) const

@@ -27,7 +27,6 @@ public:
     void setPreferredBackend(const QString &backend);
 
     // Container operations
-    QList<QMap<QString, QString>> getContainers() const;
     QString
     createContainer(const QString &name, const QString &image, const QString &home = QString(), bool init = false, const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
@@ -66,12 +65,14 @@ signals:
     void containerOutput(const QString &output);
     void containerCreationFinished(bool success, const QString &message);
     void availableBackendsChanged(const QStringList &backends);
+    void containersFetched(const QList<QMap<QString, QString>> &containers);
 
 public slots:
     void assembleContainer(const QString &iniFile);
     void installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath);
     void installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath);
     void installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath);
+    void fetchContainersAsync();
 
 private:
     QString runCommand(const QStringList &command) const;
@@ -88,6 +89,7 @@ private:
     QStringList buildDistroboxCommand(const QString &containerName, const QString &command);
     QProcess *m_createProcess = nullptr;
     QStringList m_cachedBackends;
+    QList<QMap<QString, QString>> m_currentContainers;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

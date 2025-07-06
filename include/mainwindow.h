@@ -58,6 +58,7 @@ private slots:
     void installRpmPackage();
     void installArchPackage();
     void onBackendsAvailable(const QStringList &backends);
+    void handleContainersFetched(const QList<QMap<QString, QString>> &containers);
 
 private:
     void setupUI();
@@ -76,6 +77,7 @@ private:
     QTextEdit *progressOutput;
     void setupProgressDialog(const QString &title);
     void appendCommandOutput(const QString &output);
+    QProgressDialog *loadingDialog = nullptr;
 
     Backend *backend;
     QListWidget *containerList;
