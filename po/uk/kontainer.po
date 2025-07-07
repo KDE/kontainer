@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-06-27 00:45+0000\n"
+"POT-Creation-Date: 2025-07-07 00:45+0000\n"
 "PO-Revision-Date: 2025-06-27 11:35+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -74,68 +74,126 @@ msgstr "Експортовані програми"
 msgid "Available Apps"
 msgstr "Доступні програми"
 
-#: src/backend.cpp:105
+#: src/backend.cpp:110
 #, kde-format
 msgid "Error: Command timed out"
 msgstr "Помилка: перевищено час очікування на виконання команди"
 
-#: src/backend.cpp:306
+#: src/backend.cpp:344
 #, kde-format
 msgid "Error: No supported backend available"
 msgstr "Помилка: немає підтримуваного модуля обробки"
 
-#: src/backend.cpp:312
+#: src/backend.cpp:350
 #, kde-format
 msgid "Error: Failed to start container creation process"
 msgstr "Помилка: не вдалося запустити процес створення контейнера"
 
-#: src/backend.cpp:317
+#: src/backend.cpp:355
 #, kde-format
 msgid "Container created successfully"
 msgstr "Контейнер успішно створено"
 
-#: src/backend.cpp:317
+#: src/backend.cpp:355
 #, kde-format
 msgid "Container creation failed"
 msgstr "Не вдалося створити контейнер"
 
-#: src/backend.cpp:323
+#: src/backend.cpp:361
 #, kde-format
 msgid "Error: "
 msgstr "Помилка: "
 
-#: src/backend.cpp:356
+#: src/backend.cpp:396
+#, kde-format
+msgctxt "Error message when toolbox deletion fails"
+msgid "Failed to delete Toolbox %1. Error: %2"
+msgstr ""
+
+#: src/backend.cpp:399
+#, fuzzy, kde-format
+#| msgid "Container created successfully"
+msgctxt ""
+"Inform the User that the Toolbox Deletion Completed since it returns no "
+"output on its own"
+msgid "Toolbox %1 deleted successfully."
+msgstr "Контейнер успішно створено"
+
+#: src/backend.cpp:401
 #, kde-format
 msgid "Error: Failed to delete Container."
 msgstr "Помилка: не вдалося вилучити контейнер."
 
-#: src/backend.cpp:364
+#: src/backend.cpp:409
 #, kde-format
 msgid "Unknown terminal:"
 msgstr "Невідомий термінал:"
 
-#: src/backend.cpp:397 src/backend.cpp:407
+#: src/backend.cpp:442 src/backend.cpp:452
 #, kde-format
 msgid "Failed to start terminal"
 msgstr "Не вдалося запустити термінал"
 
-#: src/backend.cpp:397 src/backend.cpp:407
+#: src/backend.cpp:442 src/backend.cpp:452
 #, kde-format
 msgid "with args"
 msgstr "з аргументами"
 
-#: src/backend.cpp:422
+#: src/backend.cpp:467
 #, kde-format
 msgid "Error: %1"
 msgstr "Помилка: %1"
 
-#: src/backend.cpp:510
+#: src/backend.cpp:555
 #, kde-format
 msgctxt ""
 "If an Toolbox Image doesnt fit the list of distros for the icon and package "
 "manager intergration, we will return Unknown"
 msgid "Unknown"
 msgstr "Невідомий"
+
+#: src/backend.cpp:911
+#, kde-format
+msgctxt "Error message when application is not found in container"
+msgid "Application %1 not found in container %2"
+msgstr ""
+
+#: src/backend.cpp:919
+#, kde-format
+msgctxt "Error message when desktop file is not found"
+msgid "Could not find desktop file for %1 in container %2"
+msgstr ""
+
+#: src/backend.cpp:966
+#, kde-format
+msgctxt "Error message when desktop file creation fails"
+msgid "Failed to create desktop file: %1"
+msgstr ""
+
+#: src/backend.cpp:975
+#, kde-format
+msgctxt "Success message after exporting application"
+msgid "Successfully exported %1 from %2"
+msgstr ""
+
+#: src/backend.cpp:1002
+#, fuzzy, kde-format
+#| msgid "No exported applications"
+msgctxt "Error message when no exported app is found"
+msgid "No exported application %1 found for container %2"
+msgstr "Немає експортованих програм"
+
+#: src/backend.cpp:1006
+#, kde-format
+msgctxt "Error message when desktop file removal fails"
+msgid "Failed to remove desktop file: %1"
+msgstr ""
+
+#: src/backend.cpp:1011
+#, kde-format
+msgctxt "Success message after unexporting application"
+msgid "Successfully unexported %1 from %2"
+msgstr ""
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -203,7 +261,7 @@ msgstr "Система ініціалізації:"
 msgid "Refresh Images"
 msgstr "Освіжити образи"
 
-#: src/createcontainerdialog.cpp:164 src/mainwindow.cpp:510
+#: src/createcontainerdialog.cpp:164 src/mainwindow.cpp:558
 #, kde-format
 msgid "Cancel"
 msgstr "Скасувати"
@@ -215,7 +273,7 @@ msgstr "Створити"
 
 #: src/createcontainerdialog.cpp:249 src/createcontainerdialog.cpp:254
 #: src/createcontainerdialog.cpp:299 src/createcontainerdialog.cpp:342
-#: src/createcontainerdialog.cpp:363 src/mainwindow.cpp:134
+#: src/createcontainerdialog.cpp:363 src/mainwindow.cpp:209
 #, kde-format
 msgid "Error"
 msgstr "Помилка"
@@ -317,12 +375,23 @@ msgstr ""
 "\n"
 "Помилка виведення: %2\n"
 
-#: src/mainwindow.cpp:117
+#: src/mainwindow.cpp:141
+#, fuzzy, kde-format
+#| msgid "Assembling container..."
+msgid "Fetching containers..."
+msgstr "Збирання контейнера…"
+
+#: src/mainwindow.cpp:169
+#, kde-format
+msgid "No containers found"
+msgstr "Не знайдено жодного контейнера"
+
+#: src/mainwindow.cpp:192
 #, kde-format
 msgid "Checking for available container backends..."
 msgstr "Перевіряємо доступність модулів обробки контейнерів…"
 
-#: src/mainwindow.cpp:134
+#: src/mainwindow.cpp:209
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
@@ -330,177 +399,157 @@ msgstr ""
 "Не знайдено модуля обробки контейнерів. Будь ласка, встановіть або "
 "distrobox, або toolbox."
 
-#: src/mainwindow.cpp:182
+#: src/mainwindow.cpp:257
 #, kde-format
 msgid "Enter"
 msgstr "Увійти"
 
-#: src/mainwindow.cpp:183
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Увійти до вибраного контейнера"
 
-#: src/mainwindow.cpp:186
+#: src/mainwindow.cpp:261
 #, kde-format
 msgid "Delete"
 msgstr "Вилучити"
 
-#: src/mainwindow.cpp:187
+#: src/mainwindow.cpp:262
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Вилучити позначений контейнер"
 
-#: src/mainwindow.cpp:190
+#: src/mainwindow.cpp:265
 #, kde-format
 msgid "Applications"
 msgstr "Програми"
 
-#: src/mainwindow.cpp:191
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Керування експортованими програмами"
 
-#: src/mainwindow.cpp:194
+#: src/mainwindow.cpp:269
 #, kde-format
 msgid "Upgrade"
 msgstr "Оновити"
 
-#: src/mainwindow.cpp:195
+#: src/mainwindow.cpp:270
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Оновити позначений контейнер"
 
-#: src/mainwindow.cpp:202
+#: src/mainwindow.cpp:277
 #, kde-format
 msgid "Refresh"
 msgstr "Освіжити"
 
-#: src/mainwindow.cpp:203
+#: src/mainwindow.cpp:278
 #, kde-format
 msgid "Refresh container list"
 msgstr "Освіжити список контейнерів"
 
-#: src/mainwindow.cpp:207
+#: src/mainwindow.cpp:282
 #, kde-format
 msgid "Install .deb"
 msgstr "Встановити .deb"
 
-#: src/mainwindow.cpp:208
+#: src/mainwindow.cpp:283
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Встановити пакунок Debian/Ubuntu"
 
-#: src/mainwindow.cpp:211
+#: src/mainwindow.cpp:286
 #, kde-format
 msgid "Install .rpm"
 msgstr "Встановити .rpm"
 
-#: src/mainwindow.cpp:212
+#: src/mainwindow.cpp:287
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Встановити пакунок Fedora/OpenSUSE"
 
-#: src/mainwindow.cpp:215
+#: src/mainwindow.cpp:290
 #, kde-format
 msgid "Install .pkg"
 msgstr "Встановити .pkg"
 
-#: src/mainwindow.cpp:216
+#: src/mainwindow.cpp:291
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Встановити пакунок Arch Linux"
 
-#: src/mainwindow.cpp:239
+#: src/mainwindow.cpp:314
 #, kde-format
 msgid "New Container"
 msgstr "Новий контейнер"
 
-#: src/mainwindow.cpp:241
+#: src/mainwindow.cpp:316
 #, kde-format
 msgid "Create new container"
 msgstr "Створити контейнер"
 
-#: src/mainwindow.cpp:247
+#: src/mainwindow.cpp:322
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Оновити усі контейнери"
 
-#: src/mainwindow.cpp:249
+#: src/mainwindow.cpp:324
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Оновлює усі контейнери"
 
-#: src/mainwindow.cpp:255
+#: src/mainwindow.cpp:330
 #, kde-format
 msgid "Assemble"
 msgstr "Зібрати"
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:332
 #, kde-format
 msgid "Create container from INI file"
 msgstr "Створити контейнер на основі файла INI"
 
-#: src/mainwindow.cpp:267
+#: src/mainwindow.cpp:342
 #, kde-format
 msgid "Terminal:"
 msgstr "Термінал:"
 
-#: src/mainwindow.cpp:305
+#: src/mainwindow.cpp:380
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr "Не знайдено емулятора термінала — виведені дані буде показано у вікні"
 
-#: src/mainwindow.cpp:376
+#: src/mainwindow.cpp:451
 #, kde-format
 msgid "Assemble Result"
 msgstr "Зібрати результат"
 
-#: src/mainwindow.cpp:422
-#, kde-format
-msgid "Container:"
-msgstr "Контейнер:"
-
-#: src/mainwindow.cpp:422
-#, kde-format
-msgid "Distro:"
-msgstr "Дистрибутив:"
-
-#: src/mainwindow.cpp:422
-#, kde-format
-msgid "Icon:"
-msgstr "Піктограма:"
-
-#: src/mainwindow.cpp:426 src/mainwindow.cpp:431
-#, kde-format
-msgid "No containers found"
-msgstr "Не знайдено жодного контейнера"
-
-#: src/mainwindow.cpp:444
+#: src/mainwindow.cpp:492
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Підтвердження вилучення"
 
-#: src/mainwindow.cpp:445
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Вилучити контейнер <b>%1</b>?"
 
-#: src/mainwindow.cpp:446
+#: src/mainwindow.cpp:494
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Наслідки цієї дії неможливо скасувати."
 
-#: src/mainwindow.cpp:453
+#: src/mainwindow.cpp:501
 #, kde-format
 msgid "Result"
 msgstr "Результат"
 
-#: src/mainwindow.cpp:501 src/mainwindow.cpp:526
+#: src/mainwindow.cpp:549 src/mainwindow.cpp:574
 #, kde-format
 msgid "Function Not Supported"
 msgstr "Підтримки функції не передбачено"
 
-#: src/mainwindow.cpp:502
+#: src/mainwindow.cpp:550
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -512,22 +561,22 @@ msgstr ""
 "Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
 "можливістю."
 
-#: src/mainwindow.cpp:507
+#: src/mainwindow.cpp:555
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Виберіть файл INI Distrobox"
 
-#: src/mainwindow.cpp:507
+#: src/mainwindow.cpp:555
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "файли INI (*.ini);;усі файли (*)"
 
-#: src/mainwindow.cpp:510
+#: src/mainwindow.cpp:558
 #, kde-format
 msgid "Assembling container..."
 msgstr "Збирання контейнера…"
 
-#: src/mainwindow.cpp:527
+#: src/mainwindow.cpp:575
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades.\n"
@@ -540,65 +589,74 @@ msgstr ""
 "Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
 "можливістю."
 
-#: src/mainwindow.cpp:536
+#: src/mainwindow.cpp:584
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "Оновлення усіх контейнерів…"
 
-#: src/mainwindow.cpp:560
+#: src/mainwindow.cpp:608
 #, kde-format
 msgid "Processing..."
 msgstr "Обробка…"
 
-#: src/mainwindow.cpp:596
+#: src/mainwindow.cpp:644
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Виберіть пакунок .deb"
 
-#: src/mainwindow.cpp:596
+#: src/mainwindow.cpp:644
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "пакунки Debian (*.deb)"
 
-#: src/mainwindow.cpp:602
+#: src/mainwindow.cpp:650
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "Встановлення пакунка .deb…"
 
-#: src/mainwindow.cpp:633
+#: src/mainwindow.cpp:681
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Виберіть пакунок .rpm"
 
-#: src/mainwindow.cpp:633
+#: src/mainwindow.cpp:681
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "пакунки RPM (*.rpm)"
 
-#: src/mainwindow.cpp:639
+#: src/mainwindow.cpp:687
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "Встановлення пакунка .rpm…"
 
-#: src/mainwindow.cpp:670
+#: src/mainwindow.cpp:718
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Виберіть пакунок Arch"
 
-#: src/mainwindow.cpp:670
+#: src/mainwindow.cpp:718
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "пакунки Arch (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:676
+#: src/mainwindow.cpp:724
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "Встановлення пакунка Arch…"
 
-#: src/mainwindow.cpp:709
+#: src/mainwindow.cpp:757
 #, kde-format
 msgid "Upgrading container..."
 msgstr "Оновлення контейнера…"
+
+#~ msgid "Container:"
+#~ msgstr "Контейнер:"
+
+#~ msgid "Distro:"
+#~ msgstr "Дистрибутив:"
+
+#~ msgid "Icon:"
+#~ msgstr "Піктограма:"
 
 #~ msgid "Search images…"
 #~ msgstr "Шукати образи…"
