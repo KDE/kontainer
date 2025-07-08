@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-07 00:45+0000\n"
-"PO-Revision-Date: 2025-06-27 11:28+0300\n"
+"PO-Revision-Date: 2025-07-07 09:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -108,16 +108,15 @@ msgstr "שגיאה:"
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr ""
+msgstr "מחיקת תיבת הכלים %1 נכשלה. שגיאה: %2"
 
 #: src/backend.cpp:399
-#, fuzzy, kde-format
-#| msgid "Container created successfully"
+#, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
 "output on its own"
 msgid "Toolbox %1 deleted successfully."
-msgstr "המכולה נוצרה בהצלחה"
+msgstr "תיבת הכלים %1 נמחקה בהצלחה."
 
 #: src/backend.cpp:401
 #, kde-format
@@ -156,44 +155,43 @@ msgstr "לא ידועה"
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
-msgstr ""
+msgstr "היישום %1 לא נמצא במכולה %2"
 
 #: src/backend.cpp:919
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
-msgstr ""
+msgstr "לא ניתן למצוא את קובץ שולחן העבודה (desktop) עבור %1 במכולה %2"
 
 #: src/backend.cpp:966
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
-msgstr ""
+msgstr "יצירת קובץ שולחן עבודה (desktop) נכשלה: %1"
 
 #: src/backend.cpp:975
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
-msgstr ""
+msgstr "%1 יוצא בהצלחה מתוך %2"
 
 #: src/backend.cpp:1002
-#, fuzzy, kde-format
-#| msgid "No exported applications"
+#, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
-msgstr "אין יישומים מיוצאים"
+msgstr "לא נמצא יישום מיוצא %1 עבור המכולה %2"
 
 #: src/backend.cpp:1006
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
-msgstr ""
+msgstr "הסרת קובץ שולחן העבודה (desktop) נכשלה: %1"
 
 #: src/backend.cpp:1011
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
-msgstr ""
+msgstr "הייצוא של %1 מתוך %2 בוטל בהצלחה"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -375,10 +373,9 @@ msgstr ""
 "פלט שגיאה: %2\n"
 
 #: src/mainwindow.cpp:141
-#, fuzzy, kde-format
-#| msgid "Assembling container..."
+#, kde-format
 msgid "Fetching containers..."
-msgstr "המכולה מורכבת…"
+msgstr "המכולות מתקבלות…"
 
 #: src/mainwindow.cpp:169
 #, kde-format

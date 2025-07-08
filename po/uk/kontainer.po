@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-07 00:45+0000\n"
-"PO-Revision-Date: 2025-06-27 11:35+0300\n"
+"PO-Revision-Date: 2025-07-07 08:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -108,16 +108,15 @@ msgstr "Помилка: "
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr ""
+msgstr "Не вдалося вилучити Toolbox %1. Помилка: %2"
 
 #: src/backend.cpp:399
-#, fuzzy, kde-format
-#| msgid "Container created successfully"
+#, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
 "output on its own"
 msgid "Toolbox %1 deleted successfully."
-msgstr "Контейнер успішно створено"
+msgstr "Toolbox %1 успішно вилучено."
 
 #: src/backend.cpp:401
 #, kde-format
@@ -156,44 +155,43 @@ msgstr "Невідомий"
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
-msgstr ""
+msgstr "Програми %1 у контейнері %2 не знайдено"
 
 #: src/backend.cpp:919
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
-msgstr ""
+msgstr "Не вдалося знайти файл desktop для %1 у контейнері %2"
 
 #: src/backend.cpp:966
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
-msgstr ""
+msgstr "Не вдалося створити файл desktop: %1"
 
 #: src/backend.cpp:975
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
-msgstr ""
+msgstr "Успішно експортовано %1 з %2"
 
 #: src/backend.cpp:1002
-#, fuzzy, kde-format
-#| msgid "No exported applications"
+#, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
-msgstr "Немає експортованих програм"
+msgstr "Не знайдено експортованої програми %1 для контейнера %2"
 
 #: src/backend.cpp:1006
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
-msgstr ""
+msgstr "Не вдалося вилучити файл desktop: %1"
 
 #: src/backend.cpp:1011
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
-msgstr ""
+msgstr "Успішно скасовано експортування %1 з %2"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -376,10 +374,9 @@ msgstr ""
 "Помилка виведення: %2\n"
 
 #: src/mainwindow.cpp:141
-#, fuzzy, kde-format
-#| msgid "Assembling container..."
+#, kde-format
 msgid "Fetching containers..."
-msgstr "Збирання контейнера…"
+msgstr "Отримання контейнерів…"
 
 #: src/mainwindow.cpp:169
 #, kde-format

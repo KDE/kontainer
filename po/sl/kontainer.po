@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-07 00:45+0000\n"
-"PO-Revision-Date: 2025-06-27 06:36+0200\n"
+"PO-Revision-Date: 2025-07-07 08:32+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -104,16 +104,15 @@ msgstr "Napaka: "
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr ""
+msgstr "Ni bilo mogoče izbrisati Toolboxa %1. Napaka: %2"
 
 #: src/backend.cpp:399
-#, fuzzy, kde-format
-#| msgid "Container created successfully"
+#, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
 "output on its own"
 msgid "Toolbox %1 deleted successfully."
-msgstr "Vsebnik uspešno ustvarjen"
+msgstr "Toolbox %1 uspešno izbrisan."
 
 #: src/backend.cpp:401
 #, kde-format
@@ -152,44 +151,43 @@ msgstr "Neznano"
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
-msgstr ""
+msgstr "Aplikacije %1 ni mogoče najti v vsebniku %2"
 
 #: src/backend.cpp:919
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
-msgstr ""
+msgstr "Ni bilo mogoče najdi datoteke namizja za %1 v vsebniku %2"
 
 #: src/backend.cpp:966
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
-msgstr ""
+msgstr "Ustvarjanje datoteke namizja ni uspelo: %1"
 
 #: src/backend.cpp:975
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
-msgstr ""
+msgstr "Uspešno izvoženo %1 iz %2"
 
 #: src/backend.cpp:1002
-#, fuzzy, kde-format
-#| msgid "No exported applications"
+#, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
-msgstr "Ni izvoženih aplikacij"
+msgstr "Ni bilo najdene izvožene aplikacije %1 za vsebnik %2"
 
 #: src/backend.cpp:1006
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
-msgstr ""
+msgstr "Odstranitev datoteke namizja ni uspela: %1"
 
 #: src/backend.cpp:1011
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
-msgstr ""
+msgstr "Uspešno odizvoženo %1 iz %2"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -371,10 +369,9 @@ msgstr ""
 "Izhod napake: %2\n"
 
 #: src/mainwindow.cpp:141
-#, fuzzy, kde-format
-#| msgid "Assembling container..."
+#, kde-format
 msgid "Fetching containers..."
-msgstr "Sestavljanje vsebnika ..."
+msgstr "Pridobivanje vsebnikov..."
 
 #: src/mainwindow.cpp:169
 #, kde-format
@@ -390,7 +387,7 @@ msgstr "Preverjanje razpoložljivih zalednih sistemov vsebnikov..."
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
-msgstr "Ni najdenih ozadij vsebnikov. Namestite bodisi Distrobox ali Toolbox."
+msgstr "Ni najdenih ozadij vsebnikov. Namestite bodisi distrobox ali toolbox."
 
 #: src/mainwindow.cpp:257
 #, kde-format
