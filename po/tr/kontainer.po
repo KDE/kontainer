@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-07 00:45+0000\n"
-"PO-Revision-Date: 2025-06-27 10:18+0300\n"
+"PO-Revision-Date: 2025-07-08 13:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -107,16 +107,15 @@ msgstr "Hata: "
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr ""
+msgstr "Toolbox %1 silinemedi. Hata: %2"
 
 #: src/backend.cpp:399
-#, fuzzy, kde-format
-#| msgid "Container created successfully"
+#, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
 "output on its own"
 msgid "Toolbox %1 deleted successfully."
-msgstr "Kapsayıcı başarıyla oluşturuldu"
+msgstr "Toolbox %1 başarıyla silindi"
 
 #: src/backend.cpp:401
 #, kde-format
@@ -155,44 +154,43 @@ msgstr "Bilinmiyor"
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
-msgstr ""
+msgstr "%2 kapsayıcısında %1 uygulaması bulunamadı"
 
 #: src/backend.cpp:919
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
-msgstr ""
+msgstr "%2 kapsayıcısında %1 için olan desktop dosyası bulunamadı"
 
 #: src/backend.cpp:966
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
-msgstr ""
+msgstr "Desktop dosyası oluşturulamadı: %1"
 
 #: src/backend.cpp:975
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
-msgstr ""
+msgstr "%1, %2 konumundan başarıyla dışa aktarıldı"
 
 #: src/backend.cpp:1002
-#, fuzzy, kde-format
-#| msgid "No exported applications"
+#, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
-msgstr "Dışa aktarılan uygulama yok"
+msgstr "%2 kapsayıcısı için %1 dışa aktarılan uygulama bulunamadı"
 
 #: src/backend.cpp:1006
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
-msgstr ""
+msgstr "Desktop dosyası kaldırılamadı: %1"
 
 #: src/backend.cpp:1011
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
-msgstr ""
+msgstr "%1 aktarımı, %2 konumundan başarıyla geri alındı"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -374,10 +372,9 @@ msgstr ""
 "Hata çıktısı: %2\n"
 
 #: src/mainwindow.cpp:141
-#, fuzzy, kde-format
-#| msgid "Assembling container..."
+#, kde-format
 msgid "Fetching containers..."
-msgstr "Kapsayıcı toplanıyor…"
+msgstr "Kapsayıcılar getiriliyor…"
 
 #: src/mainwindow.cpp:169
 #, kde-format
