@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-07-07 00:45+0000\n"
-"PO-Revision-Date: 2025-06-27 09:37+0200\n"
+"PO-Revision-Date: 2025-07-07 13:54+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -107,20 +107,21 @@ msgstr "No s'ha pogut crear el contenidor"
 msgid "Error: "
 msgstr "S'ha produït un error: "
 
+# skip-rule: kct-toolbox
 #: src/backend.cpp:396
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr ""
+msgstr "No s'ha pogut suprimir ToolboX %1. Error: %2"
 
+# skip-rule: kct-toolbox
 #: src/backend.cpp:399
-#, fuzzy, kde-format
-#| msgid "Container created successfully"
+#, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
 "output on its own"
 msgid "Toolbox %1 deleted successfully."
-msgstr "Contenidor creat correctament"
+msgstr "ToolboX %1 s'ha suprimit correctament."
 
 #: src/backend.cpp:401
 #, kde-format
@@ -159,44 +160,43 @@ msgstr "Desconegut"
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
-msgstr ""
+msgstr "No s'ha trobat l'aplicació %1 al contenidor %2"
 
 #: src/backend.cpp:919
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
-msgstr ""
+msgstr "No s'ha pogut trobar el fitxer «desktop» per a %1 en el contenidor %2"
 
 #: src/backend.cpp:966
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
-msgstr ""
+msgstr "No s'ha pogut crear el fitxer «desktop»: %1"
 
 #: src/backend.cpp:975
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
-msgstr ""
+msgstr "S'ha exportat correctament %1 des de %2"
 
 #: src/backend.cpp:1002
-#, fuzzy, kde-format
-#| msgid "No exported applications"
+#, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
-msgstr "Sense aplicacions exportades"
+msgstr "No s'ha trobat l'aplicació exportada %1 per al contenidor %2"
 
 #: src/backend.cpp:1006
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
-msgstr ""
+msgstr "No s'ha pogut eliminar el fitxer «desktop»: %1"
 
 #: src/backend.cpp:1011
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
-msgstr ""
+msgstr "S'ha desfet correctament l'exportació de %1 des de %2"
 
 #: src/createcontainerdialog.cpp:81
 #, kde-format
@@ -378,10 +378,9 @@ msgstr ""
 "Eixida d'error: %2\n"
 
 #: src/mainwindow.cpp:141
-#, fuzzy, kde-format
-#| msgid "Assembling container..."
+#, kde-format
 msgid "Fetching containers..."
-msgstr "S'està assemblant el contenidor…"
+msgstr "S'estan recuperant els contenidors…"
 
 #: src/mainwindow.cpp:169
 #, kde-format
@@ -560,7 +559,7 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
-"El dorsal Toolbox no admet l'assemblatge de contenidors.\n"
+"El dorsal ToolboX no admet l'assemblatge de contenidors.\n"
 "\n"
 "Canvieu al dorsal Distrobox per a utilitzar esta característica."
 
@@ -587,7 +586,7 @@ msgid ""
 "\n"
 "Please switch to Distrobox backend to use this feature."
 msgstr ""
-"El dorsal Toolbox no admet actualitzacions massives de contenidors.\n"
+"El dorsal ToolboX no admet actualitzacions massives de contenidors.\n"
 "\n"
 "Canvieu al dorsal Distrobox per a utilitzar esta característica."
 
@@ -651,12 +650,3 @@ msgstr "S'està instal·lant un paquet Arch…"
 #, kde-format
 msgid "Upgrading container..."
 msgstr "S'està actualitzant el contenidor…"
-
-#~ msgid "Container:"
-#~ msgstr "Contenidor:"
-
-#~ msgid "Distro:"
-#~ msgstr "Distribució:"
-
-#~ msgid "Icon:"
-#~ msgstr "Icona:"
