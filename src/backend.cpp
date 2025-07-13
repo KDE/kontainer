@@ -886,16 +886,33 @@ QStringList Backend::getExportedApps(const QString &containerName)
     }
 
     for (const QFileInfo &file : dir.entryInfoList(patterns, QDir::Files)) {
-        QString fileName = file.baseName(); // e.g. "firefox-mycontainer" or "mycontainer-firefox"
+        QString fileName = file.fileName(); // full filename with extension
+
+        // Strip the ".desktop" suffix
+        if (fileName.endsWith(".desktop")) {
+            fileName.chop(8); // remove ".desktop"
+        } else {
+            continue; // not a .desktop file
+        }
+
         QString appId;
 
         if (m_preferredBackend == "toolbox") {
-            appId = fileName.left(fileName.length() - QString("-%1").arg(containerName).length());
+            // remove trailing "-<containerName>"
+            QString suffix = "-" + containerName;
+            if (fileName.endsWith(suffix)) {
+                appId = fileName.left(fileName.length() - suffix.length());
+            }
         } else if (m_preferredBackend == "distrobox") {
-            appId = fileName.mid(QString("%1-").arg(containerName).length());
+            // remove leading "<containerName>-"
+            QString prefix = containerName + "-";
+            if (fileName.startsWith(prefix)) {
+                appId = fileName.mid(prefix.length());
+            }
         }
 
-        apps << appId;
+        if (!appId.isEmpty())
+            apps << appId;
     }
 
     return apps;
@@ -904,7 +921,8 @@ QStringList Backend::getExportedApps(const QString &containerName)
 QString Backend::exportApp(const QString &appName, const QString &containerName)
 {
     if (m_preferredBackend == "distrobox") {
-        return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", appName});
+        QString desktopPath = "/usr/share/applications/" + appName + ".desktop";
+        return runCommand({"distrobox", "enter", containerName, "--", "distrobox-export", "--app", desktopPath});
     } else {
         QString checkCmd = QString("toolbox run -c %1 which %2").arg(containerName, appName);
         if (runCommand({"sh", "-c", checkCmd}).isEmpty()) {
