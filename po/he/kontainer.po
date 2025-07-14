@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-07 00:45+0000\n"
+"POT-Creation-Date: 2025-07-14 00:45+0000\n"
 "PO-Revision-Date: 2025-07-07 09:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -151,43 +151,43 @@ msgctxt ""
 msgid "Unknown"
 msgstr "לא ידועה"
 
-#: src/backend.cpp:911
+#: src/backend.cpp:929
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "היישום %1 לא נמצא במכולה %2"
 
-#: src/backend.cpp:919
+#: src/backend.cpp:937
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "לא ניתן למצוא את קובץ שולחן העבודה (desktop) עבור %1 במכולה %2"
 
-#: src/backend.cpp:966
+#: src/backend.cpp:984
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "יצירת קובץ שולחן עבודה (desktop) נכשלה: %1"
 
-#: src/backend.cpp:975
+#: src/backend.cpp:993
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "%1 יוצא בהצלחה מתוך %2"
 
-#: src/backend.cpp:1002
+#: src/backend.cpp:1020
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "לא נמצא יישום מיוצא %1 עבור המכולה %2"
 
-#: src/backend.cpp:1006
+#: src/backend.cpp:1024
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "הסרת קובץ שולחן העבודה (desktop) נכשלה: %1"
 
-#: src/backend.cpp:1011
+#: src/backend.cpp:1029
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"

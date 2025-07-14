@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-07 00:45+0000\n"
+"POT-Creation-Date: 2025-07-14 00:45+0000\n"
 "PO-Revision-Date: 2025-07-07 13:54+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -156,43 +156,43 @@ msgctxt ""
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: src/backend.cpp:911
+#: src/backend.cpp:929
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "No s'ha trobat l'aplicació %1 al contenidor %2"
 
-#: src/backend.cpp:919
+#: src/backend.cpp:937
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "No s'ha pogut trobar el fitxer «desktop» per a %1 en el contenidor %2"
 
-#: src/backend.cpp:966
+#: src/backend.cpp:984
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "No s'ha pogut crear el fitxer «desktop»: %1"
 
-#: src/backend.cpp:975
+#: src/backend.cpp:993
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "S'ha exportat correctament %1 des de %2"
 
-#: src/backend.cpp:1002
+#: src/backend.cpp:1020
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "No s'ha trobat l'aplicació exportada %1 per al contenidor %2"
 
-#: src/backend.cpp:1006
+#: src/backend.cpp:1024
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "No s'ha pogut eliminar el fitxer «desktop»: %1"
 
-#: src/backend.cpp:1011
+#: src/backend.cpp:1029
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
