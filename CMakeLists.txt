@@ -11,9 +11,10 @@ set(CMAKE_AUTOUIC ON)
 include(GNUInstallDirs)
 
 # === ECM & KDEClangFormat & KI18n ===
-find_package(ECM REQUIRED NO_MODULE)
+find_package(ECM  6.16.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
-find_package(KF6 REQUIRED COMPONENTS I18n)
+find_package(KF6  6.17.0 REQUIRED COMPONENTS I18n)
+find_package(KF6KIO 6.17 REQUIRED)
 include(KDEClangFormat)
 include(KDEGitCommitHooks)
 kde_configure_git_pre_commit_hook(CHECKS CLANG_FORMAT)
@@ -55,6 +56,7 @@ target_link_libraries(kontainer PRIVATE
     Qt6::Gui
     Qt6::Concurrent
     KF6::I18n
+    KF6::KIOGui
 )
 
 ki18n_install(po)
