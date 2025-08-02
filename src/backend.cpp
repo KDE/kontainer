@@ -20,6 +20,14 @@ Backend::Backend(QObject *parent)
     });
 
     checkAvailableBackends();
+
+    checkTerminaljob();
+}
+
+void Backend::checkTerminaljob()
+{
+    KTerminalLauncherJob job(QStringLiteral("true"));
+    m_isTerminalJobPossible = job.prepare();
 }
 
 void Backend::checkAvailableBackends()

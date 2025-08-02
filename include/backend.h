@@ -4,6 +4,7 @@
 #pragma once
 
 #include <KLocalizedString>
+#include <KTerminalLauncherJob>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
@@ -25,6 +26,7 @@ public:
     explicit Backend(QObject *parent = nullptr);
     QStringList availableBackends() const;
     void setPreferredBackend(const QString &backend);
+    bool m_isTerminalJobPossible;
 
     // Container operations
     QString
@@ -81,6 +83,7 @@ private:
     bool m_isFlatpak = false;
     QString m_preferredBackend;
     void checkAvailableBackends();
+    void checkTerminaljob();
     void validatePreferredBackend();
     QString getDistroFromToolboxImage(const QString &image) const;
     void installPackageNoTerminal(const QString &containerName, const QString &filePath, const QString &packageCommand, const QString &signalName);
