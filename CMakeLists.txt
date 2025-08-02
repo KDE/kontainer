@@ -40,7 +40,6 @@ set(HEADERS
     include/main.h
     include/mainwindow.h
     include/packagemanager.h
-    include/terminalutils.h
     include/toolboximages.h
 )
 
