@@ -3,7 +3,6 @@
 
 #include "backend.h"
 #include "packagemanager.h"
-#include "terminalutils.h"
 #include <mainwindow.h>
 #include <toolboximages.h>
 
@@ -20,6 +19,17 @@ Backend::Backend(QObject *parent)
     });
 
     checkAvailableBackends();
+
+    checkTerminaljob();
+}
+
+// Getter
+bool Backend::isTerminalJobPossible() const { return m_isTerminalJobPossible; }
+
+void Backend::checkTerminaljob()
+{
+    KTerminalLauncherJob job(QStringLiteral("true"));
+    m_isTerminalJobPossible = job.prepare();
 }
 
 void Backend::checkAvailableBackends()
@@ -123,54 +133,6 @@ QString Backend::getContainerDistro(const QString &containerName) const
         }
     }
     return "";
-}
-
-QStringList Backend::getAvailableTerminals() const
-{
-    QStringList availableTerminals;
-    auto terminalInfoMap = getTerminalInfoMap();
-
-    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
-        if (!isFlatpakTerminal(term)) {
-            bool terminalAvailable = false;
-            if (m_isFlatpak) {
-                QProcess whichProcess;
-                whichProcess.start("flatpak-spawn", {"--host", "which", term});
-                whichProcess.waitForFinished(5000);
-                terminalAvailable = (whichProcess.exitCode() == 0);
-            } else {
-                terminalAvailable = !QStandardPaths::findExecutable(term).isEmpty();
-            }
-            if (terminalAvailable) {
-                availableTerminals.append(term);
-            }
-        }
-    }
-
-    // Check Flatpak terminals
-    for (const auto &[term, info] : terminalInfoMap.asKeyValueRange()) {
-        if (isFlatpakTerminal(term)) {
-            bool terminalAvailable = false;
-            if (m_isFlatpak) {
-                QProcess process;
-                process.start("flatpak-spawn", {"--host", "flatpak", "list", "--app", "--columns=application"});
-                if (process.waitForFinished(5000) && process.readAllStandardOutput().contains(term.toUtf8())) {
-                    terminalAvailable = true;
-                }
-            } else {
-                QProcess process;
-                process.start("flatpak", {"list", "--app", "--columns=application"});
-                if (process.waitForFinished(5000) && process.readAllStandardOutput().contains(term.toUtf8())) {
-                    terminalAvailable = true;
-                }
-            }
-            if (terminalAvailable) {
-                availableTerminals.append(term);
-            }
-        }
-    }
-
-    return availableTerminals;
 }
 
 void Backend::fetchContainersAsync()
@@ -402,59 +364,88 @@ QString Backend::deleteContainer(const QString &name)
     }
 }
 
-void Backend::executeInTerminal(const QString &terminal, const QString &command)
+QString Backend::resolveBinaryPath(const QString &binary)
 {
-    auto terminalInfoMap = getTerminalInfoMap();
-    if (!terminalInfoMap.contains(terminal)) {
-        qWarning() << i18n("Unknown terminal:") << terminal;
-        QProcess::startDetached("xterm", {"-e", command});
-        return;
-    }
-
-    TerminalInfo info = terminalInfoMap[terminal];
-    QStringList args = info.commandFormat;
-    QString executable = terminal;
-
-    // Replace placeholders
-    for (int i = 0; i < args.size(); ++i) {
-        args[i].replace("$terminal", terminal);
-        args[i].replace("$command", command);
-    }
-
-    // For Flatpak terminals, we use flatpak as the executable
-    if (isFlatpakTerminal(terminal)) {
-        executable = "flatpak";
-    }
-
+    // Hack needed for distrobox as KTerminalLauncherJob doesnt seem to want to launch it without full path
     if (m_isFlatpak) {
-        // If we're running as Flatpak, we need to use flatpak-spawn to launch the terminal
-        QStringList flatpakArgs = {"flatpak-spawn", "--host", executable};
-        flatpakArgs.append(args);
-
-        // Check if terminal exists on host using flatpak-spawn --host which
-        QProcess whichProcess;
-        whichProcess.start("flatpak-spawn", {"--host", "which", executable});
-        whichProcess.waitForFinished();
-
-        if (whichProcess.exitCode() == 0) {
-            bool success = QProcess::startDetached("flatpak-spawn", flatpakArgs.mid(1));
-            if (!success) {
-                qWarning() << i18n("Failed to start terminal") << executable << i18n("with args") << args;
-                QProcess::startDetached("flatpak-spawn", {"--host", "xterm", "-e", command});
-            }
-        } else {
-            QProcess::startDetached("flatpak-spawn", {"--host", "xterm", "-e", command});
-        }
+        QProcess proc;
+        proc.start("flatpak-spawn", {"--host", "which", binary});
+        proc.waitForFinished();
+        QString output = QString::fromUtf8(proc.readAllStandardOutput()).trimmed();
+        return output.isEmpty() ? binary : output;
     } else {
-        if (!QStandardPaths::findExecutable(executable).isEmpty()) {
-            bool success = QProcess::startDetached(executable, args);
-            if (!success) {
-                qWarning() << i18n("Failed to start terminal") << executable << i18n("with args") << args;
-                QProcess::startDetached("xterm", {"-e", command});
-            }
-        } else {
-            QProcess::startDetached("xterm", {"-e", command});
-        }
+        QString path = QStandardPaths::findExecutable(binary);
+        return path.isEmpty() ? binary : path;
+    }
+}
+
+void Backend::executeInTerminal(const QString &command)
+{
+    KTerminalLauncherJob *job = nullptr;
+    if (m_isFlatpak) {
+        job = new KTerminalLauncherJob("flatpak-spawn --host " + command);
+    } else {
+        job = new KTerminalLauncherJob(command);
+    }
+    job->start();
+}
+
+void Backend::enterContainer(const QString &name)
+{
+    if (m_preferredBackend == "distrobox") {
+        QString bin = resolveBinaryPath("distrobox");
+        executeInTerminal(bin + " enter " + name);
+    } else if (m_preferredBackend == "toolbox") {
+        QString bin = resolveBinaryPath("toolbox");
+        executeInTerminal(bin + " enter " + name);
+    }
+}
+
+void Backend::upgradeContainer(const QString &name)
+{
+    QString bin = resolveBinaryPath("distrobox-upgrade");
+    executeInTerminal(bin + " " + name);
+}
+
+void Backend::upgradeAllContainers()
+{
+    QString bin = resolveBinaryPath("distrobox-upgrade");
+    executeInTerminal(bin + " --all");
+}
+
+void Backend::installDebPackage(const QString &containerName, const QString &filePath)
+{
+    QString command = "sudo apt install -y " + filePath;
+    if (m_preferredBackend == "distrobox") {
+        QString bin = resolveBinaryPath("distrobox");
+        executeInTerminal(bin + " enter " + containerName + " -- " + command);
+    } else if (m_preferredBackend == "toolbox") {
+        QString bin = resolveBinaryPath("toolbox");
+        executeInTerminal(bin + " run -c " + containerName + " " + command);
+    }
+}
+
+void Backend::installRpmPackage(const QString &containerName, const QString &filePath)
+{
+    QString command = "sudo dnf install -y " + filePath;
+    if (m_preferredBackend == "distrobox") {
+        QString bin = resolveBinaryPath("distrobox");
+        executeInTerminal(bin + " enter " + containerName + " -- " + command);
+    } else if (m_preferredBackend == "toolbox") {
+        QString bin = resolveBinaryPath("toolbox");
+        executeInTerminal(bin + " run -c " + containerName + " " + command);
+    }
+}
+
+void Backend::installArchPackage(const QString &containerName, const QString &filePath)
+{
+    QString command = "sudo pacman -U --noconfirm " + filePath;
+    if (m_preferredBackend == "distrobox") {
+        QString bin = resolveBinaryPath("distrobox");
+        executeInTerminal(bin + " enter " + containerName + " -- " + command);
+    } else if (m_preferredBackend == "toolbox") {
+        QString bin = resolveBinaryPath("toolbox");
+        executeInTerminal(bin + " run -c " + containerName + " " + command);
     }
 }
 
@@ -477,82 +468,16 @@ void Backend::assembleContainer(const QString &iniFile)
     }
 }
 
-void Backend::enterContainer(const QString &name, const QString &terminal)
-{
-    if (m_preferredBackend == "distrobox") {
-        executeInTerminal(terminal, QString("distrobox enter %1").arg(name));
-    } else if (m_preferredBackend == "toolbox") {
-        executeInTerminal(terminal, QString("toolbox enter %1").arg(name));
-    } else {
-        // Bruh
-    }
-}
-
-void Backend::upgradeContainer(const QString &name, const QString &terminal)
-{
-    executeInTerminal(terminal, QString("distrobox-upgrade %1").arg(name));
-}
-
-void Backend::upgradeAllContainers(const QString &terminal)
-{
-    executeInTerminal(terminal, "distrobox-upgrade --all");
-}
-
-void Backend::installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath)
-{
-    QString command = QString("sudo apt install -y %1").arg(filePath);
-    if (m_preferredBackend == "distrobox") {
-        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
-        qDebug() << "[installDebPackage] Using distrobox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else if (m_preferredBackend == "toolbox") {
-        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
-        qDebug() << "[installDebPackage] Using toolbox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else {
-        qWarning() << "[installDebPackage] Unknown backend:" << m_preferredBackend;
-    }
-}
-
-void Backend::installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath)
-{
-    QString command = QString("sudo dnf install -y %1").arg(filePath);
-    if (m_preferredBackend == "distrobox") {
-        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
-        qDebug() << "[installRpmPackage] Using distrobox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else if (m_preferredBackend == "toolbox") {
-        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
-        qDebug() << "[installRpmPackage] Using toolbox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else {
-        qWarning() << "[installRpmPackage] Unknown backend:" << m_preferredBackend;
-    }
-}
-
-void Backend::installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath)
-{
-    QString command = QString("sudo pacman -U --noconfirm %1").arg(filePath);
-    if (m_preferredBackend == "distrobox") {
-        QString fullCmd = QString("distrobox enter %1 -- %2").arg(containerName, command);
-        qDebug() << "[installArchPackage] Using distrobox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else if (m_preferredBackend == "toolbox") {
-        QString fullCmd = QString("toolbox run -c %1 sh -c \"%2\"").arg(containerName, command);
-        qDebug() << "[installArchPackage] Using toolbox with command:" << fullCmd;
-        executeInTerminal(terminal, fullCmd);
-    } else {
-        qWarning() << "[installArchPackage] Unknown backend:" << m_preferredBackend;
-    }
-}
-
 QString Backend::getDistroFromToolboxImage(const QString &image) const
 {
     for (const auto &entry : toolboxImages) {
-        if (entry.image == image)
+        if (entry.image == image) {
             return entry.distro;
+        }
     }
-    return i18nc("If an Toolbox Image doesnt fit the list of distros for the icon and package manager intergration, we will return Unknown", "Unknown");
+
+    // Fallback: use regex-based parser for unknown URLs
+    return parseDistroFromImage(image);
 }
 
 QList<QMap<QString, QString>> Backend::getAvailableImages()
@@ -835,33 +760,52 @@ void Backend::installArchPackageNoTerminal(const QString &containerName, const Q
 
 QStringList Backend::getAvailableApps(const QString &containerName)
 {
+    // Find only valid .desktop files that are not NoDisplay=true
+    QString findCmd =
+    "find /usr/share/applications -type f -name '*.desktop' "
+    "! -exec grep -q '^NoDisplay=true' {} \\; "
+    "-exec test -f {} \\; "
+    "-print";
+
     QString output;
     if (m_preferredBackend == "distrobox") {
-        output = runCommand({"distrobox",
-                             "enter",
-                             containerName,
-                             "--",
-                             "sh",
-                             "-c",
-                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+        output = runCommand({
+            "distrobox",
+            "enter",
+            containerName,
+            "--",
+            "sh",
+            "--noprofile",
+            "--norc",
+            "-c",
+            findCmd
+        });
     } else if (m_preferredBackend == "toolbox") {
-        output = runCommand({"toolbox",
-                             "run",
-                             "-c",
-                             containerName,
-                             "sh",
-                             "-c",
-                             "find /usr/share/applications -name '*.desktop' ! -exec grep -q '^NoDisplay=true' {} \\; -print"});
+        output = runCommand({
+            "toolbox",
+            "run",
+            "-c",
+            containerName,
+            "sh",
+            "--noprofile",
+            "--norc",
+            "-c",
+            findCmd
+        });
     } else {
-        output = "";
+        return {};
     }
 
     QStringList apps;
     for (const QString &line : output.split('\n', Qt::SkipEmptyParts)) {
-        apps << line.split('/').last().replace(".desktop", "");
+        if (QFileInfo(line).isFile() && line.endsWith(".desktop")) {
+            apps << QFileInfo(line).baseName();
+        }
     }
+
     return apps;
 }
+
 
 QStringList Backend::getExportedApps(const QString &containerName)
 {

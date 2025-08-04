@@ -4,6 +4,7 @@
 #pragma once
 
 #include <KLocalizedString>
+#include <KTerminalLauncherJob>
 #include <QDebug>
 #include <QDir>
 #include <QFileInfo>
@@ -25,15 +26,16 @@ public:
     explicit Backend(QObject *parent = nullptr);
     QStringList availableBackends() const;
     void setPreferredBackend(const QString &backend);
+    bool isTerminalJobPossible() const;
 
     // Container operations
     QString
     createContainer(const QString &name, const QString &image, const QString &home = QString(), bool init = false, const QStringList &volumes = QStringList());
     QString deleteContainer(const QString &name);
-    void enterContainer(const QString &name, const QString &terminal);
-    void upgradeContainer(const QString &name, const QString &terminal);
-    void upgradeAllContainers(const QString &terminal);
-    void executeInTerminal(const QString &terminal, const QString &command);
+    void enterContainer(const QString &name);
+    void upgradeContainer(const QString &name);
+    void upgradeAllContainers();
+    void executeInTerminal(const QString &command);
     void installDebPackageNoTerminal(const QString &containerName, const QString &filePath);
     void installRpmPackageNoTerminal(const QString &containerName, const QString &filePath);
     void installArchPackageNoTerminal(const QString &containerName, const QString &filePath);
@@ -45,8 +47,8 @@ public:
     QString exportApp(const QString &appName, const QString &containerName);
     QString unexportApp(const QString &appName, const QString &containerName);
     QString getContainerDistro(const QString &containerName) const;
-    QStringList getAvailableTerminals() const;
     QString preferredBackend() const;
+    void checkTerminaljob();
 
     // Image operations
     QList<QMap<QString, QString>> getAvailableImages();
@@ -69,12 +71,13 @@ signals:
 
 public slots:
     void assembleContainer(const QString &iniFile);
-    void installDebPackage(const QString &terminal, const QString &containerName, const QString &filePath);
-    void installRpmPackage(const QString &terminal, const QString &containerName, const QString &filePath);
-    void installArchPackage(const QString &terminal, const QString &containerName, const QString &filePath);
+    void installDebPackage(const QString &containerName, const QString &filePath);
+    void installRpmPackage(const QString &containerName, const QString &filePath);
+    void installArchPackage(const QString &containerName, const QString &filePath);
     void fetchContainersAsync();
 
 private:
+    QString resolveBinaryPath(const QString &binary);
     QString runCommand(const QStringList &command) const;
     QString parseDistroFromImage(const QString &imageUrl) const;
     QString getDistroIcon(const QString &distroName) const;
@@ -90,6 +93,7 @@ private:
     QProcess *m_createProcess = nullptr;
     QStringList m_cachedBackends;
     QList<QMap<QString, QString>> m_currentContainers;
+    bool m_isTerminalJobPossible;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

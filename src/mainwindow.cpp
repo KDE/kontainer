@@ -5,7 +5,6 @@
 #include "appsdialog.h"
 #include "backend.h"
 #include "createcontainerdialog.h"
-#include "terminalutils.h"
 
 // Custom delegate for container list items
 class ContainerItemDelegate : public QStyledItemDelegate
@@ -112,10 +111,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Show loading UI immediately
     setupLoadingUI();
 
-    // Load saved terminal preference
-    QSettings settings;
-    preferredTerminal = settings.value("terminal/preferred", "xterm").toString();
-
     backend = new Backend(this);
     connect(backend, &Backend::availableBackendsChanged, this, &MainWindow::onBackendsAvailable);
     connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
@@ -213,13 +208,6 @@ void MainWindow::onBackendsAvailable(const QStringList &backends)
     // Now setup the full UI
     setupUI();
     refreshContainers();
-}
-
-MainWindow::~MainWindow()
-{
-    // Save terminal preference
-    QSettings settings;
-    settings.setValue("terminal/preferred", preferredTerminal);
 }
 
 void MainWindow::setupUI()
@@ -338,66 +326,16 @@ void MainWindow::setupUI()
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     toolBar->addWidget(spacer);
 
-    // Right side - terminal selection
-    QLabel *terminalLabel = new QLabel(i18n("Terminal:"), toolBar);
-    toolBar->addWidget(terminalLabel);
-
-    QComboBox *terminalSelector = new QComboBox(toolBar);
-    auto terminalInfoMap = getTerminalInfoMap();
-
     // Get available terminals from backend
-    QStringList availableTerminals = backend->getAvailableTerminals();
-    hasTerminal = !availableTerminals.isEmpty();
+    hasTerminal = backend->isTerminalJobPossible();
 
-    // Populate terminal selector
-    for (const QString &term : availableTerminals) {
-        TerminalInfo info = terminalInfoMap[term];
-        QIcon icon =
-            QIcon::fromTheme(info.icon, isFlatpakTerminal(term) ? QIcon::fromTheme("application-x-executable") : QIcon::fromTheme("utilities-terminal"));
-        terminalSelector->addItem(icon, term);
-    }
-
-    // Add separator if we have both regular and Flatpak terminals
-    bool hasRegular = std::any_of(availableTerminals.begin(), availableTerminals.end(), [this](const QString &term) {
-        return !isFlatpakTerminal(term);
-    });
-    bool hasFlatpak = std::any_of(availableTerminals.begin(), availableTerminals.end(), [this](const QString &term) {
-        return isFlatpakTerminal(term);
-    });
-
-    if (hasRegular && hasFlatpak) {
-        for (int i = 0; i < terminalSelector->count(); ++i) {
-            if (isFlatpakTerminal(terminalSelector->itemText(i))) {
-                terminalSelector->insertSeparator(i);
-                break;
-            }
-        }
-    }
-
-    if (availableTerminals.isEmpty()) {
-        preferredTerminal.clear(); // kein Terminal vorhanden
+    if (hasTerminal == false) {
         enterBtn->setEnabled(false);
         enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
     } else {
-        int index = terminalSelector->findText(preferredTerminal);
-        if (index >= 0) {
-            terminalSelector->setCurrentIndex(index);
-        } else {
-            preferredTerminal = terminalSelector->itemText(0);
-            QSettings settings;
-            settings.setValue("terminal/preferred", preferredTerminal);
-            terminalSelector->setCurrentIndex(0);
-        }
         enterBtn->setEnabled(true);
     }
 
-    connect(terminalSelector, &QComboBox::currentTextChanged, this, [this](const QString &term) {
-        preferredTerminal = term;
-        QSettings settings;
-        settings.setValue("terminal/preferred", preferredTerminal);
-    });
-
-    toolBar->addWidget(terminalSelector);
     addToolBar(Qt::TopToolBarArea, toolBar);
 
     QComboBox *backendSelector = new QComboBox(toolBar);
@@ -431,7 +369,7 @@ void MainWindow::setupUI()
 
     toolBar->addWidget(backendSelector);
 
-    qDebug() << "Preferred Terminal:" << preferredTerminal;
+    qDebug() << "Is a Terminal launch possible: " << hasTerminal;
     qDebug() << "Preferred Backend:" << backend->preferredBackend();
 
     mainLayout->addWidget(containerList, 1);
@@ -481,6 +419,13 @@ void MainWindow::updateButtonStates()
         installRpmBtn->setVisible(false);
         installArchBtn->setVisible(false);
     }
+
+    if (!backend->isTerminalJobPossible()) {
+        enterBtn->setVisible(false);
+        enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
+    } else {
+        enterBtn->setVisible(true);
+    }
 }
 
 void MainWindow::deleteContainer()
@@ -520,7 +465,7 @@ void MainWindow::showAppsDialog()
 
 void MainWindow::createNewContainer()
 {
-    CreateContainerDialog dialog(backend, preferredTerminal, this);
+    CreateContainerDialog dialog(backend, this);
     if (dialog.exec() == QDialog::Accepted) {
         refreshContainers();
     }
@@ -536,7 +481,7 @@ void MainWindow::enterContainer()
 {
     if (currentContainer.isEmpty())
         return;
-    backend->enterContainer(currentContainer, preferredTerminal);
+    backend->enterContainer(currentContainer);
 }
 
 void MainWindow::assembleContainer()
@@ -571,16 +516,16 @@ void MainWindow::upgradeAllContainers()
 
     if (currentBackend == "toolbox") {
         QMessageBox::information(this,
-                                 i18n("Function Not Supported"),
-                                 i18n("Toolbox backend doesn't support mass container upgrades.\n\n"
-                                      "Please switch to Distrobox backend to use this feature."));
+                                 i18n("Function Not Supported Yet"),
+                                 i18n("Toolbox backend doesn't support mass container upgrades yet.\n\n"
+                                      "We are working with Upstream to fix it."));
         return;
     }
 
     qDebug() << "[upgradeAllContainers] Called with backend:" << currentBackend;
 
-    if (preferredTerminal.isEmpty()) {
-        qDebug() << "[upgradeAllContainers] No preferred terminal. Using internal upgrade.";
+    if (!backend->isTerminalJobPossible()) {
+        qDebug() << "[upgradeAllContainers] No terminal. Using internal upgrade.";
         setupProgressDialog(i18n("Upgrading all containers..."));
 
         connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
@@ -592,11 +537,11 @@ void MainWindow::upgradeAllContainers()
         });
         backend->upgradeAllContainersNoTerminal();
     } else {
-        qDebug() << "[upgradeAllContainers] Using preferred terminal:" << preferredTerminal;
+        qDebug() << "[upgradeAllContainers] Using terminal.";
         connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
             // Terminal will handle its own output
         });
-        backend->upgradeAllContainers(preferredTerminal);
+        backend->upgradeAllContainers();
     }
 }
 
@@ -645,7 +590,7 @@ void MainWindow::installDebPackage()
     qDebug() << "[installDebPackage] Selected file:" << filePath;
 
     if (!filePath.isEmpty()) {
-        if (preferredTerminal.isEmpty()) {
+        if (!backend->isTerminalJobPossible()) {
             qDebug() << "[installDebPackage] No preferred terminal. Using internal install.";
             setupProgressDialog(i18n("Installing .deb package..."));
 
@@ -658,11 +603,11 @@ void MainWindow::installDebPackage()
             });
             backend->installDebPackageNoTerminal(currentContainer, filePath);
         } else {
-            qDebug() << "[installDebPackage] Using preferred terminal:" << preferredTerminal;
+            qDebug() << "[installDebPackage] Using terminal.";
             connect(backend, &Backend::debInstallFinished, this, [](const QString &) {
                 // Terminal will handle its own output
             });
-            backend->installDebPackage(preferredTerminal, currentContainer, filePath);
+            backend->installDebPackage(currentContainer, filePath);
         }
     } else {
         qDebug() << "[installDebPackage] File selection canceled.";
@@ -682,7 +627,7 @@ void MainWindow::installRpmPackage()
     qDebug() << "[installRpmPackage] Selected file:" << filePath;
 
     if (!filePath.isEmpty()) {
-        if (preferredTerminal.isEmpty()) {
+        if (!backend->isTerminalJobPossible()) {
             qDebug() << "[installRpmPackage] No preferred terminal. Using internal install.";
             setupProgressDialog(i18n("Installing .rpm package..."));
 
@@ -695,11 +640,11 @@ void MainWindow::installRpmPackage()
             });
             backend->installRpmPackageNoTerminal(currentContainer, filePath);
         } else {
-            qDebug() << "[installRpmPackage] Using preferred terminal:" << preferredTerminal;
+            qDebug() << "[installRpmPackage] Using terminal.";
             connect(backend, &Backend::rpmInstallFinished, this, [](const QString &) {
                 // Terminal will handle its own output
             });
-            backend->installRpmPackage(preferredTerminal, currentContainer, filePath);
+            backend->installRpmPackage(currentContainer, filePath);
         }
     } else {
         qDebug() << "[installRpmPackage] File selection canceled.";
@@ -719,7 +664,7 @@ void MainWindow::installArchPackage()
     qDebug() << "[installArchPackage] Selected file:" << filePath;
 
     if (!filePath.isEmpty()) {
-        if (preferredTerminal.isEmpty()) {
+        if (!backend->isTerminalJobPossible()) {
             qDebug() << "[installArchPackage] No preferred terminal. Using internal install.";
             setupProgressDialog(i18n("Installing Arch package..."));
 
@@ -732,11 +677,11 @@ void MainWindow::installArchPackage()
             });
             backend->installArchPackageNoTerminal(currentContainer, filePath);
         } else {
-            qDebug() << "[installArchPackage] Using preferred terminal:" << preferredTerminal;
+            qDebug() << "[installArchPackage] Using terminal.";
             connect(backend, &Backend::archInstallFinished, this, [](const QString &) {
                 // Terminal will handle its own output
             });
-            backend->installArchPackage(preferredTerminal, currentContainer, filePath);
+            backend->installArchPackage(currentContainer, filePath);
         }
     } else {
         qDebug() << "[installArchPackage] File selection canceled.";
@@ -752,7 +697,7 @@ void MainWindow::upgradeContainer()
         return;
     }
 
-    if (preferredTerminal.isEmpty()) {
+    if (!backend->isTerminalJobPossible()) {
         qDebug() << "[upgradeContainer] No preferred terminal. Using internal upgrade.";
         setupProgressDialog(i18n("Upgrading container..."));
 
@@ -765,10 +710,10 @@ void MainWindow::upgradeContainer()
         });
         backend->upgradeContainerNoTerminal(currentContainer);
     } else {
-        qDebug() << "[upgradeContainer] Using preferred terminal:" << preferredTerminal;
+        qDebug() << "[upgradeContainer] Using preferred terminal.";
         connect(backend, &Backend::upgradeFinished, this, [](const QString &) {
             // Terminal will handle its own output
         });
-        backend->upgradeContainer(currentContainer, preferredTerminal);
+        backend->upgradeContainer(currentContainer);
     }
 }
