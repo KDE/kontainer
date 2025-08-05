@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-14 00:45+0000\n"
+"POT-Creation-Date: 2025-08-05 00:46+0000\n"
 "PO-Revision-Date: 2025-07-07 08:32+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -70,43 +70,43 @@ msgstr "Izvožene aplikacije"
 msgid "Available Apps"
 msgstr "Razpoložljive aplikacije"
 
-#: src/backend.cpp:110
+#: src/backend.cpp:120
 #, kde-format
 msgid "Error: Command timed out"
 msgstr "Napaka: Časovna omejitev ukaza je potekla"
 
-#: src/backend.cpp:344
+#: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
 msgstr "Napaka: Ni podprtega zaledja"
 
-#: src/backend.cpp:350
+#: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
 msgstr "Napaka: Postopek zagona ustvarjanja vsebnika ni uspel"
 
-#: src/backend.cpp:355
+#: src/backend.cpp:317
 #, kde-format
 msgid "Container created successfully"
 msgstr "Vsebnik uspešno ustvarjen"
 
-#: src/backend.cpp:355
+#: src/backend.cpp:317
 #, kde-format
 msgid "Container creation failed"
 msgstr "Ustvarjanje vsebnika ni uspelo"
 
-#: src/backend.cpp:361
+#: src/backend.cpp:323
 #, kde-format
 msgid "Error: "
 msgstr "Napaka: "
 
-#: src/backend.cpp:396
+#: src/backend.cpp:358
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
 msgstr "Ni bilo mogoče izbrisati Toolboxa %1. Napaka: %2"
 
-#: src/backend.cpp:399
+#: src/backend.cpp:361
 #, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
@@ -114,184 +114,161 @@ msgctxt ""
 msgid "Toolbox %1 deleted successfully."
 msgstr "Toolbox %1 uspešno izbrisan."
 
-#: src/backend.cpp:401
+#: src/backend.cpp:363
 #, kde-format
 msgid "Error: Failed to delete Container."
 msgstr "Napaka: Vsebnika ni bilo mogoče izbrisati."
 
-#: src/backend.cpp:409
-#, kde-format
-msgid "Unknown terminal:"
-msgstr "Neznani terminal:"
-
-#: src/backend.cpp:442 src/backend.cpp:452
-#, kde-format
-msgid "Failed to start terminal"
-msgstr "Zagon terminala ni uspel"
-
-#: src/backend.cpp:442 src/backend.cpp:452
-#, kde-format
-msgid "with args"
-msgstr "z argumenti"
-
-#: src/backend.cpp:467
+#: src/backend.cpp:458
 #, kde-format
 msgid "Error: %1"
 msgstr "Napaka: %1"
 
-#: src/backend.cpp:555
-#, kde-format
-msgctxt ""
-"If an Toolbox Image doesnt fit the list of distros for the icon and package "
-"manager intergration, we will return Unknown"
-msgid "Unknown"
-msgstr "Neznano"
-
-#: src/backend.cpp:929
+#: src/backend.cpp:873
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "Aplikacije %1 ni mogoče najti v vsebniku %2"
 
-#: src/backend.cpp:937
+#: src/backend.cpp:881
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "Ni bilo mogoče najdi datoteke namizja za %1 v vsebniku %2"
 
-#: src/backend.cpp:984
+#: src/backend.cpp:928
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "Ustvarjanje datoteke namizja ni uspelo: %1"
 
-#: src/backend.cpp:993
+#: src/backend.cpp:937
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "Uspešno izvoženo %1 iz %2"
 
-#: src/backend.cpp:1020
+#: src/backend.cpp:964
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "Ni bilo najdene izvožene aplikacije %1 za vsebnik %2"
 
-#: src/backend.cpp:1024
+#: src/backend.cpp:968
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "Odstranitev datoteke namizja ni uspela: %1"
 
-#: src/backend.cpp:1029
+#: src/backend.cpp:973
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
 msgstr "Uspešno odizvoženo %1 iz %2"
 
-#: src/createcontainerdialog.cpp:81
+#: src/createcontainerdialog.cpp:80
 #, kde-format
 msgid "Create New Container"
 msgstr "Ustvari nov vsebnik"
 
-#: src/createcontainerdialog.cpp:95
+#: src/createcontainerdialog.cpp:94
 #, kde-format
 msgid "my-container"
 msgstr "my-container"
 
-#: src/createcontainerdialog.cpp:96
+#: src/createcontainerdialog.cpp:95
 #, kde-format
 msgid "Container name:"
 msgstr "Ime vsebnika:"
 
-#: src/createcontainerdialog.cpp:105
+#: src/createcontainerdialog.cpp:104
 #, kde-format
 msgid "Search images..."
 msgstr "Iskanje slik..."
 
-#: src/createcontainerdialog.cpp:127
+#: src/createcontainerdialog.cpp:126
 #, kde-format
 msgid "Available images:"
 msgstr "Razpoložljive slike:"
 
-#: src/createcontainerdialog.cpp:132
+#: src/createcontainerdialog.cpp:131
 #, kde-format
 msgid "Leave empty for default"
 msgstr "Pustite prazno za privzeto"
 
-#: src/createcontainerdialog.cpp:133
+#: src/createcontainerdialog.cpp:132
 #, kde-format
 msgid "Custom home path:"
 msgstr "Domača pot po meri:"
 
-#: src/createcontainerdialog.cpp:136
+#: src/createcontainerdialog.cpp:135
 #, kde-format
 msgid "e.g., /host/path:/container/path (comma separate multiple)"
 msgstr "npr., /host/path:/container/path (več ločeno z vejico)"
 
-#: src/createcontainerdialog.cpp:137
+#: src/createcontainerdialog.cpp:136
 #, kde-format
 msgid "Additional volumes:"
 msgstr "Dodatni nosilci:"
 
-#: src/createcontainerdialog.cpp:139
+#: src/createcontainerdialog.cpp:138
 #, kde-format
 msgid "Enable systemd init"
 msgstr "Omogoči systemd init"
 
-#: src/createcontainerdialog.cpp:140
+#: src/createcontainerdialog.cpp:139
 #, kde-format
 msgid "Enable systemd as init system inside the container"
 msgstr "Omogoči systemd kot init sistem znotraj vsebnika"
 
-#: src/createcontainerdialog.cpp:141
+#: src/createcontainerdialog.cpp:140
 #, kde-format
 msgid "Init system:"
 msgstr "Inicializacija sistema:"
 
-#: src/createcontainerdialog.cpp:155
+#: src/createcontainerdialog.cpp:154
 #, kde-format
 msgid "Refresh Images"
 msgstr "Osveži slike"
 
-#: src/createcontainerdialog.cpp:164 src/mainwindow.cpp:558
+#: src/createcontainerdialog.cpp:163 src/mainwindow.cpp:503
 #, kde-format
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: src/createcontainerdialog.cpp:170
+#: src/createcontainerdialog.cpp:169
 #, kde-format
 msgid "Create"
 msgstr "Ustvari"
 
-#: src/createcontainerdialog.cpp:249 src/createcontainerdialog.cpp:254
-#: src/createcontainerdialog.cpp:299 src/createcontainerdialog.cpp:342
-#: src/createcontainerdialog.cpp:363 src/mainwindow.cpp:209
+#: src/createcontainerdialog.cpp:248 src/createcontainerdialog.cpp:253
+#: src/createcontainerdialog.cpp:298 src/createcontainerdialog.cpp:341
+#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:204
 #, kde-format
 msgid "Error"
 msgstr "Napaka"
 
-#: src/createcontainerdialog.cpp:249
+#: src/createcontainerdialog.cpp:248
 #, kde-format
 msgid "Please enter a container name"
 msgstr "Vnesite ime vsebnika"
 
-#: src/createcontainerdialog.cpp:254
+#: src/createcontainerdialog.cpp:253
 #, kde-format
 msgid "Please select an image"
 msgstr "Izberite sliko"
 
-#: src/createcontainerdialog.cpp:263
+#: src/createcontainerdialog.cpp:262
 #, kde-format
 msgid "Creating Container"
 msgstr "Ustvarjanje vsebnika"
 
-#: src/createcontainerdialog.cpp:264
+#: src/createcontainerdialog.cpp:263
 #, kde-format
 msgid "Starting container creation..."
 msgstr "Zagon ustvarjanja vsebnika…"
 
-#: src/createcontainerdialog.cpp:289
+#: src/createcontainerdialog.cpp:288
 #, kde-format
 msgid ""
 "Container '%1' created successfully!\n"
@@ -302,62 +279,62 @@ msgstr ""
 "\n"
 "Sedaj se bo odprla terminalska seja z novim vsebnikom."
 
-#: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
+#: src/createcontainerdialog.cpp:291 src/createcontainerdialog.cpp:353
 #, kde-format
 msgid "Success"
 msgstr "Uspeh"
 
-#: src/createcontainerdialog.cpp:312
+#: src/createcontainerdialog.cpp:311
 #, kde-format
 msgid "Process output:"
 msgstr "Izhod procesa:"
 
-#: src/createcontainerdialog.cpp:319
+#: src/createcontainerdialog.cpp:318
 #, kde-format
 msgid "Process error:"
 msgstr "Napaka procesa:"
 
-#: src/createcontainerdialog.cpp:322
+#: src/createcontainerdialog.cpp:321
 #, kde-format
 msgid "Failed to start"
 msgstr "Zagon ni uspel"
 
-#: src/createcontainerdialog.cpp:325
+#: src/createcontainerdialog.cpp:324
 #, kde-format
 msgid "Crashed"
 msgstr "Sesutje"
 
-#: src/createcontainerdialog.cpp:328
+#: src/createcontainerdialog.cpp:327
 #, kde-format
 msgid "Timed out"
 msgstr "Časovna omejitev je potekla"
 
-#: src/createcontainerdialog.cpp:331
+#: src/createcontainerdialog.cpp:330
 #, kde-format
 msgid "Write error"
 msgstr "Napaka pri pisanju"
 
-#: src/createcontainerdialog.cpp:334
+#: src/createcontainerdialog.cpp:333
 #, kde-format
 msgid "Read error"
 msgstr "Napaka pri branju"
 
-#: src/createcontainerdialog.cpp:337
+#: src/createcontainerdialog.cpp:336
 #, kde-format
 msgid "Unknown error"
 msgstr "Neznana napaka"
 
-#: src/createcontainerdialog.cpp:352
+#: src/createcontainerdialog.cpp:351
 #, kde-format
 msgid "Container “%1” created successfully!"
 msgstr "Vsebnik “%1” je bil uspešno ustvarjen!"
 
-#: src/createcontainerdialog.cpp:359
+#: src/createcontainerdialog.cpp:358
 #, kde-format
 msgid "Container creation failed (exit code: %1)"
 msgstr "Ustvarjanje vsebnika ni uspelo (izhodna koda:  %1)"
 
-#: src/createcontainerdialog.cpp:361
+#: src/createcontainerdialog.cpp:360
 #, kde-format
 msgid ""
 "Container creation failed (exit code: %1)\n"
@@ -368,180 +345,175 @@ msgstr ""
 "\n"
 "Izhod napake: %2\n"
 
-#: src/mainwindow.cpp:141
+#: src/mainwindow.cpp:136
 #, kde-format
 msgid "Fetching containers..."
 msgstr "Pridobivanje vsebnikov..."
 
-#: src/mainwindow.cpp:169
+#: src/mainwindow.cpp:164
 #, kde-format
 msgid "No containers found"
 msgstr "Ni najdenih vsebnikov"
 
-#: src/mainwindow.cpp:192
+#: src/mainwindow.cpp:187
 #, kde-format
 msgid "Checking for available container backends..."
 msgstr "Preverjanje razpoložljivih zalednih sistemov vsebnikov..."
 
-#: src/mainwindow.cpp:209
+#: src/mainwindow.cpp:204
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr "Ni najdenih ozadij vsebnikov. Namestite bodisi distrobox ali toolbox."
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:245
 #, kde-format
 msgid "Enter"
 msgstr "Enter"
 
-#: src/mainwindow.cpp:258
+#: src/mainwindow.cpp:246
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Vnesite izbrani vsebnik"
 
-#: src/mainwindow.cpp:261
+#: src/mainwindow.cpp:249
 #, kde-format
 msgid "Delete"
 msgstr "Izbriši"
 
-#: src/mainwindow.cpp:262
+#: src/mainwindow.cpp:250
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Izbriši izbrani vsebnik"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:253
 #, kde-format
 msgid "Applications"
 msgstr "Aplikacije"
 
-#: src/mainwindow.cpp:266
+#: src/mainwindow.cpp:254
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Upravljaj izvožene aplikacije"
 
-#: src/mainwindow.cpp:269
+#: src/mainwindow.cpp:257
 #, kde-format
 msgid "Upgrade"
 msgstr "Nadgradi"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Nadgradi izbrani vsebnik"
 
-#: src/mainwindow.cpp:277
+#: src/mainwindow.cpp:265
 #, kde-format
 msgid "Refresh"
 msgstr "Osveži"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Refresh container list"
 msgstr "Osveži seznam vsebnikov"
 
-#: src/mainwindow.cpp:282
+#: src/mainwindow.cpp:270
 #, kde-format
 msgid "Install .deb"
 msgstr "Namesti .deb"
 
-#: src/mainwindow.cpp:283
+#: src/mainwindow.cpp:271
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Namesti paket Debian/Ubuntu"
 
-#: src/mainwindow.cpp:286
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Install .rpm"
 msgstr "Namesti .rpm"
 
-#: src/mainwindow.cpp:287
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Namesti paket Fedora/OpenSUSE"
 
-#: src/mainwindow.cpp:290
+#: src/mainwindow.cpp:278
 #, kde-format
 msgid "Install .pkg"
 msgstr "Namesti .pkg"
 
-#: src/mainwindow.cpp:291
+#: src/mainwindow.cpp:279
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Namesti paket Arch Linux"
 
-#: src/mainwindow.cpp:314
+#: src/mainwindow.cpp:302
 #, kde-format
 msgid "New Container"
 msgstr "Nov vsebnik"
 
-#: src/mainwindow.cpp:316
+#: src/mainwindow.cpp:304
 #, kde-format
 msgid "Create new container"
 msgstr "Ustvari nov vsebnik"
 
-#: src/mainwindow.cpp:322
+#: src/mainwindow.cpp:310
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Nadgradi vse vsebnike"
 
-#: src/mainwindow.cpp:324
+#: src/mainwindow.cpp:312
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Nadgradi vse vsebnike"
 
-#: src/mainwindow.cpp:330
+#: src/mainwindow.cpp:318
 #, kde-format
 msgid "Assemble"
 msgstr "Sestavi"
 
-#: src/mainwindow.cpp:332
+#: src/mainwindow.cpp:320
 #, kde-format
 msgid "Create container from INI file"
 msgstr "Ustvari vsebnik iz datoteke INI"
 
-#: src/mainwindow.cpp:342
-#, kde-format
-msgid "Terminal:"
-msgstr "Terminal:"
-
-#: src/mainwindow.cpp:380
+#: src/mainwindow.cpp:334 src/mainwindow.cpp:425
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
 "Terminalskega emulatorja ni mogoče najti - izhod bo prikazan v pogovornem "
 "oknu"
 
-#: src/mainwindow.cpp:451
+#: src/mainwindow.cpp:389
 #, kde-format
 msgid "Assemble Result"
 msgstr "Rezultat sestavljanja"
 
-#: src/mainwindow.cpp:492
+#: src/mainwindow.cpp:437
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Potrdi brisanje"
 
-#: src/mainwindow.cpp:493
+#: src/mainwindow.cpp:438
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Naj izbrišem vsebnik <b>%1</b>?"
 
-#: src/mainwindow.cpp:494
+#: src/mainwindow.cpp:439
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Tega dejanja ni mogoče razveljaviti."
 
-#: src/mainwindow.cpp:501
+#: src/mainwindow.cpp:446
 #, kde-format
 msgid "Result"
 msgstr "Rezultat"
 
-#: src/mainwindow.cpp:549 src/mainwindow.cpp:574
+#: src/mainwindow.cpp:494
 #, kde-format
 msgid "Function Not Supported"
 msgstr "Funkcija ni podprta"
 
-#: src/mainwindow.cpp:550
+#: src/mainwindow.cpp:495
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -552,91 +524,119 @@ msgstr ""
 "\n"
 "Za uporabo te zmožnosti preklopite na zaledni sistem Distrobox."
 
-#: src/mainwindow.cpp:555
+#: src/mainwindow.cpp:500
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Izberite datoteko Distrobox INI"
 
-#: src/mainwindow.cpp:555
+#: src/mainwindow.cpp:500
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "INI datoteke (*.ini);;Vse datoteke (*)"
 
-#: src/mainwindow.cpp:558
+#: src/mainwindow.cpp:503
 #, kde-format
 msgid "Assembling container..."
 msgstr "Sestavljanje vsebnika ..."
 
-#: src/mainwindow.cpp:575
-#, kde-format
+#: src/mainwindow.cpp:519
+#, fuzzy, kde-format
+#| msgid "Function Not Supported"
+msgid "Function Not Supported Yet"
+msgstr "Funkcija ni podprta"
+
+#: src/mainwindow.cpp:520
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toolbox backend doesn't support mass container upgrades.\n"
+#| "\n"
+#| "Please switch to Distrobox backend to use this feature."
 msgid ""
-"Toolbox backend doesn't support mass container upgrades.\n"
+"Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
-"Please switch to Distrobox backend to use this feature."
+"We are working with Upstream to fix it."
 msgstr ""
 "Zaledni sistem Toolbox ne podpira množičnih nadgradenj vsebnikov.\n"
 "\n"
 "Za uporabo te zmožnosti preklopite na zaledni sistem Distrobox."
 
-#: src/mainwindow.cpp:584
+#: src/mainwindow.cpp:529
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "Nadgrajevanje vseh vsebnikov..."
 
-#: src/mainwindow.cpp:608
+#: src/mainwindow.cpp:553
 #, kde-format
 msgid "Processing..."
 msgstr "Obdelovanje..."
 
-#: src/mainwindow.cpp:644
+#: src/mainwindow.cpp:589
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Izberite paket .deb"
 
-#: src/mainwindow.cpp:644
+#: src/mainwindow.cpp:589
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Debian paketi (*.deb)"
 
-#: src/mainwindow.cpp:650
+#: src/mainwindow.cpp:595
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "Nameščanje paketa .deb..."
 
-#: src/mainwindow.cpp:681
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Izberite paket .rpm"
 
-#: src/mainwindow.cpp:681
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "RPM paketi  (*.rpm)"
 
-#: src/mainwindow.cpp:687
+#: src/mainwindow.cpp:632
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "Nameščanje paketa .rpm..."
 
-#: src/mainwindow.cpp:718
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Izberite Arch paket"
 
-#: src/mainwindow.cpp:718
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Arch paketi (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:724
+#: src/mainwindow.cpp:669
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "Nameščanje paketa Arch..."
 
-#: src/mainwindow.cpp:757
+#: src/mainwindow.cpp:702
 #, kde-format
 msgid "Upgrading container..."
 msgstr "Posodabljanje vsebnika ..."
+
+#~ msgid "Unknown terminal:"
+#~ msgstr "Neznani terminal:"
+
+#~ msgid "Failed to start terminal"
+#~ msgstr "Zagon terminala ni uspel"
+
+#~ msgid "with args"
+#~ msgstr "z argumenti"
+
+#~ msgctxt ""
+#~ "If an Toolbox Image doesnt fit the list of distros for the icon and "
+#~ "package manager intergration, we will return Unknown"
+#~ msgid "Unknown"
+#~ msgstr "Neznano"
+
+#~ msgid "Terminal:"
+#~ msgstr "Terminal:"
 
 #~ msgid "Container:"
 #~ msgstr "Vsebnik:"

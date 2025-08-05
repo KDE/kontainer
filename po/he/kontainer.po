@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-07-14 00:45+0000\n"
+"POT-Creation-Date: 2025-08-05 00:46+0000\n"
 "PO-Revision-Date: 2025-07-07 09:14+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -74,43 +74,43 @@ msgstr "יישומים שיוצאו"
 msgid "Available Apps"
 msgstr "יישומים זמינים"
 
-#: src/backend.cpp:110
+#: src/backend.cpp:120
 #, kde-format
 msgid "Error: Command timed out"
 msgstr "שגיאה: הזמן שהוקצה לפעולה נגמר"
 
-#: src/backend.cpp:344
+#: src/backend.cpp:306
 #, kde-format
 msgid "Error: No supported backend available"
 msgstr "שגיאה: אין מנגנון נתמך זמין"
 
-#: src/backend.cpp:350
+#: src/backend.cpp:312
 #, kde-format
 msgid "Error: Failed to start container creation process"
 msgstr "שגיאה: התחלת תהליך יצירת המכולה נכשלה"
 
-#: src/backend.cpp:355
+#: src/backend.cpp:317
 #, kde-format
 msgid "Container created successfully"
 msgstr "המכולה נוצרה בהצלחה"
 
-#: src/backend.cpp:355
+#: src/backend.cpp:317
 #, kde-format
 msgid "Container creation failed"
 msgstr "יצירת המכולה נכשלה"
 
-#: src/backend.cpp:361
+#: src/backend.cpp:323
 #, kde-format
 msgid "Error: "
 msgstr "שגיאה:"
 
-#: src/backend.cpp:396
+#: src/backend.cpp:358
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
 msgstr "מחיקת תיבת הכלים %1 נכשלה. שגיאה: %2"
 
-#: src/backend.cpp:399
+#: src/backend.cpp:361
 #, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
@@ -118,184 +118,161 @@ msgctxt ""
 msgid "Toolbox %1 deleted successfully."
 msgstr "תיבת הכלים %1 נמחקה בהצלחה."
 
-#: src/backend.cpp:401
+#: src/backend.cpp:363
 #, kde-format
 msgid "Error: Failed to delete Container."
 msgstr "שגיאה: מחיקת המכולה נכשלה."
 
-#: src/backend.cpp:409
-#, kde-format
-msgid "Unknown terminal:"
-msgstr "מסוף לא ידוע:"
-
-#: src/backend.cpp:442 src/backend.cpp:452
-#, kde-format
-msgid "Failed to start terminal"
-msgstr "הפעלת המסוף נכשלה"
-
-#: src/backend.cpp:442 src/backend.cpp:452
-#, kde-format
-msgid "with args"
-msgstr "עם ארגומנטים"
-
-#: src/backend.cpp:467
+#: src/backend.cpp:458
 #, kde-format
 msgid "Error: %1"
 msgstr "שגיאה: %1"
 
-#: src/backend.cpp:555
-#, kde-format
-msgctxt ""
-"If an Toolbox Image doesnt fit the list of distros for the icon and package "
-"manager intergration, we will return Unknown"
-msgid "Unknown"
-msgstr "לא ידועה"
-
-#: src/backend.cpp:929
+#: src/backend.cpp:873
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "היישום %1 לא נמצא במכולה %2"
 
-#: src/backend.cpp:937
+#: src/backend.cpp:881
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "לא ניתן למצוא את קובץ שולחן העבודה (desktop) עבור %1 במכולה %2"
 
-#: src/backend.cpp:984
+#: src/backend.cpp:928
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "יצירת קובץ שולחן עבודה (desktop) נכשלה: %1"
 
-#: src/backend.cpp:993
+#: src/backend.cpp:937
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "%1 יוצא בהצלחה מתוך %2"
 
-#: src/backend.cpp:1020
+#: src/backend.cpp:964
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "לא נמצא יישום מיוצא %1 עבור המכולה %2"
 
-#: src/backend.cpp:1024
+#: src/backend.cpp:968
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "הסרת קובץ שולחן העבודה (desktop) נכשלה: %1"
 
-#: src/backend.cpp:1029
+#: src/backend.cpp:973
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
 msgstr "הייצוא של %1 מתוך %2 בוטל בהצלחה"
 
-#: src/createcontainerdialog.cpp:81
+#: src/createcontainerdialog.cpp:80
 #, kde-format
 msgid "Create New Container"
 msgstr "יצירת מכולה חדשה"
 
-#: src/createcontainerdialog.cpp:95
+#: src/createcontainerdialog.cpp:94
 #, kde-format
 msgid "my-container"
 msgstr "המכולה-שלי"
 
-#: src/createcontainerdialog.cpp:96
+#: src/createcontainerdialog.cpp:95
 #, kde-format
 msgid "Container name:"
 msgstr "שם המכולה:"
 
-#: src/createcontainerdialog.cpp:105
+#: src/createcontainerdialog.cpp:104
 #, kde-format
 msgid "Search images..."
 msgstr "חיפוש דמויות…"
 
-#: src/createcontainerdialog.cpp:127
+#: src/createcontainerdialog.cpp:126
 #, kde-format
 msgid "Available images:"
 msgstr "תמונות זמינות:"
 
-#: src/createcontainerdialog.cpp:132
+#: src/createcontainerdialog.cpp:131
 #, kde-format
 msgid "Leave empty for default"
 msgstr "להשאיר ריק לברירת מחדל"
 
-#: src/createcontainerdialog.cpp:133
+#: src/createcontainerdialog.cpp:132
 #, kde-format
 msgid "Custom home path:"
 msgstr "נתיב בית כברירת מחדל:"
 
-#: src/createcontainerdialog.cpp:136
+#: src/createcontainerdialog.cpp:135
 #, kde-format
 msgid "e.g., /host/path:/container/path (comma separate multiple)"
 msgstr "למשל: ‎/host/path:/container/path (אפשר להפריד בין כמה כאלה בפסיקים)"
 
-#: src/createcontainerdialog.cpp:137
+#: src/createcontainerdialog.cpp:136
 #, kde-format
 msgid "Additional volumes:"
 msgstr "כרכים נוספים:"
 
-#: src/createcontainerdialog.cpp:139
+#: src/createcontainerdialog.cpp:138
 #, kde-format
 msgid "Enable systemd init"
 msgstr "הפעלת אתחול עם systemd"
 
-#: src/createcontainerdialog.cpp:140
+#: src/createcontainerdialog.cpp:139
 #, kde-format
 msgid "Enable systemd as init system inside the container"
 msgstr "הפעלת systemd כמערכת אתחול בתוך המכולה"
 
-#: src/createcontainerdialog.cpp:141
+#: src/createcontainerdialog.cpp:140
 #, kde-format
 msgid "Init system:"
 msgstr "מערכת אתחול:"
 
-#: src/createcontainerdialog.cpp:155
+#: src/createcontainerdialog.cpp:154
 #, kde-format
 msgid "Refresh Images"
 msgstr "רענון דמויות"
 
-#: src/createcontainerdialog.cpp:164 src/mainwindow.cpp:558
+#: src/createcontainerdialog.cpp:163 src/mainwindow.cpp:503
 #, kde-format
 msgid "Cancel"
 msgstr "ביטול"
 
-#: src/createcontainerdialog.cpp:170
+#: src/createcontainerdialog.cpp:169
 #, kde-format
 msgid "Create"
 msgstr "יצירה"
 
-#: src/createcontainerdialog.cpp:249 src/createcontainerdialog.cpp:254
-#: src/createcontainerdialog.cpp:299 src/createcontainerdialog.cpp:342
-#: src/createcontainerdialog.cpp:363 src/mainwindow.cpp:209
+#: src/createcontainerdialog.cpp:248 src/createcontainerdialog.cpp:253
+#: src/createcontainerdialog.cpp:298 src/createcontainerdialog.cpp:341
+#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:204
 #, kde-format
 msgid "Error"
 msgstr "שגיאה"
 
-#: src/createcontainerdialog.cpp:249
+#: src/createcontainerdialog.cpp:248
 #, kde-format
 msgid "Please enter a container name"
 msgstr "נא למלא שם למכולה"
 
-#: src/createcontainerdialog.cpp:254
+#: src/createcontainerdialog.cpp:253
 #, kde-format
 msgid "Please select an image"
 msgstr "נא לבחור דמות"
 
-#: src/createcontainerdialog.cpp:263
+#: src/createcontainerdialog.cpp:262
 #, kde-format
 msgid "Creating Container"
 msgstr "המכולה נוצרת"
 
-#: src/createcontainerdialog.cpp:264
+#: src/createcontainerdialog.cpp:263
 #, kde-format
 msgid "Starting container creation..."
 msgstr "יצירת המכולה מתחילה…"
 
-#: src/createcontainerdialog.cpp:289
+#: src/createcontainerdialog.cpp:288
 #, kde-format
 msgid ""
 "Container '%1' created successfully!\n"
@@ -306,62 +283,62 @@ msgstr ""
 "\n"
 "הפעלת מסוף עם המכולה החדשה תיפתח כעת."
 
-#: src/createcontainerdialog.cpp:292 src/createcontainerdialog.cpp:354
+#: src/createcontainerdialog.cpp:291 src/createcontainerdialog.cpp:353
 #, kde-format
 msgid "Success"
 msgstr "הצלחה"
 
-#: src/createcontainerdialog.cpp:312
+#: src/createcontainerdialog.cpp:311
 #, kde-format
 msgid "Process output:"
 msgstr "פלט תהליך:"
 
-#: src/createcontainerdialog.cpp:319
+#: src/createcontainerdialog.cpp:318
 #, kde-format
 msgid "Process error:"
 msgstr "שגיאת תהליך:"
 
-#: src/createcontainerdialog.cpp:322
+#: src/createcontainerdialog.cpp:321
 #, kde-format
 msgid "Failed to start"
 msgstr "ההתחלה נכשלה"
 
-#: src/createcontainerdialog.cpp:325
+#: src/createcontainerdialog.cpp:324
 #, kde-format
 msgid "Crashed"
 msgstr "קרס"
 
-#: src/createcontainerdialog.cpp:328
+#: src/createcontainerdialog.cpp:327
 #, kde-format
 msgid "Timed out"
 msgstr "נגמר הזמן שהוקצב"
 
-#: src/createcontainerdialog.cpp:331
+#: src/createcontainerdialog.cpp:330
 #, kde-format
 msgid "Write error"
 msgstr "שגיאת כתיבה"
 
-#: src/createcontainerdialog.cpp:334
+#: src/createcontainerdialog.cpp:333
 #, kde-format
 msgid "Read error"
 msgstr "שגיאת קריאה"
 
-#: src/createcontainerdialog.cpp:337
+#: src/createcontainerdialog.cpp:336
 #, kde-format
 msgid "Unknown error"
 msgstr "שגיאה לא ידועה"
 
-#: src/createcontainerdialog.cpp:352
+#: src/createcontainerdialog.cpp:351
 #, kde-format
 msgid "Container “%1” created successfully!"
 msgstr "המכולה „%1” נוצרה בהצלחה!"
 
-#: src/createcontainerdialog.cpp:359
+#: src/createcontainerdialog.cpp:358
 #, kde-format
 msgid "Container creation failed (exit code: %1)"
 msgstr "יצירת המכולה נכשלה (קוד יציאה: %1)"
 
-#: src/createcontainerdialog.cpp:361
+#: src/createcontainerdialog.cpp:360
 #, kde-format
 msgid ""
 "Container creation failed (exit code: %1)\n"
@@ -372,178 +349,173 @@ msgstr ""
 "\n"
 "פלט שגיאה: %2\n"
 
-#: src/mainwindow.cpp:141
+#: src/mainwindow.cpp:136
 #, kde-format
 msgid "Fetching containers..."
 msgstr "המכולות מתקבלות…"
 
-#: src/mainwindow.cpp:169
+#: src/mainwindow.cpp:164
 #, kde-format
 msgid "No containers found"
 msgstr "לא נמצאו מכולות"
 
-#: src/mainwindow.cpp:192
+#: src/mainwindow.cpp:187
 #, kde-format
 msgid "Checking for available container backends..."
 msgstr "מתבצעת בדיקה לאיתור מנגנוני מכולות זמינים."
 
-#: src/mainwindow.cpp:209
+#: src/mainwindow.cpp:204
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr "לא נמצאו מנגנוני מכונות. נא להתקין את distrobox או את toolbox."
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:245
 #, kde-format
 msgid "Enter"
 msgstr "כניסה"
 
-#: src/mainwindow.cpp:258
+#: src/mainwindow.cpp:246
 #, kde-format
 msgid "Enter the selected container"
 msgstr "כניסה למכולה הנבחרת"
 
-#: src/mainwindow.cpp:261
+#: src/mainwindow.cpp:249
 #, kde-format
 msgid "Delete"
 msgstr "מחיקה"
 
-#: src/mainwindow.cpp:262
+#: src/mainwindow.cpp:250
 #, kde-format
 msgid "Delete the selected container"
 msgstr "מחיקת המכולה הנבחרת"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:253
 #, kde-format
 msgid "Applications"
 msgstr "יישומים"
 
-#: src/mainwindow.cpp:266
+#: src/mainwindow.cpp:254
 #, kde-format
 msgid "Manage exported applications"
 msgstr "ניהול יישומים מיוצאים"
 
-#: src/mainwindow.cpp:269
+#: src/mainwindow.cpp:257
 #, kde-format
 msgid "Upgrade"
 msgstr "שדרוג"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "שדרוג המכולה הנבחרת"
 
-#: src/mainwindow.cpp:277
+#: src/mainwindow.cpp:265
 #, kde-format
 msgid "Refresh"
 msgstr "ריענון"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Refresh container list"
 msgstr "ריענון רשימת המכולות"
 
-#: src/mainwindow.cpp:282
+#: src/mainwindow.cpp:270
 #, kde-format
 msgid "Install .deb"
 msgstr "התקנת ‎.deb"
 
-#: src/mainwindow.cpp:283
+#: src/mainwindow.cpp:271
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "התקנת חבילת דביאן/אובונטו"
 
-#: src/mainwindow.cpp:286
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Install .rpm"
 msgstr "התקנת ‎.rpm"
 
-#: src/mainwindow.cpp:287
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "התקנת חבילת פדורה/OpenSUSE"
 
-#: src/mainwindow.cpp:290
+#: src/mainwindow.cpp:278
 #, kde-format
 msgid "Install .pkg"
 msgstr "התקנת ‎.pkg"
 
-#: src/mainwindow.cpp:291
+#: src/mainwindow.cpp:279
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "התקנת חבילת לינוקס ארץ׳"
 
-#: src/mainwindow.cpp:314
+#: src/mainwindow.cpp:302
 #, kde-format
 msgid "New Container"
 msgstr "מכולה חדשה"
 
-#: src/mainwindow.cpp:316
+#: src/mainwindow.cpp:304
 #, kde-format
 msgid "Create new container"
 msgstr "יצירת מכולה חדשה"
 
-#: src/mainwindow.cpp:322
+#: src/mainwindow.cpp:310
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "שדרוג כל המכולות"
 
-#: src/mainwindow.cpp:324
+#: src/mainwindow.cpp:312
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "שדרוג כל המכולות"
 
-#: src/mainwindow.cpp:330
+#: src/mainwindow.cpp:318
 #, kde-format
 msgid "Assemble"
 msgstr "הרכבה"
 
-#: src/mainwindow.cpp:332
+#: src/mainwindow.cpp:320
 #, kde-format
 msgid "Create container from INI file"
 msgstr "יצירת מכולה מקובץ INI"
 
-#: src/mainwindow.cpp:342
-#, kde-format
-msgid "Terminal:"
-msgstr "מסוף:"
-
-#: src/mainwindow.cpp:380
+#: src/mainwindow.cpp:334 src/mainwindow.cpp:425
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr "לא נמצא מדמה מסוף - הפלט יוצג בחלונית"
 
-#: src/mainwindow.cpp:451
+#: src/mainwindow.cpp:389
 #, kde-format
 msgid "Assemble Result"
 msgstr "תוצאת הרכבה"
 
-#: src/mainwindow.cpp:492
+#: src/mainwindow.cpp:437
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "אישור מחיקה"
 
-#: src/mainwindow.cpp:493
+#: src/mainwindow.cpp:438
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "למחוק את המכולה <b>%1</b>?"
 
-#: src/mainwindow.cpp:494
+#: src/mainwindow.cpp:439
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "זאת פעולה בלתי הפיכה."
 
-#: src/mainwindow.cpp:501
+#: src/mainwindow.cpp:446
 #, kde-format
 msgid "Result"
 msgstr "תוצאה"
 
-#: src/mainwindow.cpp:549 src/mainwindow.cpp:574
+#: src/mainwindow.cpp:494
 #, kde-format
 msgid "Function Not Supported"
 msgstr "הפונקציה לא נתמכת"
 
-#: src/mainwindow.cpp:550
+#: src/mainwindow.cpp:495
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -554,91 +526,119 @@ msgstr ""
 "\n"
 "נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
 
-#: src/mainwindow.cpp:555
+#: src/mainwindow.cpp:500
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "בחירת קובץ INI של Distrobox"
 
-#: src/mainwindow.cpp:555
+#: src/mainwindow.cpp:500
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "קובצי INI‏ (‎*.ini);;כל הקבצים (*)"
 
-#: src/mainwindow.cpp:558
+#: src/mainwindow.cpp:503
 #, kde-format
 msgid "Assembling container..."
 msgstr "המכולה מורכבת…"
 
-#: src/mainwindow.cpp:575
-#, kde-format
+#: src/mainwindow.cpp:519
+#, fuzzy, kde-format
+#| msgid "Function Not Supported"
+msgid "Function Not Supported Yet"
+msgstr "הפונקציה לא נתמכת"
+
+#: src/mainwindow.cpp:520
+#, fuzzy, kde-format
+#| msgid ""
+#| "Toolbox backend doesn't support mass container upgrades.\n"
+#| "\n"
+#| "Please switch to Distrobox backend to use this feature."
 msgid ""
-"Toolbox backend doesn't support mass container upgrades.\n"
+"Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
-"Please switch to Distrobox backend to use this feature."
+"We are working with Upstream to fix it."
 msgstr ""
 "המנגנון של Toolbox לא תומך בעדכון מכולות במרוכז.\n"
 "\n"
 "נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
 
-#: src/mainwindow.cpp:584
+#: src/mainwindow.cpp:529
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "כל המכולות משודרגות…"
 
-#: src/mainwindow.cpp:608
+#: src/mainwindow.cpp:553
 #, kde-format
 msgid "Processing..."
 msgstr "מתבצע עיבוד…"
 
-#: src/mainwindow.cpp:644
+#: src/mainwindow.cpp:589
 #, kde-format
 msgid "Select .deb Package"
 msgstr "בחירת חבילת ‎.deb"
 
-#: src/mainwindow.cpp:644
+#: src/mainwindow.cpp:589
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "חבילות דביאן (‎*.deb)"
 
-#: src/mainwindow.cpp:650
+#: src/mainwindow.cpp:595
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "חבילת ‎.deb מותקנת…"
 
-#: src/mainwindow.cpp:681
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "בחירת חבילת ‎.rpm"
 
-#: src/mainwindow.cpp:681
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "חבילות RPM‏ (‎*.rpm)"
 
-#: src/mainwindow.cpp:687
+#: src/mainwindow.cpp:632
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "חבילת ‎.rpm מותקנת…"
 
-#: src/mainwindow.cpp:718
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Select Arch Package"
 msgstr "בחירת חבילת ארץ׳"
 
-#: src/mainwindow.cpp:718
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "חבילות ארץ׳ (‎*.pkg.tar.*‎)"
 
-#: src/mainwindow.cpp:724
+#: src/mainwindow.cpp:669
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "חבילת ארץ׳ מותקנת…"
 
-#: src/mainwindow.cpp:757
+#: src/mainwindow.cpp:702
 #, kde-format
 msgid "Upgrading container..."
 msgstr "המכולה מתעדכנת…"
+
+#~ msgid "Unknown terminal:"
+#~ msgstr "מסוף לא ידוע:"
+
+#~ msgid "Failed to start terminal"
+#~ msgstr "הפעלת המסוף נכשלה"
+
+#~ msgid "with args"
+#~ msgstr "עם ארגומנטים"
+
+#~ msgctxt ""
+#~ "If an Toolbox Image doesnt fit the list of distros for the icon and "
+#~ "package manager intergration, we will return Unknown"
+#~ msgid "Unknown"
+#~ msgstr "לא ידועה"
+
+#~ msgid "Terminal:"
+#~ msgstr "מסוף:"
 
 #~ msgid "Container:"
 #~ msgstr "מכולה:"
