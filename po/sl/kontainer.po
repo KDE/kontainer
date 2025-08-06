@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 00:46+0000\n"
-"PO-Revision-Date: 2025-07-07 08:32+0200\n"
+"PO-Revision-Date: 2025-08-05 07:20+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -540,25 +540,20 @@ msgid "Assembling container..."
 msgstr "Sestavljanje vsebnika ..."
 
 #: src/mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgid "Function Not Supported"
+#, kde-format
 msgid "Function Not Supported Yet"
-msgstr "Funkcija ni podprta"
+msgstr "Funkcija še ni podprta"
 
 #: src/mainwindow.cpp:520
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toolbox backend doesn't support mass container upgrades.\n"
-#| "\n"
-#| "Please switch to Distrobox backend to use this feature."
+#, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
 "We are working with Upstream to fix it."
 msgstr ""
-"Zaledni sistem Toolbox ne podpira množičnih nadgradenj vsebnikov.\n"
+"Ozadje Toolbox še ne podpira množičnih nadgradenj vsebnikov.\n"
 "\n"
-"Za uporabo te zmožnosti preklopite na zaledni sistem Distrobox."
+"Sodelujemo z Upstreamom, da bi to odpravili."
 
 #: src/mainwindow.cpp:529
 #, kde-format

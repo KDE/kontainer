@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 00:46+0000\n"
-"PO-Revision-Date: 2025-07-07 08:56+0300\n"
+"PO-Revision-Date: 2025-08-05 14:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -546,17 +546,12 @@ msgid "Assembling container..."
 msgstr "Збирання контейнера…"
 
 #: src/mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgid "Function Not Supported"
+#, kde-format
 msgid "Function Not Supported Yet"
-msgstr "Підтримки функції не передбачено"
+msgstr "Підтримки функції ще не передбачено"
 
 #: src/mainwindow.cpp:520
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toolbox backend doesn't support mass container upgrades.\n"
-#| "\n"
-#| "Please switch to Distrobox backend to use this feature."
+#, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
@@ -565,8 +560,7 @@ msgstr ""
 "У модулі обробки Toolbox не передбачено підтримки пакетного оновлення "
 "контейнерів.\n"
 "\n"
-"Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
-"можливістю."
+"Ми працюємо з розробниками основної програми, щоб виправити це."
 
 #: src/mainwindow.cpp:529
 #, kde-format

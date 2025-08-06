@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 00:46+0000\n"
-"PO-Revision-Date: 2025-07-07 09:14+0300\n"
+"PO-Revision-Date: 2025-08-05 11:01+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: src/appsdialog.cpp:62
 #, kde-format
@@ -542,25 +542,20 @@ msgid "Assembling container..."
 msgstr "המכולה מורכבת…"
 
 #: src/mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgid "Function Not Supported"
+#, kde-format
 msgid "Function Not Supported Yet"
-msgstr "הפונקציה לא נתמכת"
+msgstr "הפונקציה לא נתמכת עדיין"
 
 #: src/mainwindow.cpp:520
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toolbox backend doesn't support mass container upgrades.\n"
-#| "\n"
-#| "Please switch to Distrobox backend to use this feature."
+#, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
 "We are working with Upstream to fix it."
 msgstr ""
-"המנגנון של Toolbox לא תומך בעדכון מכולות במרוכז.\n"
+"המנגנון של Toolbox לא תומך בעדכון מכולות במרוכז עדיין.\n"
 "\n"
-"נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
+"אנו עובדים מול המקורות של המנגנון כדי לתקן את זה."
 
 #: src/mainwindow.cpp:529
 #, kde-format

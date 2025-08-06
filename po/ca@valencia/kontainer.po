@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 00:46+0000\n"
-"PO-Revision-Date: 2025-07-07 13:54+0200\n"
+"PO-Revision-Date: 2025-08-05 08:45+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: src/appsdialog.cpp:62
 #, kde-format
@@ -538,7 +538,7 @@ msgstr ""
 #: src/mainwindow.cpp:500
 #, kde-format
 msgid "Select Distrobox INI File"
-msgstr "Seleccioneu el fitxer INI de Distrobox"
+msgstr "Trieu el fitxer INI de Distrobox"
 
 #: src/mainwindow.cpp:500
 #, kde-format
@@ -551,26 +551,21 @@ msgid "Assembling container..."
 msgstr "S'està assemblant el contenidor…"
 
 #: src/mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgid "Function Not Supported"
+#, kde-format
 msgid "Function Not Supported Yet"
-msgstr "Funció no implementada"
+msgstr "Funció encara no implementada"
 
 # skip-rule: kct-toolbox
 #: src/mainwindow.cpp:520
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toolbox backend doesn't support mass container upgrades.\n"
-#| "\n"
-#| "Please switch to Distrobox backend to use this feature."
+#, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
 "We are working with Upstream to fix it."
 msgstr ""
-"El dorsal ToolboX no admet actualitzacions massives de contenidors.\n"
+"El dorsal ToolboX encara no admet actualitzacions massives de contenidors.\n"
 "\n"
-"Canvieu al dorsal Distrobox per a utilitzar esta característica."
+"Estem treballant amb el desenvolupament original per a solucionar-ho."
 
 #: src/mainwindow.cpp:529
 #, kde-format
@@ -632,21 +627,3 @@ msgstr "S'està instal·lant un paquet Arch…"
 #, kde-format
 msgid "Upgrading container..."
 msgstr "S'està actualitzant el contenidor…"
-
-#~ msgid "Unknown terminal:"
-#~ msgstr "Terminal desconegut:"
-
-#~ msgid "Failed to start terminal"
-#~ msgstr "No s'ha pogut iniciar el terminal"
-
-#~ msgid "with args"
-#~ msgstr "amb arguments"
-
-#~ msgctxt ""
-#~ "If an Toolbox Image doesnt fit the list of distros for the icon and "
-#~ "package manager intergration, we will return Unknown"
-#~ msgid "Unknown"
-#~ msgstr "Desconegut"
-
-#~ msgid "Terminal:"
-#~ msgstr "Terminal:"
