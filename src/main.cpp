@@ -3,13 +3,20 @@
 
 #include "mainwindow.h"
 #include <main.h>
+#include "appflags.h"
+
+bool g_noTerminal = false;
 
 int main(int argc, char *argv[])
 {
+    for (int i = 1; i < argc; ++i) {
+        if (QString(argv[i]) == "--no-terminal") {
+            g_noTerminal = true;
+        }
+    }
+
     KLocalizedString::setApplicationDomain("kontainer");
-
     QApplication app(argc, argv);
-
     app.setStyle(QStyleFactory::create("Breeze"));
 
     MainWindow window;

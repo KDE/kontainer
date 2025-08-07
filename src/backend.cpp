@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: 2025 Hadi Chokr <hadichokr@icloud.com>
 
 #include "backend.h"
+#include "appflags.h"
 #include "packagemanager.h"
 #include <mainwindow.h>
 #include <toolboximages.h>
@@ -26,10 +27,17 @@ Backend::Backend(QObject *parent)
 // Getter
 bool Backend::isTerminalJobPossible() {
     checkTerminaljob();
-    return m_isTerminalJobPossible; }
+    return m_isTerminalJobPossible;
+}
 
 void Backend::checkTerminaljob()
 {
+    if (g_noTerminal) {
+        qDebug() << "Terminal job check skipped due to --no-terminal flag";
+        m_isTerminalJobPossible = false;
+        return;
+    }
+
     KTerminalLauncherJob job(QStringLiteral("true"));
     m_isTerminalJobPossible = job.prepare();
 }

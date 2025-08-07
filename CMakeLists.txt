@@ -34,6 +34,7 @@ set(SOURCES
 )
 
 set(HEADERS
+    include/appflags.h
     include/appsdialog.h
     include/backend.h
     include/createcontainerdialog.h
