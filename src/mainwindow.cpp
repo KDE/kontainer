@@ -204,6 +204,16 @@ void MainWindow::onBackendsAvailable(const QStringList &backends)
         // Setup minimal UI even without backends
     }
 
+    if (!(backend->isTerminalJobPossible()))
+    {
+        QMessageBox::critical(this,
+                              i18n("No Terminal Mode Disabled"),
+                              i18n("The No Terminal Mode will be removed soon and is now disabled.\n\n"
+                              "Please install a terminal emulator like Konsole:\n"
+                              "flatpak install org.kde.konsole"));
+        qApp->exit(1);
+    }
+
     // Now setup the full UI
     setupUI();
     refreshContainers();
