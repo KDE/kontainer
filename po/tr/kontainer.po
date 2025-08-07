@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-05 00:46+0000\n"
+"POT-Creation-Date: 2025-08-07 18:32+0000\n"
 "PO-Revision-Date: 2025-08-06 22:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -73,43 +73,43 @@ msgstr "Dışa Aktarılmış Uygulamalar"
 msgid "Available Apps"
 msgstr "Kullanılabilir Uygulamalar"
 
-#: src/backend.cpp:120
+#: src/backend.cpp:130
 #, kde-format
 msgid "Error: Command timed out"
 msgstr "Hata: Komut zaman aşımına uğradı."
 
-#: src/backend.cpp:306
+#: src/backend.cpp:316
 #, kde-format
 msgid "Error: No supported backend available"
 msgstr "Hata: Desteklenen arka uç yok"
 
-#: src/backend.cpp:312
+#: src/backend.cpp:322
 #, kde-format
 msgid "Error: Failed to start container creation process"
 msgstr "Hata: Kapsayıcı oluşturma süreci başlatılamadı"
 
-#: src/backend.cpp:317
+#: src/backend.cpp:327
 #, kde-format
 msgid "Container created successfully"
 msgstr "Kapsayıcı başarıyla oluşturuldu"
 
-#: src/backend.cpp:317
+#: src/backend.cpp:327
 #, kde-format
 msgid "Container creation failed"
 msgstr "Kapsayıcı oluşturulamadı"
 
-#: src/backend.cpp:323
+#: src/backend.cpp:333
 #, kde-format
 msgid "Error: "
 msgstr "Hata: "
 
-#: src/backend.cpp:358
+#: src/backend.cpp:368
 #, kde-format
 msgctxt "Error message when toolbox deletion fails"
 msgid "Failed to delete Toolbox %1. Error: %2"
 msgstr "Toolbox %1 silinemedi. Hata: %2"
 
-#: src/backend.cpp:361
+#: src/backend.cpp:371
 #, kde-format
 msgctxt ""
 "Inform the User that the Toolbox Deletion Completed since it returns no "
@@ -117,53 +117,61 @@ msgctxt ""
 msgid "Toolbox %1 deleted successfully."
 msgstr "Toolbox %1 başarıyla silindi"
 
-#: src/backend.cpp:363
+#: src/backend.cpp:373
 #, kde-format
 msgid "Error: Failed to delete Container."
 msgstr "Hata: Kapsayıcı silinemedi"
 
-#: src/backend.cpp:458
+#: src/backend.cpp:597
 #, kde-format
-msgid "Error: %1"
-msgstr "Hata: %1"
+msgid "Error: Unknown container backend"
+msgstr ""
 
-#: src/backend.cpp:873
+#: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
+#, fuzzy, kde-format
+#| msgid "Error: Command timed out"
+msgid ""
+"\n"
+"Error: Command failed with exit code %1"
+msgstr "Hata: Komut zaman aşımına uğradı."
+
+#: src/backend.cpp:904
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "%2 kapsayıcısında %1 uygulaması bulunamadı"
 
-#: src/backend.cpp:881
+#: src/backend.cpp:912
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "%2 kapsayıcısında %1 için olan desktop dosyası bulunamadı"
 
-#: src/backend.cpp:928
+#: src/backend.cpp:959
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "Desktop dosyası oluşturulamadı: %1"
 
-#: src/backend.cpp:937
+#: src/backend.cpp:968
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "%1, %2 konumundan başarıyla dışa aktarıldı"
 
-#: src/backend.cpp:964
+#: src/backend.cpp:995
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "%2 kapsayıcısı için %1 dışa aktarılan uygulama bulunamadı"
 
-#: src/backend.cpp:968
+#: src/backend.cpp:999
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "Desktop dosyası kaldırılamadı: %1"
 
-#: src/backend.cpp:973
+#: src/backend.cpp:1004
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
@@ -234,7 +242,7 @@ msgstr "Init sistemi:"
 msgid "Refresh Images"
 msgstr "Görselleri Yenile"
 
-#: src/createcontainerdialog.cpp:163 src/mainwindow.cpp:503
+#: src/createcontainerdialog.cpp:163
 #, kde-format
 msgid "Cancel"
 msgstr "İptal"
@@ -246,7 +254,7 @@ msgstr "Oluştur"
 
 #: src/createcontainerdialog.cpp:248 src/createcontainerdialog.cpp:253
 #: src/createcontainerdialog.cpp:298 src/createcontainerdialog.cpp:341
-#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:204
+#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:203
 #, kde-format
 msgid "Error"
 msgstr "Hata"
@@ -348,22 +356,22 @@ msgstr ""
 "\n"
 "Hata çıktısı: %2\n"
 
-#: src/mainwindow.cpp:136
+#: src/mainwindow.cpp:135
 #, kde-format
 msgid "Fetching containers..."
 msgstr "Kapsayıcılar getiriliyor…"
 
-#: src/mainwindow.cpp:164
+#: src/mainwindow.cpp:163
 #, kde-format
 msgid "No containers found"
 msgstr "Bulunan kapsayıcı yok"
 
-#: src/mainwindow.cpp:187
+#: src/mainwindow.cpp:186
 #, kde-format
 msgid "Checking for available container backends..."
 msgstr "Kullanılabilir kapsayıcı arka uçları denetleniyor…"
 
-#: src/mainwindow.cpp:204
+#: src/mainwindow.cpp:203
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
@@ -371,154 +379,149 @@ msgstr ""
 "Bulunan kapsayıcı arka ucu yok. Lütfen “distrobox” veya “toolbox” "
 "araçlarından birini kurun."
 
-#: src/mainwindow.cpp:245
+#: src/mainwindow.cpp:244
 #, kde-format
 msgid "Enter"
 msgstr "Gir"
 
-#: src/mainwindow.cpp:246
+#: src/mainwindow.cpp:245
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Seçili kapsayıcıya gir"
 
-#: src/mainwindow.cpp:249
+#: src/mainwindow.cpp:248
 #, kde-format
 msgid "Delete"
 msgstr "Sil"
 
-#: src/mainwindow.cpp:250
+#: src/mainwindow.cpp:249
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Seçili kapsayıcıyı sil"
 
-#: src/mainwindow.cpp:253
+#: src/mainwindow.cpp:252
 #, kde-format
 msgid "Applications"
 msgstr "Uygulamalar"
 
-#: src/mainwindow.cpp:254
+#: src/mainwindow.cpp:253
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Dışa aktarılan uygulamaları yönet"
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:256
 #, kde-format
 msgid "Upgrade"
 msgstr "Yükselt"
 
-#: src/mainwindow.cpp:258
+#: src/mainwindow.cpp:257
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Seçili kapsayıcıyı yükselt"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:264
 #, kde-format
 msgid "Refresh"
 msgstr "Yenile"
 
-#: src/mainwindow.cpp:266
+#: src/mainwindow.cpp:265
 #, kde-format
 msgid "Refresh container list"
 msgstr "Kapsayıcı listesini yenile"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:269
 #, kde-format
 msgid "Install .deb"
 msgstr ".deb Kur"
 
-#: src/mainwindow.cpp:271
+#: src/mainwindow.cpp:270
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Debian/Ubuntu paketi kur"
 
-#: src/mainwindow.cpp:274
+#: src/mainwindow.cpp:273
 #, kde-format
 msgid "Install .rpm"
 msgstr ".rpm Kur"
 
-#: src/mainwindow.cpp:275
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Fedora/OpenSUSE paketi kur"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:277
 #, kde-format
 msgid "Install .pkg"
 msgstr ".pkg Kur"
 
-#: src/mainwindow.cpp:279
+#: src/mainwindow.cpp:278
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Arch Linux paketi kur"
 
-#: src/mainwindow.cpp:302
+#: src/mainwindow.cpp:301
 #, kde-format
 msgid "New Container"
 msgstr "Yeni Kapsayıcı"
 
-#: src/mainwindow.cpp:304
+#: src/mainwindow.cpp:303
 #, kde-format
 msgid "Create new container"
 msgstr "Yeni kapsayıcı oluştur"
 
-#: src/mainwindow.cpp:310
+#: src/mainwindow.cpp:309
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Tüm Kapsayıcıları Yükselt"
 
-#: src/mainwindow.cpp:312
+#: src/mainwindow.cpp:311
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Tüm kapsayıcıları yükseltir"
 
-#: src/mainwindow.cpp:318
+#: src/mainwindow.cpp:317
 #, kde-format
 msgid "Assemble"
 msgstr "Topla"
 
-#: src/mainwindow.cpp:320
+#: src/mainwindow.cpp:319
 #, kde-format
 msgid "Create container from INI file"
 msgstr "INI dosyasından kapsayıcı oluştur"
 
-#: src/mainwindow.cpp:334 src/mainwindow.cpp:425
+#: src/mainwindow.cpp:333 src/mainwindow.cpp:408
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
 "Bulunan bir uçbirim öykünücüsü yok — çıktı, bir iletişim kutusunda "
 "gösterilecek."
 
-#: src/mainwindow.cpp:389
-#, kde-format
-msgid "Assemble Result"
-msgstr "Sonucu Topla"
-
-#: src/mainwindow.cpp:437
+#: src/mainwindow.cpp:421
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Silmeyi Onayla"
 
-#: src/mainwindow.cpp:438
+#: src/mainwindow.cpp:422
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "<b>%1</b> kapsayıcısı silinsin mi?"
 
-#: src/mainwindow.cpp:439
+#: src/mainwindow.cpp:423
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Bu eylem geri alınamaz."
 
-#: src/mainwindow.cpp:446
+#: src/mainwindow.cpp:430
 #, kde-format
 msgid "Result"
 msgstr "Sonuç"
 
-#: src/mainwindow.cpp:494
+#: src/mainwindow.cpp:477
 #, kde-format
 msgid "Function Not Supported"
 msgstr "İşlev Desteklenmiyor"
 
-#: src/mainwindow.cpp:495
+#: src/mainwindow.cpp:478
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -529,96 +532,98 @@ msgstr ""
 "\n"
 "Bu özelliği kullanmak için Distrobox arka ucuna geçin."
 
-#: src/mainwindow.cpp:500
+#: src/mainwindow.cpp:483
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Distrobox INI Dosyası Seç"
 
-#: src/mainwindow.cpp:500
+#: src/mainwindow.cpp:483
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "INI dosyaları (*.ini);;Tüm dosyalar (*)"
 
-#: src/mainwindow.cpp:503
+#: src/mainwindow.cpp:500
 #, kde-format
 msgid "Assembling container..."
 msgstr "Kapsayıcı toplanıyor…"
 
-#: src/mainwindow.cpp:519
-#, kde-format
-msgid "Function Not Supported Yet"
-msgstr "İşlev Henüz Desteklenmiyor"
-
-#: src/mainwindow.cpp:520
-#, kde-format
-msgid ""
-"Toolbox backend doesn't support mass container upgrades yet.\n"
-"\n"
-"We are working with Upstream to fix it."
-msgstr ""
-"Toolbox arka ucu toplu kapsayıcı yükseltmelerini desteklemiyor.\n"
-"\n"
-"Bunu düzeltmek için Toolbox geliştiricileriyle iletişim halindeyiz."
-
-#: src/mainwindow.cpp:529
-#, kde-format
-msgid "Upgrading all containers..."
-msgstr "Tüm kapsayıcılar yükseltiliyor…"
-
-#: src/mainwindow.cpp:553
+#: src/mainwindow.cpp:523
 #, kde-format
 msgid "Processing..."
 msgstr "İşleniyor…"
 
-#: src/mainwindow.cpp:589
+#: src/mainwindow.cpp:576
 #, kde-format
 msgid "Select .deb Package"
 msgstr ".deb Paketi Seç"
 
-#: src/mainwindow.cpp:589
+#: src/mainwindow.cpp:578
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Debian paketleri (*.deb)"
 
-#: src/mainwindow.cpp:595
+#: src/mainwindow.cpp:587
 #, kde-format
 msgid "Installing .deb package..."
 msgstr ".deb paketi kuruluyor…"
 
-#: src/mainwindow.cpp:626
+#: src/mainwindow.cpp:614
 #, kde-format
 msgid "Select .rpm Package"
 msgstr ".rpm Paketi Seç"
 
-#: src/mainwindow.cpp:626
+#: src/mainwindow.cpp:616
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "RPM paketleri (*.rpm)"
 
-#: src/mainwindow.cpp:632
+#: src/mainwindow.cpp:625
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr ".rpm paketi kuruluyor…"
 
-#: src/mainwindow.cpp:663
+#: src/mainwindow.cpp:652
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Arch Paketi Seç"
 
-#: src/mainwindow.cpp:663
+#: src/mainwindow.cpp:654
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Arch paketleri (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:669
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "Arch paketi kuruluyor…"
 
-#: src/mainwindow.cpp:702
+#: src/mainwindow.cpp:691
 #, kde-format
 msgid "Upgrading container..."
 msgstr "Kapsayıcı yükseltiliyor…"
+
+#: src/mainwindow.cpp:713
+#, kde-format
+msgid "Upgrading all containers..."
+msgstr "Tüm kapsayıcılar yükseltiliyor…"
+
+#~ msgid "Error: %1"
+#~ msgstr "Hata: %1"
+
+#~ msgid "Assemble Result"
+#~ msgstr "Sonucu Topla"
+
+#~ msgid "Function Not Supported Yet"
+#~ msgstr "İşlev Henüz Desteklenmiyor"
+
+#~ msgid ""
+#~ "Toolbox backend doesn't support mass container upgrades yet.\n"
+#~ "\n"
+#~ "We are working with Upstream to fix it."
+#~ msgstr ""
+#~ "Toolbox arka ucu toplu kapsayıcı yükseltmelerini desteklemiyor.\n"
+#~ "\n"
+#~ "Bunu düzeltmek için Toolbox geliştiricileriyle iletişim halindeyiz."
 
 #~ msgid "Unknown terminal:"
 #~ msgstr "Bilinmeyen uçbirim:"
