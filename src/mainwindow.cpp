@@ -484,16 +484,28 @@ void MainWindow::assembleContainer()
     dialog->setFileMode(QFileDialog::ExistingFile);
     dialog->open();
 
-    connect(dialog, &QFileDialog::fileSelected, this, [this](const QString &iniFile) {
+    // We connect only ONCE per dialog, safely
+    connect(dialog, &QFileDialog::fileSelected, this, [this, dialog](const QString &iniFile) {
+        dialog->deleteLater(); // clean up the dialog
+
+        if (iniFile.isEmpty())
+            return;
+
+        // Clean up previous connections safely (if still connected)
+        disconnect(backend, &Backend::assembleStartedWithDialog, this, nullptr);
+        disconnect(backend, &Backend::assembleFinished, this, nullptr);
+
+        // Connect backend signals robustly
+        connect(backend, &Backend::assembleStartedWithDialog, this, [this]() {
+            setupProgressDialog(i18n("Assembling container..."));
+        });
+
+        connect(backend, &Backend::assembleFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+        });
+
+        // Start backend logic
         backend->assembleContainer(iniFile);
-    });
-
-    connect(backend, &Backend::assembleStartedWithDialog, this, [this]() {
-        setupProgressDialog(i18n("Assembling container..."));
-    });
-
-    connect(backend, &Backend::assembleFinished, this, [this](const QString &output) {
-        appendCommandOutput(output);
     });
 }
 
@@ -536,6 +548,13 @@ void MainWindow::upgradeAllContainers()
 // New helper function to create and show progress dialog with output
 void MainWindow::setupProgressDialog(const QString &title)
 {
+    // Safe cleanup if it exists
+    if (progressDialog) {
+        progressDialog->close();
+        progressDialog->deleteLater();
+        progressDialog = nullptr;
+    }
+
     progressDialog = new QProgressDialog(this);
     progressDialog->setWindowTitle(title);
     progressDialog->setLabelText(i18n("Processing..."));
@@ -556,13 +575,14 @@ void MainWindow::setupProgressDialog(const QString &title)
 // New function to append output to the progress dialog
 void MainWindow::appendCommandOutput(const QString &output)
 {
-    if (progressOutput) {
-        progressOutput->append(output);
-        // Auto-scroll to bottom
-        QTextCursor cursor = progressOutput->textCursor();
-        cursor.movePosition(QTextCursor::End);
-        progressOutput->setTextCursor(cursor);
-    }
+    if (!progressOutput)
+        return;
+
+    progressOutput->append(output);
+
+    QTextCursor cursor = progressOutput->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    progressOutput->setTextCursor(cursor);
 }
 
 void MainWindow::installDebPackage()
