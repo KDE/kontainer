@@ -393,11 +393,6 @@ void MainWindow::onAssembleFinished(const QString &result)
 void MainWindow::updateButtonStates()
 {
     bool hasSelection = !currentContainer.isEmpty();
-    if (!hasTerminal) {
-        enterBtn->setVisible(false);
-    } else {
-        enterBtn->setEnabled(hasSelection);
-    }
 
     deleteBtn->setEnabled(hasSelection);
     appsBtn->setEnabled(hasSelection);
@@ -425,6 +420,7 @@ void MainWindow::updateButtonStates()
         enterBtn->setToolTip(i18n("No terminal emulator found - output will be shown in dialog"));
     } else {
         enterBtn->setVisible(true);
+        enterBtn->setEnabled(hasSelection);
     }
 }
 

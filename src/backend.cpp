@@ -24,7 +24,9 @@ Backend::Backend(QObject *parent)
 }
 
 // Getter
-bool Backend::isTerminalJobPossible() const { return m_isTerminalJobPossible; }
+bool Backend::isTerminalJobPossible() {
+    checkTerminaljob();
+    return m_isTerminalJobPossible; }
 
 void Backend::checkTerminaljob()
 {

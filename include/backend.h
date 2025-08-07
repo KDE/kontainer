@@ -26,7 +26,7 @@ public:
     explicit Backend(QObject *parent = nullptr);
     QStringList availableBackends() const;
     void setPreferredBackend(const QString &backend);
-    bool isTerminalJobPossible() const;
+    bool isTerminalJobPossible();
 
     // Container operations
     QString
