@@ -509,46 +509,9 @@ void MainWindow::assembleContainer()
     });
 }
 
-void MainWindow::upgradeAllContainers()
-{
-    // Get the current backend from the Backend instance
-    QString currentBackend = backend->preferredBackend();
-
-    if (currentBackend == "toolbox") {
-        QMessageBox::information(this,
-                                 i18n("Function Not Supported Yet"),
-                                 i18n("Toolbox backend doesn't support mass container upgrades yet.\n\n"
-                                      "We are working with Upstream to fix it."));
-        return;
-    }
-
-    qDebug() << "[upgradeAllContainers] Called with backend:" << currentBackend;
-
-    if (!backend->isTerminalJobPossible()) {
-        qDebug() << "[upgradeAllContainers] No terminal. Using internal upgrade.";
-        setupProgressDialog(i18n("Upgrading all containers..."));
-
-        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
-        connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
-            appendCommandOutput(output);
-            progressDialog->close();
-            progressDialog->deleteLater();
-            progressDialog = nullptr;
-        });
-        backend->upgradeAllContainersNoTerminal();
-    } else {
-        qDebug() << "[upgradeAllContainers] Using terminal.";
-        connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
-            // Terminal will handle its own output
-        });
-        backend->upgradeAllContainers();
-    }
-}
-
 // New helper function to create and show progress dialog with output
 void MainWindow::setupProgressDialog(const QString &title)
 {
-    // Safe cleanup if it exists
     if (progressDialog) {
         progressDialog->close();
         progressDialog->deleteLater();
@@ -569,7 +532,22 @@ void MainWindow::setupProgressDialog(const QString &title)
     layout->addWidget(progressOutput);
     progressDialog->setLayout(layout);
     progressDialog->resize(600, 400);
+
+    connect(progressDialog, &QProgressDialog::finished, this, [this]() {
+        qDebug() << "[setupProgressDialog] Progress dialog manually closed.";
+        cleanupProgressDialog(); // just in case
+    });
+
     progressDialog->show();
+}
+
+void MainWindow::cleanupProgressDialog()
+{
+    if (progressDialog) {
+        progressDialog->close();
+        progressDialog->deleteLater();
+        progressDialog = nullptr;
+    }
 }
 
 // New function to append output to the progress dialog
@@ -590,35 +568,36 @@ void MainWindow::installDebPackage()
     qDebug() << "[installDebPackage] Called";
 
     if (currentContainer.isEmpty()) {
-        qDebug() << "[installDebPackage] No container selected. Aborting.";
+        qDebug() << "[installDebPackage] No container selected.";
         return;
     }
 
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .deb Package"), QDir::homePath(), i18n("Debian Packages (*.deb)"));
-    qDebug() << "[installDebPackage] Selected file:" << filePath;
+    const QString filePath = QFileDialog::getOpenFileName(this,
+                                                          i18n("Select .deb Package"),
+                                                          QDir::homePath(),
+                                                          i18n("Debian Packages (*.deb)"));
 
-    if (!filePath.isEmpty()) {
-        if (!backend->isTerminalJobPossible()) {
-            qDebug() << "[installDebPackage] No preferred terminal. Using internal install.";
-            setupProgressDialog(i18n("Installing .deb package..."));
-
-            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
-            connect(backend, &Backend::debInstallFinished, this, [this](const QString &output) {
-                appendCommandOutput(output);
-                progressDialog->close();
-                progressDialog->deleteLater();
-                progressDialog = nullptr;
-            });
-            backend->installDebPackageNoTerminal(currentContainer, filePath);
-        } else {
-            qDebug() << "[installDebPackage] Using terminal.";
-            connect(backend, &Backend::debInstallFinished, this, [](const QString &) {
-                // Terminal will handle its own output
-            });
-            backend->installDebPackage(currentContainer, filePath);
-        }
-    } else {
+    if (filePath.isEmpty()) {
         qDebug() << "[installDebPackage] File selection canceled.";
+        return;
+    }
+
+    if (!backend->isTerminalJobPossible()) {
+        qDebug() << "[installDebPackage] Using internal install.";
+        setupProgressDialog(i18n("Installing .deb package..."));
+
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::debInstallFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            cleanupProgressDialog();
+            disconnect(backend, nullptr, this, nullptr);
+        });
+
+        backend->installDebPackageNoTerminal(currentContainer, filePath);
+    } else {
+        qDebug() << "[installDebPackage] Using terminal backend.";
+        connect(backend, &Backend::debInstallFinished, this, [](const QString &) {});
+        backend->installDebPackage(currentContainer, filePath);
     }
 }
 
@@ -627,35 +606,36 @@ void MainWindow::installRpmPackage()
     qDebug() << "[installRpmPackage] Called";
 
     if (currentContainer.isEmpty()) {
-        qDebug() << "[installRpmPackage] No container selected. Aborting.";
+        qDebug() << "[installRpmPackage] No container selected.";
         return;
     }
 
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select .rpm Package"), QDir::homePath(), i18n("RPM Packages (*.rpm)"));
-    qDebug() << "[installRpmPackage] Selected file:" << filePath;
+    const QString filePath = QFileDialog::getOpenFileName(this,
+                                                          i18n("Select .rpm Package"),
+                                                          QDir::homePath(),
+                                                          i18n("RPM Packages (*.rpm)"));
 
-    if (!filePath.isEmpty()) {
-        if (!backend->isTerminalJobPossible()) {
-            qDebug() << "[installRpmPackage] No preferred terminal. Using internal install.";
-            setupProgressDialog(i18n("Installing .rpm package..."));
-
-            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
-            connect(backend, &Backend::rpmInstallFinished, this, [this](const QString &output) {
-                appendCommandOutput(output);
-                progressDialog->close();
-                progressDialog->deleteLater();
-                progressDialog = nullptr;
-            });
-            backend->installRpmPackageNoTerminal(currentContainer, filePath);
-        } else {
-            qDebug() << "[installRpmPackage] Using terminal.";
-            connect(backend, &Backend::rpmInstallFinished, this, [](const QString &) {
-                // Terminal will handle its own output
-            });
-            backend->installRpmPackage(currentContainer, filePath);
-        }
-    } else {
+    if (filePath.isEmpty()) {
         qDebug() << "[installRpmPackage] File selection canceled.";
+        return;
+    }
+
+    if (!backend->isTerminalJobPossible()) {
+        qDebug() << "[installRpmPackage] Using internal install.";
+        setupProgressDialog(i18n("Installing .rpm package..."));
+
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::rpmInstallFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            cleanupProgressDialog();
+            disconnect(backend, nullptr, this, nullptr);
+        });
+
+        backend->installRpmPackageNoTerminal(currentContainer, filePath);
+    } else {
+        qDebug() << "[installRpmPackage] Using terminal backend.";
+        connect(backend, &Backend::rpmInstallFinished, this, [](const QString &) {});
+        backend->installRpmPackage(currentContainer, filePath);
     }
 }
 
@@ -664,35 +644,36 @@ void MainWindow::installArchPackage()
     qDebug() << "[installArchPackage] Called";
 
     if (currentContainer.isEmpty()) {
-        qDebug() << "[installArchPackage] No container selected. Aborting.";
+        qDebug() << "[installArchPackage] No container selected.";
         return;
     }
 
-    QString filePath = QFileDialog::getOpenFileName(this, i18n("Select Arch Package"), QDir::homePath(), i18n("Arch Packages (*.pkg.tar.*)"));
-    qDebug() << "[installArchPackage] Selected file:" << filePath;
+    const QString filePath = QFileDialog::getOpenFileName(this,
+                                                          i18n("Select Arch Package"),
+                                                          QDir::homePath(),
+                                                          i18n("Arch Packages (*.pkg.tar.*)"));
 
-    if (!filePath.isEmpty()) {
-        if (!backend->isTerminalJobPossible()) {
-            qDebug() << "[installArchPackage] No preferred terminal. Using internal install.";
-            setupProgressDialog(i18n("Installing Arch package..."));
-
-            connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
-            connect(backend, &Backend::archInstallFinished, this, [this](const QString &output) {
-                appendCommandOutput(output);
-                progressDialog->close();
-                progressDialog->deleteLater();
-                progressDialog = nullptr;
-            });
-            backend->installArchPackageNoTerminal(currentContainer, filePath);
-        } else {
-            qDebug() << "[installArchPackage] Using terminal.";
-            connect(backend, &Backend::archInstallFinished, this, [](const QString &) {
-                // Terminal will handle its own output
-            });
-            backend->installArchPackage(currentContainer, filePath);
-        }
-    } else {
+    if (filePath.isEmpty()) {
         qDebug() << "[installArchPackage] File selection canceled.";
+        return;
+    }
+
+    if (!backend->isTerminalJobPossible()) {
+        qDebug() << "[installArchPackage] Using internal install.";
+        setupProgressDialog(i18n("Installing Arch package..."));
+
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::archInstallFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            cleanupProgressDialog();
+            disconnect(backend, nullptr, this, nullptr);
+        });
+
+        backend->installArchPackageNoTerminal(currentContainer, filePath);
+    } else {
+        qDebug() << "[installArchPackage] Using terminal backend.";
+        connect(backend, &Backend::archInstallFinished, this, [](const QString &) {});
+        backend->installArchPackage(currentContainer, filePath);
     }
 }
 
@@ -701,27 +682,46 @@ void MainWindow::upgradeContainer()
     qDebug() << "[upgradeContainer] Called";
 
     if (currentContainer.isEmpty()) {
-        qDebug() << "[upgradeContainer] No container selected. Aborting.";
+        qDebug() << "[upgradeContainer] No container selected.";
         return;
     }
 
     if (!backend->isTerminalJobPossible()) {
-        qDebug() << "[upgradeContainer] No preferred terminal. Using internal upgrade.";
+        qDebug() << "[upgradeContainer] Using internal upgrade.";
         setupProgressDialog(i18n("Upgrading container..."));
 
         connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
         connect(backend, &Backend::upgradeFinished, this, [this](const QString &output) {
             appendCommandOutput(output);
-            progressDialog->close();
-            progressDialog->deleteLater();
-            progressDialog = nullptr;
+            cleanupProgressDialog();
+            disconnect(backend, nullptr, this, nullptr);
         });
+
         backend->upgradeContainerNoTerminal(currentContainer);
     } else {
-        qDebug() << "[upgradeContainer] Using preferred terminal.";
-        connect(backend, &Backend::upgradeFinished, this, [](const QString &) {
-            // Terminal will handle its own output
-        });
+        qDebug() << "[upgradeContainer] Using terminal backend.";
+        connect(backend, &Backend::upgradeFinished, this, [](const QString &) {});
         backend->upgradeContainer(currentContainer);
+    }
+}
+
+void MainWindow::upgradeAllContainers()
+{
+    qDebug() << "[upgradeAllContainers] Called";
+
+    if (!backend->isTerminalJobPossible()) {
+        setupProgressDialog(i18n("Upgrading all containers..."));
+
+        connect(backend, &Backend::outputReceived, this, &MainWindow::appendCommandOutput);
+        connect(backend, &Backend::upgradeAllFinished, this, [this](const QString &output) {
+            appendCommandOutput(output);
+            cleanupProgressDialog();
+            disconnect(backend, nullptr, this, nullptr);
+        });
+
+        backend->upgradeAllContainersNoTerminal();
+    } else {
+        connect(backend, &Backend::upgradeAllFinished, this, [](const QString &) {});
+        backend->upgradeAllContainers();
     }
 }

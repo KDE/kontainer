@@ -18,6 +18,8 @@
 #include <QStringList>
 #include <QtConcurrent/QtConcurrent>
 #include <algorithm>
+#include <QMutex>
+#include <QMutexLocker>
 
 class Backend : public QObject
 {
@@ -95,6 +97,7 @@ private:
     QStringList m_cachedBackends;
     QList<QMap<QString, QString>> m_currentContainers;
     bool m_isTerminalJobPossible;
+    QMutex mutex;
 
     const QStringList DISTROS = {"alma",     "alpine",     "amazon", "amazonlinux", "arch",       "bazzite",   "blackarch",   "bluefin",  "bookworm",
                                  "bullseye", "buster",     "centos", "chainguard",  "clearlinux", "crystal",   "debian",      "deepin",   "fedora",

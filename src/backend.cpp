@@ -581,134 +581,141 @@ QList<QMap<QString, QString>> Backend::searchImages(const QString &query)
 // Modified implementation:
 void Backend::installPackageNoTerminal(const QString &containerName, const QString &filePath, const QString &packageCommand, const QString &signalName)
 {
-    qDebug().nospace() << "[installPackageNoTerminal] Installing " << filePath << " in container " << containerName << " (Flatpak:" << m_isFlatpak
-                       << ", Backend:" << m_preferredBackend << ")";
+    QtConcurrent::run([=]() {
+        QMutexLocker locker(&mutex);
 
-    QProcess *process = new QProcess(this);
-    QStringList args;
-    QString fullCommand = QString("sudo %1 %2").arg(packageCommand, filePath);
+        QProcess process;
+        QStringList args;
+        QString fullCommand = QString("sudo %1 %2").arg(packageCommand, filePath);
 
-    if (m_preferredBackend == "distrobox") {
-        args = buildDistroboxCommand(containerName, fullCommand);
-    } else if (m_preferredBackend == "toolbox") {
-        args = buildToolboxCommand(containerName, fullCommand);
-    } else {
-        qWarning() << "[installPackageNoTerminal] Unknown backend:" << m_preferredBackend;
-        emit packageInstallFinished(signalName, "Error: Unknown container backend");
-        process->deleteLater();
-        return;
-    }
+        if (m_preferredBackend == "distrobox") {
+            args = buildDistroboxCommand(containerName, fullCommand);
+        } else if (m_preferredBackend == "toolbox") {
+            args = buildToolboxCommand(containerName, fullCommand);
+        } else {
+            QMetaObject::invokeMethod(this, [=]() {
+                emit packageInstallFinished(signalName, i18n("Error: Unknown container backend"));
+            }, Qt::QueuedConnection);
+            return;
+        }
 
-    qDebug() << "[installPackageNoTerminal] Command:" << args;
+        process.setProgram(args.first());
+        process.setArguments(args.mid(1));
 
-    // Connect real-time output signals
-    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
-        QString output = process->readAllStandardOutput();
-        emit outputReceived(output);
+        QString output;
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.start();
+        if (!process.waitForStarted()) return;
+
+        while (process.state() == QProcess::Running) {
+            process.waitForReadyRead();
+            QString chunk = QString::fromLocal8Bit(process.readAll());
+            output += chunk;
+            QMetaObject::invokeMethod(this, [=]() {
+                emit outputReceived(chunk);
+            }, Qt::QueuedConnection);
+        }
+
+        process.waitForFinished();
+        int exitCode = process.exitCode();
+
+        QString result = output;
+        if (exitCode != 0) {
+            result += i18n("\nError: Command failed with exit code %1").arg(exitCode);
+        }
+
+        QMetaObject::invokeMethod(this, [=]() {
+            if (signalName == "debInstallFinished")
+                emit debInstallFinished(result);
+            else if (signalName == "rpmInstallFinished")
+                emit rpmInstallFinished(result);
+            else if (signalName == "archInstallFinished")
+                emit archInstallFinished(result);
+            emit packageInstallFinished(signalName, result);
+        }, Qt::QueuedConnection);
     });
-
-    connect(process, &QProcess::readyReadStandardError, [this, process]() {
-        QString output = process->readAllStandardError();
-        emit outputReceived(output);
-    });
-
-    connect(process, &QProcess::finished, this, [this, process, signalName](int exitCode) {
-        handlePackageInstallFinished(process, exitCode, signalName);
-    });
-
-    process->start(args[0], args.mid(1));
 }
 
 void Backend::upgradeContainerNoTerminal(const QString &containerName)
 {
-    qDebug() << "[upgradeContainerNoTerminal] Upgrading container" << containerName << "(Flatpak:" << m_isFlatpak << ")";
+    QtConcurrent::run([=]() {
+        QMutexLocker locker(&mutex);
 
-    QProcess *process = new QProcess(this);
-    QStringList args;
+        QProcess process;
+        QStringList args = m_isFlatpak
+        ? QStringList{"flatpak-spawn", "--host", "distrobox-upgrade", containerName}
+        : QStringList{"distrobox-upgrade", containerName};
 
-    if (m_isFlatpak) {
-        args << "flatpak-spawn" << "--host" << "distrobox-upgrade" << containerName;
-    } else {
-        args << "distrobox-upgrade" << containerName;
-    }
+        process.setProgram(args.first());
+        process.setArguments(args.mid(1));
+        process.setProcessChannelMode(QProcess::MergedChannels);
 
-    qDebug() << "[upgradeContainerNoTerminal] Command:" << args;
+        QString output;
+        process.start();
+        if (!process.waitForStarted()) return;
 
-    // Connect real-time output signals
-    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
-        QString output = process->readAllStandardOutput();
-        emit outputReceived(output);
-    });
-
-    connect(process, &QProcess::readyReadStandardError, [this, process]() {
-        QString output = process->readAllStandardError();
-        emit outputReceived(output);
-    });
-
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString stdoutData = process->readAllStandardOutput();
-        QString stderrData = process->readAllStandardError();
-
-        qDebug() << "[upgradeContainerNoTerminal] Exit code:" << exitCode;
-        qDebug() << "[upgradeContainerNoTerminal] Stdout:" << stdoutData;
-        qDebug() << "[upgradeContainerNoTerminal] Stderr:" << stderrData;
-
-        QString result = stdoutData;
-        if (exitCode != 0) {
-            result += "\nError: " + stderrData;
+        while (process.state() == QProcess::Running) {
+            process.waitForReadyRead();
+            QString chunk = QString::fromLocal8Bit(process.readAll());
+            output += chunk;
+            QMetaObject::invokeMethod(this, [=]() {
+                emit outputReceived(chunk);
+            }, Qt::QueuedConnection);
         }
 
-        emit upgradeFinished(result);
-        process->deleteLater();
-    });
+        process.waitForFinished();
+        int exitCode = process.exitCode();
 
-    process->start(args[0], args.mid(1));
+        QString result = output;
+        if (exitCode != 0) {
+            result += i18n("\nError: Command failed with exit code %1").arg(exitCode);
+        }
+
+        QMetaObject::invokeMethod(this, [=]() {
+            emit upgradeFinished(result);
+        }, Qt::QueuedConnection);
+    });
 }
 
 void Backend::upgradeAllContainersNoTerminal()
 {
-    qDebug() << "[upgradeAllContainersNoTerminal] Upgrading all containers (Flatpak:" << m_isFlatpak << ")";
+    QtConcurrent::run([=]() {
+        QMutexLocker locker(&mutex);
 
-    QProcess *process = new QProcess(this);
-    QStringList args;
+        QProcess process;
+        QStringList args = m_isFlatpak
+        ? QStringList{"flatpak-spawn", "--host", "distrobox-upgrade", "--all"}
+        : QStringList{"distrobox-upgrade", "--all"};
 
-    if (m_isFlatpak) {
-        args << "flatpak-spawn" << "--host" << "distrobox-upgrade" << "--all";
-    } else {
-        args << "distrobox-upgrade" << "--all";
-    }
+        process.setProgram(args.first());
+        process.setArguments(args.mid(1));
+        process.setProcessChannelMode(QProcess::MergedChannels);
 
-    qDebug() << "[upgradeAllContainersNoTerminal] Command:" << args;
+        QString output;
+        process.start();
+        if (!process.waitForStarted()) return;
 
-    // Connect real-time output signals
-    connect(process, &QProcess::readyReadStandardOutput, [this, process]() {
-        QString output = process->readAllStandardOutput();
-        emit outputReceived(output);
-    });
-
-    connect(process, &QProcess::readyReadStandardError, [this, process]() {
-        QString output = process->readAllStandardError();
-        emit outputReceived(output);
-    });
-
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString stdoutData = process->readAllStandardOutput();
-        QString stderrData = process->readAllStandardError();
-
-        qDebug() << "[upgradeAllContainersNoTerminal] Exit code:" << exitCode;
-        qDebug() << "[upgradeAllContainersNoTerminal] Stdout:" << stdoutData;
-        qDebug() << "[upgradeAllContainersNoTerminal] Stderr:" << stderrData;
-
-        QString result = stdoutData;
-        if (exitCode != 0) {
-            result += "\nError: " + stderrData;
+        while (process.state() == QProcess::Running) {
+            process.waitForReadyRead();
+            QString chunk = QString::fromLocal8Bit(process.readAll());
+            output += chunk;
+            QMetaObject::invokeMethod(this, [=]() {
+                emit outputReceived(chunk);
+            }, Qt::QueuedConnection);
         }
 
-        emit upgradeAllFinished(result);
-        process->deleteLater();
-    });
+        process.waitForFinished();
+        int exitCode = process.exitCode();
 
-    process->start(args[0], args.mid(1));
+        QString result = output;
+        if (exitCode != 0) {
+            result += i18n("\nError: Command failed with exit code %1").arg(exitCode);
+        }
+
+        QMetaObject::invokeMethod(this, [=]() {
+            emit upgradeAllFinished(result);
+        }, Qt::QueuedConnection);
+    });
 }
 
 QStringList Backend::buildDistroboxCommand(const QString &containerName, const QString &command)

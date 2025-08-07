@@ -75,6 +75,7 @@ private:
     void setupProgressDialog(const QString &title);
     void appendCommandOutput(const QString &output);
     QProgressDialog *loadingDialog = nullptr;
+    void cleanupProgressDialog();
 
     Backend *backend;
     QListWidget *containerList;
