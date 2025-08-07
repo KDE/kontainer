@@ -113,7 +113,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     backend = new Backend(this);
     connect(backend, &Backend::availableBackendsChanged, this, &MainWindow::onBackendsAvailable);
-    connect(backend, &Backend::assembleFinished, this, &MainWindow::onAssembleFinished);
     connect(backend, &Backend::containersFetched, this, &MainWindow::handleContainersFetched);
 
     setWindowTitle(tr("Kontainer"));
@@ -379,17 +378,6 @@ void MainWindow::setupUI()
     updateButtonStates();
 }
 
-void MainWindow::onAssembleFinished(const QString &result)
-{
-    if (progressDialog) {
-        progressDialog->close();
-        progressDialog->deleteLater();
-        progressDialog = nullptr;
-    }
-    QMessageBox::information(this, i18n("Assemble Result"), result);
-    refreshContainers();
-}
-
 void MainWindow::updateButtonStates()
 {
     bool hasSelection = !currentContainer.isEmpty();
@@ -482,27 +470,31 @@ void MainWindow::enterContainer()
 
 void MainWindow::assembleContainer()
 {
-    // Get the current backend from the Backend instance
     QString currentBackend = backend->preferredBackend();
 
     if (currentBackend == "toolbox") {
         QMessageBox::information(this,
                                  i18n("Function Not Supported"),
                                  i18n("Toolbox backend doesn't support container assembly.\n\n"
-                                      "Please switch to Distrobox backend to use this feature."));
+                                 "Please switch to Distrobox backend to use this feature."));
         return;
     }
 
-    QString iniFile = QFileDialog::getOpenFileName(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
+    QFileDialog *dialog = new QFileDialog(this, i18n("Select Distrobox INI File"), QDir::homePath(), i18n("INI Files (*.ini);;All Files (*)"));
+    dialog->setFileMode(QFileDialog::ExistingFile);
+    dialog->open();
 
-    if (!iniFile.isEmpty()) {
-        progressDialog = new QProgressDialog(i18n("Assembling container..."), i18n("Cancel"), 0, 0, this);
-        progressDialog->setWindowModality(Qt::WindowModal);
-        progressDialog->setCancelButton(nullptr);
-        progressDialog->show();
-
+    connect(dialog, &QFileDialog::fileSelected, this, [this](const QString &iniFile) {
         backend->assembleContainer(iniFile);
-    }
+    });
+
+    connect(backend, &Backend::assembleStartedWithDialog, this, [this]() {
+        setupProgressDialog(i18n("Assembling container..."));
+    });
+
+    connect(backend, &Backend::assembleFinished, this, [this](const QString &output) {
+        appendCommandOutput(output);
+    });
 }
 
 void MainWindow::upgradeAllContainers()

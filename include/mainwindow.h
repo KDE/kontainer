@@ -51,7 +51,6 @@ private slots:
     void upgradeAllContainers();
     void createNewContainer();
     void assembleContainer();
-    void onAssembleFinished(const QString &result);
     void installDebPackage();
     void installRpmPackage();
     void installArchPackage();

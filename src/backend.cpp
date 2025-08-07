@@ -24,7 +24,7 @@ Backend::Backend(QObject *parent)
     checkTerminaljob();
 }
 
-// Getter
+// Getter and technically setter
 bool Backend::isTerminalJobPossible() {
     checkTerminaljob();
     return m_isTerminalJobPossible;
@@ -461,15 +461,29 @@ void Backend::installArchPackage(const QString &containerName, const QString &fi
 
 void Backend::assembleContainer(const QString &iniFile)
 {
+    QString bin = resolveBinaryPath("distrobox-assemble");
+    QString command = QString("%1 create --file \"%2\"").arg(bin, iniFile);
+
+    if (isTerminalJobPossible()) {
+        executeInTerminal(command);
+        return;
+    }
+
+    emit assembleStartedWithDialog();
+
     QProcess *process = new QProcess(this);
-    connect(process, &QProcess::finished, this, [this, process](int exitCode) {
-        QString result = process->readAllStandardOutput();
-        if (exitCode != 0) {
-            result = i18n("Error: %1", process->readAllStandardError());
-        }
-        emit assembleFinished(result);
-        process->deleteLater();
+
+    connect(process, &QProcess::readyReadStandardOutput, this, [this, process]() {
+        QString output = QString::fromLocal8Bit(process->readAllStandardOutput());
+        emit assembleFinished(output);
     });
+
+    connect(process, &QProcess::readyReadStandardError, this, [this, process]() {
+        QString error = QString::fromLocal8Bit(process->readAllStandardError());
+        emit assembleFinished(error);
+    });
+
+    connect(process, &QProcess::finished, process, &QProcess::deleteLater);
 
     if (m_isFlatpak) {
         process->start("flatpak-spawn", {"--host", "distrobox", "assemble", "create", "--file", iniFile});

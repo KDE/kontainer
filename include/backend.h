@@ -55,7 +55,8 @@ public:
     QList<QMap<QString, QString>> searchImages(const QString &query);
 
 signals:
-    void assembleFinished(const QString &result);
+    void assembleStartedWithDialog();           // For UI to open dialog
+    void assembleFinished(const QString &output); // Called on each output line or on finish
     void debInstallFinished(const QString &output);
     void rpmInstallFinished(const QString &output);
     void archInstallFinished(const QString &output);
