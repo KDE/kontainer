@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-05 00:46+0000\n"
-"PO-Revision-Date: 2025-07-08 13:24+0300\n"
+"PO-Revision-Date: 2025-08-06 22:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -545,17 +545,12 @@ msgid "Assembling container..."
 msgstr "Kapsayıcı toplanıyor…"
 
 #: src/mainwindow.cpp:519
-#, fuzzy, kde-format
-#| msgid "Function Not Supported"
+#, kde-format
 msgid "Function Not Supported Yet"
-msgstr "İşlev Desteklenmiyor"
+msgstr "İşlev Henüz Desteklenmiyor"
 
 #: src/mainwindow.cpp:520
-#, fuzzy, kde-format
-#| msgid ""
-#| "Toolbox backend doesn't support mass container upgrades.\n"
-#| "\n"
-#| "Please switch to Distrobox backend to use this feature."
+#, kde-format
 msgid ""
 "Toolbox backend doesn't support mass container upgrades yet.\n"
 "\n"
@@ -563,7 +558,7 @@ msgid ""
 msgstr ""
 "Toolbox arka ucu toplu kapsayıcı yükseltmelerini desteklemiyor.\n"
 "\n"
-"Bu özelliği kullanmak için Distrobox arka ucuna geçin."
+"Bunu düzeltmek için Toolbox geliştiricileriyle iletişim halindeyiz."
 
 #: src/mainwindow.cpp:529
 #, kde-format
