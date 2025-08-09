@@ -333,12 +333,14 @@ QString Backend::createContainer(const QString &name, const QString &image, cons
     return success ? message : i18n("Error: ") + output;
 }
 
-QString Backend::deleteContainer(const QString &name)
+
+void Backend::deleteContainer(const QString &name)
 {
     QString appsPath;
 
     if (m_preferredBackend == "distrobox") {
-        return runCommand({"distrobox", "rm", name, "--force"});
+        QString bin = resolveBinaryPath("distrobox");
+        executeInTerminal(QString("%1 rm %2 --force").arg(bin, name));
     } else if (m_preferredBackend == "toolbox") {
         // First remove all exported desktop files for this container
         if (m_isFlatpak) {
@@ -363,14 +365,8 @@ QString Backend::deleteContainer(const QString &name)
         }
 
         // Now remove the container
-        QString result = runCommand({"toolbox", "rm", name, "--force"});
-        if (result.startsWith("Error:")) {
-            return i18nc("Error message when toolbox deletion fails", "Failed to delete Toolbox %1. Error: %2", name, result);
-        }
-
-        return i18nc("Inform the User that the Toolbox Deletion Completed since it returns no output on its own", "Toolbox %1 deleted successfully.", name);
-    } else {
-        return i18n("Error: Failed to delete Container.");
+        QString bin = resolveBinaryPath("toolbox");
+        executeInTerminal(QString("%1 rm %2 --force").arg(bin, name));
     }
 }
 
