@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-07 18:32+0000\n"
-"PO-Revision-Date: 2025-08-05 14:25+0300\n"
+"PO-Revision-Date: 2025-08-08 21:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -126,15 +126,16 @@ msgstr "Помилка: не вдалося вилучити контейнер.
 #: src/backend.cpp:597
 #, kde-format
 msgid "Error: Unknown container backend"
-msgstr ""
+msgstr "Помилка: невідомий модуль контейнера"
 
 #: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
-#, fuzzy, kde-format
-#| msgid "Error: Command timed out"
+#, kde-format
 msgid ""
 "\n"
 "Error: Command failed with exit code %1"
-msgstr "Помилка: перевищено час очікування на виконання команди"
+msgstr ""
+"\n"
+"Помилка: спроба виконати команду завершилася кодом виходу %1"
 
 #: src/backend.cpp:904
 #, kde-format

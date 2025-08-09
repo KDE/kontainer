@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-07 18:32+0000\n"
-"PO-Revision-Date: 2025-08-05 07:20+0200\n"
+"PO-Revision-Date: 2025-08-08 06:46+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -122,15 +122,16 @@ msgstr "Napaka: Vsebnika ni bilo mogoče izbrisati."
 #: src/backend.cpp:597
 #, kde-format
 msgid "Error: Unknown container backend"
-msgstr ""
+msgstr "Napaka: Neznan zaledni del vsebnika"
 
 #: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
-#, fuzzy, kde-format
-#| msgid "Error: Command timed out"
+#, kde-format
 msgid ""
 "\n"
 "Error: Command failed with exit code %1"
-msgstr "Napaka: Časovna omejitev ukaza je potekla"
+msgstr ""
+"\n"
+"Napaka: Ukaz ni uspel z izhodno kodo %1"
 
 #: src/backend.cpp:904
 #, kde-format
