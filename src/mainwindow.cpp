@@ -436,9 +436,7 @@ void MainWindow::deleteContainer()
     msgBox.setIcon(QMessageBox::Warning);
 
     if (msgBox.exec() == QMessageBox::Yes) {
-        QString result = backend->deleteContainer(currentContainer);
-        QMessageBox::information(this, i18n("Result"), result);
-        refreshContainers();
+        backend->deleteContainer(currentContainer);
     }
 }
 

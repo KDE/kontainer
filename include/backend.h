@@ -33,7 +33,7 @@ public:
     // Container operations
     QString
     createContainer(const QString &name, const QString &image, const QString &home = QString(), bool init = false, const QStringList &volumes = QStringList());
-    QString deleteContainer(const QString &name);
+    void deleteContainer(const QString &name);
     void enterContainer(const QString &name);
     void upgradeContainer(const QString &name);
     void upgradeAllContainers();
