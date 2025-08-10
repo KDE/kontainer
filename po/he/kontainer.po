@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-07 18:32+0000\n"
+"POT-Creation-Date: 2025-08-10 00:46+0000\n"
 "PO-Revision-Date: 2025-08-05 11:01+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -378,147 +378,161 @@ msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr "לא נמצאו מנגנוני מכונות. נא להתקין את distrobox או את toolbox."
 
-#: src/mainwindow.cpp:244
+#: src/mainwindow.cpp:210
+#, kde-format
+msgid "No Terminal Mode Disabled"
+msgstr ""
+
+#: src/mainwindow.cpp:211
+#, kde-format
+msgid ""
+"The No Terminal Mode will be removed soon and is now disabled.\n"
+"\n"
+"Please install a terminal emulator like Konsole:\n"
+"flatpak install org.kde.konsole"
+msgstr ""
+
+#: src/mainwindow.cpp:254
 #, kde-format
 msgid "Enter"
 msgstr "כניסה"
 
-#: src/mainwindow.cpp:245
+#: src/mainwindow.cpp:255
 #, kde-format
 msgid "Enter the selected container"
 msgstr "כניסה למכולה הנבחרת"
 
-#: src/mainwindow.cpp:248
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Delete"
 msgstr "מחיקה"
 
-#: src/mainwindow.cpp:249
+#: src/mainwindow.cpp:259
 #, kde-format
 msgid "Delete the selected container"
 msgstr "מחיקת המכולה הנבחרת"
 
-#: src/mainwindow.cpp:252
+#: src/mainwindow.cpp:262
 #, kde-format
 msgid "Applications"
 msgstr "יישומים"
 
-#: src/mainwindow.cpp:253
+#: src/mainwindow.cpp:263
 #, kde-format
 msgid "Manage exported applications"
 msgstr "ניהול יישומים מיוצאים"
 
-#: src/mainwindow.cpp:256
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Upgrade"
 msgstr "שדרוג"
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:267
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "שדרוג המכולה הנבחרת"
 
-#: src/mainwindow.cpp:264
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Refresh"
 msgstr "ריענון"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Refresh container list"
 msgstr "ריענון רשימת המכולות"
 
-#: src/mainwindow.cpp:269
+#: src/mainwindow.cpp:279
 #, kde-format
 msgid "Install .deb"
 msgstr "התקנת ‎.deb"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:280
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "התקנת חבילת דביאן/אובונטו"
 
-#: src/mainwindow.cpp:273
+#: src/mainwindow.cpp:283
 #, kde-format
 msgid "Install .rpm"
 msgstr "התקנת ‎.rpm"
 
-#: src/mainwindow.cpp:274
+#: src/mainwindow.cpp:284
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "התקנת חבילת פדורה/OpenSUSE"
 
-#: src/mainwindow.cpp:277
+#: src/mainwindow.cpp:287
 #, kde-format
 msgid "Install .pkg"
 msgstr "התקנת ‎.pkg"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:288
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "התקנת חבילת לינוקס ארץ׳"
 
-#: src/mainwindow.cpp:301
+#: src/mainwindow.cpp:311
 #, kde-format
 msgid "New Container"
 msgstr "מכולה חדשה"
 
-#: src/mainwindow.cpp:303
+#: src/mainwindow.cpp:313
 #, kde-format
 msgid "Create new container"
 msgstr "יצירת מכולה חדשה"
 
-#: src/mainwindow.cpp:309
+#: src/mainwindow.cpp:319
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "שדרוג כל המכולות"
 
-#: src/mainwindow.cpp:311
+#: src/mainwindow.cpp:321
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "שדרוג כל המכולות"
 
-#: src/mainwindow.cpp:317
+#: src/mainwindow.cpp:327
 #, kde-format
 msgid "Assemble"
 msgstr "הרכבה"
 
-#: src/mainwindow.cpp:319
+#: src/mainwindow.cpp:329
 #, kde-format
 msgid "Create container from INI file"
 msgstr "יצירת מכולה מקובץ INI"
 
-#: src/mainwindow.cpp:333 src/mainwindow.cpp:408
+#: src/mainwindow.cpp:343 src/mainwindow.cpp:418
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr "לא נמצא מדמה מסוף - הפלט יוצג בחלונית"
 
-#: src/mainwindow.cpp:421
+#: src/mainwindow.cpp:431
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "אישור מחיקה"
 
-#: src/mainwindow.cpp:422
+#: src/mainwindow.cpp:432
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "למחוק את המכולה <b>%1</b>?"
 
-#: src/mainwindow.cpp:423
+#: src/mainwindow.cpp:433
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "זאת פעולה בלתי הפיכה."
 
-#: src/mainwindow.cpp:430
+#: src/mainwindow.cpp:440
 #, kde-format
 msgid "Result"
 msgstr "תוצאה"
 
-#: src/mainwindow.cpp:477
+#: src/mainwindow.cpp:487
 #, kde-format
 msgid "Function Not Supported"
 msgstr "הפונקציה לא נתמכת"
 
-#: src/mainwindow.cpp:478
+#: src/mainwindow.cpp:488
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -529,77 +543,77 @@ msgstr ""
 "\n"
 "נא לעבור למנגנון של Distrobox כדי להשתמש ביכולת הזאת."
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "בחירת קובץ INI של Distrobox"
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "קובצי INI‏ (‎*.ini);;כל הקבצים (*)"
 
-#: src/mainwindow.cpp:500
+#: src/mainwindow.cpp:510
 #, kde-format
 msgid "Assembling container..."
 msgstr "המכולה מורכבת…"
 
-#: src/mainwindow.cpp:523
+#: src/mainwindow.cpp:533
 #, kde-format
 msgid "Processing..."
 msgstr "מתבצע עיבוד…"
 
-#: src/mainwindow.cpp:576
+#: src/mainwindow.cpp:586
 #, kde-format
 msgid "Select .deb Package"
 msgstr "בחירת חבילת ‎.deb"
 
-#: src/mainwindow.cpp:578
+#: src/mainwindow.cpp:588
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "חבילות דביאן (‎*.deb)"
 
-#: src/mainwindow.cpp:587
+#: src/mainwindow.cpp:597
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "חבילת ‎.deb מותקנת…"
 
-#: src/mainwindow.cpp:614
+#: src/mainwindow.cpp:624
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "בחירת חבילת ‎.rpm"
 
-#: src/mainwindow.cpp:616
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "חבילות RPM‏ (‎*.rpm)"
 
-#: src/mainwindow.cpp:625
+#: src/mainwindow.cpp:635
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "חבילת ‎.rpm מותקנת…"
 
-#: src/mainwindow.cpp:652
+#: src/mainwindow.cpp:662
 #, kde-format
 msgid "Select Arch Package"
 msgstr "בחירת חבילת ארץ׳"
 
-#: src/mainwindow.cpp:654
+#: src/mainwindow.cpp:664
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "חבילות ארץ׳ (‎*.pkg.tar.*‎)"
 
-#: src/mainwindow.cpp:663
+#: src/mainwindow.cpp:673
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "חבילת ארץ׳ מותקנת…"
 
-#: src/mainwindow.cpp:691
+#: src/mainwindow.cpp:701
 #, kde-format
 msgid "Upgrading container..."
 msgstr "המכולה מתעדכנת…"
 
-#: src/mainwindow.cpp:713
+#: src/mainwindow.cpp:723
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "כל המכולות משודרגות…"

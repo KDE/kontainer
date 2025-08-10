@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-07 18:32+0000\n"
+"POT-Creation-Date: 2025-08-10 00:46+0000\n"
 "PO-Revision-Date: 2025-08-08 21:48+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -382,147 +382,161 @@ msgstr ""
 "Не знайдено модуля обробки контейнерів. Будь ласка, встановіть або "
 "distrobox, або toolbox."
 
-#: src/mainwindow.cpp:244
+#: src/mainwindow.cpp:210
+#, kde-format
+msgid "No Terminal Mode Disabled"
+msgstr ""
+
+#: src/mainwindow.cpp:211
+#, kde-format
+msgid ""
+"The No Terminal Mode will be removed soon and is now disabled.\n"
+"\n"
+"Please install a terminal emulator like Konsole:\n"
+"flatpak install org.kde.konsole"
+msgstr ""
+
+#: src/mainwindow.cpp:254
 #, kde-format
 msgid "Enter"
 msgstr "Увійти"
 
-#: src/mainwindow.cpp:245
+#: src/mainwindow.cpp:255
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Увійти до вибраного контейнера"
 
-#: src/mainwindow.cpp:248
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Delete"
 msgstr "Вилучити"
 
-#: src/mainwindow.cpp:249
+#: src/mainwindow.cpp:259
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Вилучити позначений контейнер"
 
-#: src/mainwindow.cpp:252
+#: src/mainwindow.cpp:262
 #, kde-format
 msgid "Applications"
 msgstr "Програми"
 
-#: src/mainwindow.cpp:253
+#: src/mainwindow.cpp:263
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Керування експортованими програмами"
 
-#: src/mainwindow.cpp:256
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Upgrade"
 msgstr "Оновити"
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:267
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Оновити позначений контейнер"
 
-#: src/mainwindow.cpp:264
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Refresh"
 msgstr "Освіжити"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Refresh container list"
 msgstr "Освіжити список контейнерів"
 
-#: src/mainwindow.cpp:269
+#: src/mainwindow.cpp:279
 #, kde-format
 msgid "Install .deb"
 msgstr "Встановити .deb"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:280
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Встановити пакунок Debian/Ubuntu"
 
-#: src/mainwindow.cpp:273
+#: src/mainwindow.cpp:283
 #, kde-format
 msgid "Install .rpm"
 msgstr "Встановити .rpm"
 
-#: src/mainwindow.cpp:274
+#: src/mainwindow.cpp:284
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Встановити пакунок Fedora/OpenSUSE"
 
-#: src/mainwindow.cpp:277
+#: src/mainwindow.cpp:287
 #, kde-format
 msgid "Install .pkg"
 msgstr "Встановити .pkg"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:288
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Встановити пакунок Arch Linux"
 
-#: src/mainwindow.cpp:301
+#: src/mainwindow.cpp:311
 #, kde-format
 msgid "New Container"
 msgstr "Новий контейнер"
 
-#: src/mainwindow.cpp:303
+#: src/mainwindow.cpp:313
 #, kde-format
 msgid "Create new container"
 msgstr "Створити контейнер"
 
-#: src/mainwindow.cpp:309
+#: src/mainwindow.cpp:319
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Оновити усі контейнери"
 
-#: src/mainwindow.cpp:311
+#: src/mainwindow.cpp:321
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Оновлює усі контейнери"
 
-#: src/mainwindow.cpp:317
+#: src/mainwindow.cpp:327
 #, kde-format
 msgid "Assemble"
 msgstr "Зібрати"
 
-#: src/mainwindow.cpp:319
+#: src/mainwindow.cpp:329
 #, kde-format
 msgid "Create container from INI file"
 msgstr "Створити контейнер на основі файла INI"
 
-#: src/mainwindow.cpp:333 src/mainwindow.cpp:408
+#: src/mainwindow.cpp:343 src/mainwindow.cpp:418
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr "Не знайдено емулятора термінала — виведені дані буде показано у вікні"
 
-#: src/mainwindow.cpp:421
+#: src/mainwindow.cpp:431
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Підтвердження вилучення"
 
-#: src/mainwindow.cpp:422
+#: src/mainwindow.cpp:432
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Вилучити контейнер <b>%1</b>?"
 
-#: src/mainwindow.cpp:423
+#: src/mainwindow.cpp:433
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Наслідки цієї дії неможливо скасувати."
 
-#: src/mainwindow.cpp:430
+#: src/mainwindow.cpp:440
 #, kde-format
 msgid "Result"
 msgstr "Результат"
 
-#: src/mainwindow.cpp:477
+#: src/mainwindow.cpp:487
 #, kde-format
 msgid "Function Not Supported"
 msgstr "Підтримки функції не передбачено"
 
-#: src/mainwindow.cpp:478
+#: src/mainwindow.cpp:488
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -534,77 +548,77 @@ msgstr ""
 "Будь ласка, перемкніться на модуль Distrobox, щоб скористатися цією "
 "можливістю."
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Виберіть файл INI Distrobox"
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "файли INI (*.ini);;усі файли (*)"
 
-#: src/mainwindow.cpp:500
+#: src/mainwindow.cpp:510
 #, kde-format
 msgid "Assembling container..."
 msgstr "Збирання контейнера…"
 
-#: src/mainwindow.cpp:523
+#: src/mainwindow.cpp:533
 #, kde-format
 msgid "Processing..."
 msgstr "Обробка…"
 
-#: src/mainwindow.cpp:576
+#: src/mainwindow.cpp:586
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Виберіть пакунок .deb"
 
-#: src/mainwindow.cpp:578
+#: src/mainwindow.cpp:588
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "пакунки Debian (*.deb)"
 
-#: src/mainwindow.cpp:587
+#: src/mainwindow.cpp:597
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "Встановлення пакунка .deb…"
 
-#: src/mainwindow.cpp:614
+#: src/mainwindow.cpp:624
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Виберіть пакунок .rpm"
 
-#: src/mainwindow.cpp:616
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "пакунки RPM (*.rpm)"
 
-#: src/mainwindow.cpp:625
+#: src/mainwindow.cpp:635
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "Встановлення пакунка .rpm…"
 
-#: src/mainwindow.cpp:652
+#: src/mainwindow.cpp:662
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Виберіть пакунок Arch"
 
-#: src/mainwindow.cpp:654
+#: src/mainwindow.cpp:664
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "пакунки Arch (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:663
+#: src/mainwindow.cpp:673
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "Встановлення пакунка Arch…"
 
-#: src/mainwindow.cpp:691
+#: src/mainwindow.cpp:701
 #, kde-format
 msgid "Upgrading container..."
 msgstr "Оновлення контейнера…"
 
-#: src/mainwindow.cpp:713
+#: src/mainwindow.cpp:723
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "Оновлення усіх контейнерів…"

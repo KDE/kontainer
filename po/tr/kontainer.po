@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-07 18:32+0000\n"
+"POT-Creation-Date: 2025-08-10 00:46+0000\n"
 "PO-Revision-Date: 2025-08-07 22:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -380,149 +380,163 @@ msgstr ""
 "Bulunan kapsayıcı arka ucu yok. Lütfen “distrobox” veya “toolbox” "
 "araçlarından birini kurun."
 
-#: src/mainwindow.cpp:244
+#: src/mainwindow.cpp:210
+#, kde-format
+msgid "No Terminal Mode Disabled"
+msgstr ""
+
+#: src/mainwindow.cpp:211
+#, kde-format
+msgid ""
+"The No Terminal Mode will be removed soon and is now disabled.\n"
+"\n"
+"Please install a terminal emulator like Konsole:\n"
+"flatpak install org.kde.konsole"
+msgstr ""
+
+#: src/mainwindow.cpp:254
 #, kde-format
 msgid "Enter"
 msgstr "Gir"
 
-#: src/mainwindow.cpp:245
+#: src/mainwindow.cpp:255
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Seçili kapsayıcıya gir"
 
-#: src/mainwindow.cpp:248
+#: src/mainwindow.cpp:258
 #, kde-format
 msgid "Delete"
 msgstr "Sil"
 
-#: src/mainwindow.cpp:249
+#: src/mainwindow.cpp:259
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Seçili kapsayıcıyı sil"
 
-#: src/mainwindow.cpp:252
+#: src/mainwindow.cpp:262
 #, kde-format
 msgid "Applications"
 msgstr "Uygulamalar"
 
-#: src/mainwindow.cpp:253
+#: src/mainwindow.cpp:263
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Dışa aktarılan uygulamaları yönet"
 
-#: src/mainwindow.cpp:256
+#: src/mainwindow.cpp:266
 #, kde-format
 msgid "Upgrade"
 msgstr "Yükselt"
 
-#: src/mainwindow.cpp:257
+#: src/mainwindow.cpp:267
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Seçili kapsayıcıyı yükselt"
 
-#: src/mainwindow.cpp:264
+#: src/mainwindow.cpp:274
 #, kde-format
 msgid "Refresh"
 msgstr "Yenile"
 
-#: src/mainwindow.cpp:265
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Refresh container list"
 msgstr "Kapsayıcı listesini yenile"
 
-#: src/mainwindow.cpp:269
+#: src/mainwindow.cpp:279
 #, kde-format
 msgid "Install .deb"
 msgstr ".deb Kur"
 
-#: src/mainwindow.cpp:270
+#: src/mainwindow.cpp:280
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Debian/Ubuntu paketi kur"
 
-#: src/mainwindow.cpp:273
+#: src/mainwindow.cpp:283
 #, kde-format
 msgid "Install .rpm"
 msgstr ".rpm Kur"
 
-#: src/mainwindow.cpp:274
+#: src/mainwindow.cpp:284
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Fedora/OpenSUSE paketi kur"
 
-#: src/mainwindow.cpp:277
+#: src/mainwindow.cpp:287
 #, kde-format
 msgid "Install .pkg"
 msgstr ".pkg Kur"
 
-#: src/mainwindow.cpp:278
+#: src/mainwindow.cpp:288
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Arch Linux paketi kur"
 
-#: src/mainwindow.cpp:301
+#: src/mainwindow.cpp:311
 #, kde-format
 msgid "New Container"
 msgstr "Yeni Kapsayıcı"
 
-#: src/mainwindow.cpp:303
+#: src/mainwindow.cpp:313
 #, kde-format
 msgid "Create new container"
 msgstr "Yeni kapsayıcı oluştur"
 
-#: src/mainwindow.cpp:309
+#: src/mainwindow.cpp:319
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Tüm Kapsayıcıları Yükselt"
 
-#: src/mainwindow.cpp:311
+#: src/mainwindow.cpp:321
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Tüm kapsayıcıları yükseltir"
 
-#: src/mainwindow.cpp:317
+#: src/mainwindow.cpp:327
 #, kde-format
 msgid "Assemble"
 msgstr "Topla"
 
-#: src/mainwindow.cpp:319
+#: src/mainwindow.cpp:329
 #, kde-format
 msgid "Create container from INI file"
 msgstr "INI dosyasından kapsayıcı oluştur"
 
-#: src/mainwindow.cpp:333 src/mainwindow.cpp:408
+#: src/mainwindow.cpp:343 src/mainwindow.cpp:418
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
 "Bulunan bir uçbirim öykünücüsü yok — çıktı, bir iletişim kutusunda "
 "gösterilecek."
 
-#: src/mainwindow.cpp:421
+#: src/mainwindow.cpp:431
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Silmeyi Onayla"
 
-#: src/mainwindow.cpp:422
+#: src/mainwindow.cpp:432
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "<b>%1</b> kapsayıcısı silinsin mi?"
 
-#: src/mainwindow.cpp:423
+#: src/mainwindow.cpp:433
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Bu eylem geri alınamaz."
 
-#: src/mainwindow.cpp:430
+#: src/mainwindow.cpp:440
 #, kde-format
 msgid "Result"
 msgstr "Sonuç"
 
-#: src/mainwindow.cpp:477
+#: src/mainwindow.cpp:487
 #, kde-format
 msgid "Function Not Supported"
 msgstr "İşlev Desteklenmiyor"
 
-#: src/mainwindow.cpp:478
+#: src/mainwindow.cpp:488
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -533,77 +547,77 @@ msgstr ""
 "\n"
 "Bu özelliği kullanmak için Distrobox arka ucuna geçin."
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Distrobox INI Dosyası Seç"
 
-#: src/mainwindow.cpp:483
+#: src/mainwindow.cpp:493
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "INI dosyaları (*.ini);;Tüm dosyalar (*)"
 
-#: src/mainwindow.cpp:500
+#: src/mainwindow.cpp:510
 #, kde-format
 msgid "Assembling container..."
 msgstr "Kapsayıcı toplanıyor…"
 
-#: src/mainwindow.cpp:523
+#: src/mainwindow.cpp:533
 #, kde-format
 msgid "Processing..."
 msgstr "İşleniyor…"
 
-#: src/mainwindow.cpp:576
+#: src/mainwindow.cpp:586
 #, kde-format
 msgid "Select .deb Package"
 msgstr ".deb Paketi Seç"
 
-#: src/mainwindow.cpp:578
+#: src/mainwindow.cpp:588
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Debian paketleri (*.deb)"
 
-#: src/mainwindow.cpp:587
+#: src/mainwindow.cpp:597
 #, kde-format
 msgid "Installing .deb package..."
 msgstr ".deb paketi kuruluyor…"
 
-#: src/mainwindow.cpp:614
+#: src/mainwindow.cpp:624
 #, kde-format
 msgid "Select .rpm Package"
 msgstr ".rpm Paketi Seç"
 
-#: src/mainwindow.cpp:616
+#: src/mainwindow.cpp:626
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "RPM paketleri (*.rpm)"
 
-#: src/mainwindow.cpp:625
+#: src/mainwindow.cpp:635
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr ".rpm paketi kuruluyor…"
 
-#: src/mainwindow.cpp:652
+#: src/mainwindow.cpp:662
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Arch Paketi Seç"
 
-#: src/mainwindow.cpp:654
+#: src/mainwindow.cpp:664
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Arch paketleri (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:663
+#: src/mainwindow.cpp:673
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "Arch paketi kuruluyor…"
 
-#: src/mainwindow.cpp:691
+#: src/mainwindow.cpp:701
 #, kde-format
 msgid "Upgrading container..."
 msgstr "Kapsayıcı yükseltiliyor…"
 
-#: src/mainwindow.cpp:713
+#: src/mainwindow.cpp:723
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "Tüm kapsayıcılar yükseltiliyor…"
