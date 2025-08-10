@@ -71,6 +71,7 @@ signals:
     void containerCreationFinished(bool success, const QString &message);
     void availableBackendsChanged(const QStringList &backends);
     void containersFetched(const QList<QMap<QString, QString>> &containers);
+    void terminalFinished();
 
 public slots:
     void assembleContainer(const QString &iniFile);

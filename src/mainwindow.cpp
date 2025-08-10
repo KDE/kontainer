@@ -114,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent)
     backend = new Backend(this);
     connect(backend, &Backend::availableBackendsChanged, this, &MainWindow::onBackendsAvailable);
     connect(backend, &Backend::containersFetched, this, &MainWindow::handleContainersFetched);
+    connect(backend, &Backend::terminalFinished, this, &MainWindow::refreshContainers);
 
     setWindowTitle(tr("Kontainer"));
     resize(850, 600);

@@ -393,6 +393,7 @@ void Backend::executeInTerminal(const QString &command)
     } else {
         job = new KTerminalLauncherJob(command);
     }
+    connect(job, &KJob::result, this, &Backend::terminalFinished);
     job->start();
 }
 
