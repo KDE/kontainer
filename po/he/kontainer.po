@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-10 00:46+0000\n"
-"PO-Revision-Date: 2025-08-05 11:01+0300\n"
+"PO-Revision-Date: 2025-08-10 09:33+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -126,15 +126,16 @@ msgstr "שגיאה: מחיקת המכולה נכשלה."
 #: src/backend.cpp:597
 #, kde-format
 msgid "Error: Unknown container backend"
-msgstr ""
+msgstr "שגיאה: מנגנון המיכלים לא ידוע"
 
 #: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
-#, fuzzy, kde-format
-#| msgid "Error: Command timed out"
+#, kde-format
 msgid ""
 "\n"
 "Error: Command failed with exit code %1"
-msgstr "שגיאה: הזמן שהוקצה לפעולה נגמר"
+msgstr ""
+"\n"
+"שגיאה: הפקודה נכשלה וקוד היציאה שלה הוא %1"
 
 #: src/backend.cpp:904
 #, kde-format
@@ -381,7 +382,7 @@ msgstr "לא נמצאו מנגנוני מכונות. נא להתקין את dist
 #: src/mainwindow.cpp:210
 #, kde-format
 msgid "No Terminal Mode Disabled"
-msgstr ""
+msgstr "מצב לא מסוף מושבת"
 
 #: src/mainwindow.cpp:211
 #, kde-format
@@ -391,6 +392,10 @@ msgid ""
 "Please install a terminal emulator like Konsole:\n"
 "flatpak install org.kde.konsole"
 msgstr ""
+"מצב לא מסוף יוסר בקרוב והוא מושבת מעתה.\n"
+"\n"
+"נא להתקין מדמה מסוף כגון Konsole:\n"
+"flatpak install org.kde.konsole"
 
 #: src/mainwindow.cpp:254
 #, kde-format

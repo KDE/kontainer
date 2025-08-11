@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-10 00:46+0000\n"
-"PO-Revision-Date: 2025-08-08 08:46+0200\n"
+"PO-Revision-Date: 2025-08-10 08:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -387,7 +387,7 @@ msgstr ""
 #: src/mainwindow.cpp:210
 #, kde-format
 msgid "No Terminal Mode Disabled"
-msgstr ""
+msgstr "«Mode sense terminal» desactivat"
 
 #: src/mainwindow.cpp:211
 #, kde-format
@@ -397,6 +397,10 @@ msgid ""
 "Please install a terminal emulator like Konsole:\n"
 "flatpak install org.kde.konsole"
 msgstr ""
+"El «Mode sense terminal» s'eliminarà aviat i ara està desactivat.\n"
+"\n"
+"Instal·leu un emulador de terminal com el Konsole:\n"
+"flatpak install org.kde.konsole"
 
 #: src/mainwindow.cpp:254
 #, kde-format
