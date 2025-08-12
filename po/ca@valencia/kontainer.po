@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-08-10 00:46+0000\n"
-"PO-Revision-Date: 2025-08-05 08:45+0200\n"
+"PO-Revision-Date: 2025-08-10 08:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -131,15 +131,16 @@ msgstr "S'ha produït un error: ha fallat a suprimir el contenidor."
 #: src/backend.cpp:597
 #, kde-format
 msgid "Error: Unknown container backend"
-msgstr ""
+msgstr "S'ha produït un error: dorsal de contenidor desconegut"
 
 #: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
-#, fuzzy, kde-format
-#| msgid "Error: Command timed out"
+#, kde-format
 msgid ""
 "\n"
 "Error: Command failed with exit code %1"
-msgstr "S'ha produït un error: l'ordre ha excedit el temps"
+msgstr ""
+"\n"
+"S'ha produït un error: l'ordre ha fallat amb el codi d'eixida %1"
 
 #: src/backend.cpp:904
 #, kde-format
@@ -388,7 +389,7 @@ msgstr ""
 #: src/mainwindow.cpp:210
 #, kde-format
 msgid "No Terminal Mode Disabled"
-msgstr ""
+msgstr "«Mode sense terminal» desactivat"
 
 #: src/mainwindow.cpp:211
 #, kde-format
@@ -398,6 +399,10 @@ msgid ""
 "Please install a terminal emulator like Konsole:\n"
 "flatpak install org.kde.konsole"
 msgstr ""
+"El «Mode sense terminal» s'eliminarà prompte i ara està desactivat.\n"
+"\n"
+"Instal·leu un emulador de terminal com Konsole:\n"
+"flatpak install org.kde.konsole"
 
 #: src/mainwindow.cpp:254
 #, kde-format
@@ -627,23 +632,3 @@ msgstr "S'està actualitzant el contenidor…"
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "S'estan actualitzant tots els contenidors…"
-
-#~ msgid "Error: %1"
-#~ msgstr "S'ha produït un error: %1"
-
-#~ msgid "Assemble Result"
-#~ msgstr "Resultat de l'assemblatge"
-
-#~ msgid "Function Not Supported Yet"
-#~ msgstr "Funció encara no implementada"
-
-# skip-rule: kct-toolbox
-#~ msgid ""
-#~ "Toolbox backend doesn't support mass container upgrades yet.\n"
-#~ "\n"
-#~ "We are working with Upstream to fix it."
-#~ msgstr ""
-#~ "El dorsal ToolboX encara no admet actualitzacions massives de "
-#~ "contenidors.\n"
-#~ "\n"
-#~ "Estem treballant amb el desenvolupament original per a solucionar-ho."
