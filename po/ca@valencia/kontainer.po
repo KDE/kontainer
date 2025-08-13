@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kontainer\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-08-10 00:46+0000\n"
+"POT-Creation-Date: 2025-08-13 00:45+0000\n"
 "PO-Revision-Date: 2025-08-10 08:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -107,33 +107,12 @@ msgstr "No s'ha pogut crear el contenidor"
 msgid "Error: "
 msgstr "S'ha produït un error: "
 
-# skip-rule: kct-toolbox
-#: src/backend.cpp:368
-#, kde-format
-msgctxt "Error message when toolbox deletion fails"
-msgid "Failed to delete Toolbox %1. Error: %2"
-msgstr "No s'ha pogut suprimir ToolboX %1. Error: %2"
-
-# skip-rule: kct-toolbox
-#: src/backend.cpp:371
-#, kde-format
-msgctxt ""
-"Inform the User that the Toolbox Deletion Completed since it returns no "
-"output on its own"
-msgid "Toolbox %1 deleted successfully."
-msgstr "ToolboX %1 s'ha suprimit correctament."
-
-#: src/backend.cpp:373
-#, kde-format
-msgid "Error: Failed to delete Container."
-msgstr "S'ha produït un error: ha fallat a suprimir el contenidor."
-
-#: src/backend.cpp:597
+#: src/backend.cpp:594
 #, kde-format
 msgid "Error: Unknown container backend"
 msgstr "S'ha produït un error: dorsal de contenidor desconegut"
 
-#: src/backend.cpp:624 src/backend.cpp:671 src/backend.cpp:712
+#: src/backend.cpp:621 src/backend.cpp:668 src/backend.cpp:709
 #, kde-format
 msgid ""
 "\n"
@@ -142,43 +121,43 @@ msgstr ""
 "\n"
 "S'ha produït un error: l'ordre ha fallat amb el codi d'eixida %1"
 
-#: src/backend.cpp:904
+#: src/backend.cpp:901
 #, kde-format
 msgctxt "Error message when application is not found in container"
 msgid "Application %1 not found in container %2"
 msgstr "No s'ha trobat l'aplicació %1 al contenidor %2"
 
-#: src/backend.cpp:912
+#: src/backend.cpp:909
 #, kde-format
 msgctxt "Error message when desktop file is not found"
 msgid "Could not find desktop file for %1 in container %2"
 msgstr "No s'ha pogut trobar el fitxer «desktop» per a %1 en el contenidor %2"
 
-#: src/backend.cpp:959
+#: src/backend.cpp:956
 #, kde-format
 msgctxt "Error message when desktop file creation fails"
 msgid "Failed to create desktop file: %1"
 msgstr "No s'ha pogut crear el fitxer «desktop»: %1"
 
-#: src/backend.cpp:968
+#: src/backend.cpp:965
 #, kde-format
 msgctxt "Success message after exporting application"
 msgid "Successfully exported %1 from %2"
 msgstr "S'ha exportat correctament %1 des de %2"
 
-#: src/backend.cpp:995
+#: src/backend.cpp:992
 #, kde-format
 msgctxt "Error message when no exported app is found"
 msgid "No exported application %1 found for container %2"
 msgstr "No s'ha trobat l'aplicació exportada %1 per al contenidor %2"
 
-#: src/backend.cpp:999
+#: src/backend.cpp:996
 #, kde-format
 msgctxt "Error message when desktop file removal fails"
 msgid "Failed to remove desktop file: %1"
 msgstr "No s'ha pogut eliminar el fitxer «desktop»: %1"
 
-#: src/backend.cpp:1004
+#: src/backend.cpp:1001
 #, kde-format
 msgctxt "Success message after unexporting application"
 msgid "Successfully unexported %1 from %2"
@@ -261,7 +240,7 @@ msgstr "Crea"
 
 #: src/createcontainerdialog.cpp:248 src/createcontainerdialog.cpp:253
 #: src/createcontainerdialog.cpp:298 src/createcontainerdialog.cpp:341
-#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:203
+#: src/createcontainerdialog.cpp:362 src/mainwindow.cpp:204
 #, kde-format
 msgid "Error"
 msgstr "S'ha produït un error"
@@ -363,35 +342,35 @@ msgstr ""
 "\n"
 "Eixida d'error: %2\n"
 
-#: src/mainwindow.cpp:135
+#: src/mainwindow.cpp:136
 #, kde-format
 msgid "Fetching containers..."
 msgstr "S'estan recuperant els contenidors…"
 
-#: src/mainwindow.cpp:163
+#: src/mainwindow.cpp:164
 #, kde-format
 msgid "No containers found"
 msgstr "No s'ha trobat cap contenidor"
 
-#: src/mainwindow.cpp:186
+#: src/mainwindow.cpp:187
 #, kde-format
 msgid "Checking for available container backends..."
 msgstr "S'està comprovant si hi ha dorsals disponibles de contenidors…"
 
 # skip-rule: kct-toolbox
-#: src/mainwindow.cpp:203
+#: src/mainwindow.cpp:204
 #, kde-format
 msgid ""
 "No container backends found. Please install either distrobox or toolbox."
 msgstr ""
 "No s'ha trobat cap dorsal de contenidor. Instal·leu «distrobox» o «toolbox»."
 
-#: src/mainwindow.cpp:210
+#: src/mainwindow.cpp:211
 #, kde-format
 msgid "No Terminal Mode Disabled"
 msgstr "«Mode sense terminal» desactivat"
 
-#: src/mainwindow.cpp:211
+#: src/mainwindow.cpp:212
 #, kde-format
 msgid ""
 "The No Terminal Mode will be removed soon and is now disabled.\n"
@@ -404,149 +383,144 @@ msgstr ""
 "Instal·leu un emulador de terminal com Konsole:\n"
 "flatpak install org.kde.konsole"
 
-#: src/mainwindow.cpp:254
+#: src/mainwindow.cpp:255
 #, kde-format
 msgid "Enter"
 msgstr "Entrada"
 
-#: src/mainwindow.cpp:255
+#: src/mainwindow.cpp:256
 #, kde-format
 msgid "Enter the selected container"
 msgstr "Entra en el contenidor seleccionat"
 
-#: src/mainwindow.cpp:258
+#: src/mainwindow.cpp:259
 #, kde-format
 msgid "Delete"
 msgstr "Suprimix"
 
-#: src/mainwindow.cpp:259
+#: src/mainwindow.cpp:260
 #, kde-format
 msgid "Delete the selected container"
 msgstr "Suprimix el contenidor seleccionat"
 
-#: src/mainwindow.cpp:262
+#: src/mainwindow.cpp:263
 #, kde-format
 msgid "Applications"
 msgstr "Aplicacions"
 
-#: src/mainwindow.cpp:263
+#: src/mainwindow.cpp:264
 #, kde-format
 msgid "Manage exported applications"
 msgstr "Gestiona les aplicacions exportades"
 
-#: src/mainwindow.cpp:266
+#: src/mainwindow.cpp:267
 #, kde-format
 msgid "Upgrade"
 msgstr "Actualitza"
 
-#: src/mainwindow.cpp:267
+#: src/mainwindow.cpp:268
 #, kde-format
 msgid "Upgrade the selected container"
 msgstr "Actualitza el contenidor seleccionat"
 
-#: src/mainwindow.cpp:274
+#: src/mainwindow.cpp:275
 #, kde-format
 msgid "Refresh"
 msgstr "Actualitza la llista"
 
-#: src/mainwindow.cpp:275
+#: src/mainwindow.cpp:276
 #, kde-format
 msgid "Refresh container list"
 msgstr "Actualitza la llista de contenidors"
 
-#: src/mainwindow.cpp:279
+#: src/mainwindow.cpp:280
 #, kde-format
 msgid "Install .deb"
 msgstr "Instal·la un «.deb»"
 
-#: src/mainwindow.cpp:280
+#: src/mainwindow.cpp:281
 #, kde-format
 msgid "Install Debian/Ubuntu package"
 msgstr "Instal·la un paquet Debian/Ubuntu"
 
-#: src/mainwindow.cpp:283
+#: src/mainwindow.cpp:284
 #, kde-format
 msgid "Install .rpm"
 msgstr "Instal·la un «.rpm»"
 
-#: src/mainwindow.cpp:284
+#: src/mainwindow.cpp:285
 #, kde-format
 msgid "Install Fedora/OpenSUSE package"
 msgstr "Instal·la un paquet Fedora/OpenSUSE"
 
-#: src/mainwindow.cpp:287
+#: src/mainwindow.cpp:288
 #, kde-format
 msgid "Install .pkg"
 msgstr "Instal·la un «.pkg»"
 
-#: src/mainwindow.cpp:288
+#: src/mainwindow.cpp:289
 #, kde-format
 msgid "Install Arch Linux package"
 msgstr "Instal·la un paquet Arch Linux"
 
-#: src/mainwindow.cpp:311
+#: src/mainwindow.cpp:312
 #, kde-format
 msgid "New Container"
 msgstr "Contenidor nou"
 
-#: src/mainwindow.cpp:313
+#: src/mainwindow.cpp:314
 #, kde-format
 msgid "Create new container"
 msgstr "Crea un contenidor nou"
 
-#: src/mainwindow.cpp:319
+#: src/mainwindow.cpp:320
 #, kde-format
 msgid "Upgrade all Containers"
 msgstr "Actualitza tots els contenidors"
 
-#: src/mainwindow.cpp:321
+#: src/mainwindow.cpp:322
 #, kde-format
 msgid "Upgrades all containers"
 msgstr "Actualitza tots els contenidors"
 
-#: src/mainwindow.cpp:327
+#: src/mainwindow.cpp:328
 #, kde-format
 msgid "Assemble"
 msgstr "Assembla"
 
-#: src/mainwindow.cpp:329
+#: src/mainwindow.cpp:330
 #, kde-format
 msgid "Create container from INI file"
 msgstr "Crear un contenidor a partir d'un fitxer INI"
 
-#: src/mainwindow.cpp:343 src/mainwindow.cpp:418
+#: src/mainwindow.cpp:344 src/mainwindow.cpp:419
 #, kde-format
 msgid "No terminal emulator found - output will be shown in dialog"
 msgstr ""
 "No s'ha trobat cap emulador de terminal: l'eixida es mostrarà en el diàleg"
 
-#: src/mainwindow.cpp:431
+#: src/mainwindow.cpp:432
 #, kde-format
 msgid "Confirm Deletion"
 msgstr "Confirma la supressió"
 
-#: src/mainwindow.cpp:432
+#: src/mainwindow.cpp:433
 #, kde-format
 msgid "Delete container <b>%1</b>?"
 msgstr "Voleu suprimir el contenidor <b>%1</b>?"
 
-#: src/mainwindow.cpp:433
+#: src/mainwindow.cpp:434
 #, kde-format
 msgid "This action cannot be undone."
 msgstr "Esta acció no es podrà desfer."
 
-#: src/mainwindow.cpp:440
-#, kde-format
-msgid "Result"
-msgstr "Resultat"
-
-#: src/mainwindow.cpp:487
+#: src/mainwindow.cpp:486
 #, kde-format
 msgid "Function Not Supported"
 msgstr "Funció no implementada"
 
 # skip-rule: kct-toolbox
-#: src/mainwindow.cpp:488
+#: src/mainwindow.cpp:487
 #, kde-format
 msgid ""
 "Toolbox backend doesn't support container assembly.\n"
@@ -557,78 +531,96 @@ msgstr ""
 "\n"
 "Canvieu al dorsal Distrobox per a utilitzar esta característica."
 
-#: src/mainwindow.cpp:493
+#: src/mainwindow.cpp:492
 #, kde-format
 msgid "Select Distrobox INI File"
 msgstr "Trieu el fitxer INI de Distrobox"
 
-#: src/mainwindow.cpp:493
+#: src/mainwindow.cpp:492
 #, kde-format
 msgid "INI Files (*.ini);;All Files (*)"
 msgstr "Fitxers INI (*.ini);;Tots els fitxers (*)"
 
-#: src/mainwindow.cpp:510
+#: src/mainwindow.cpp:509
 #, kde-format
 msgid "Assembling container..."
 msgstr "S'està assemblant el contenidor…"
 
-#: src/mainwindow.cpp:533
+#: src/mainwindow.cpp:532
 #, kde-format
 msgid "Processing..."
 msgstr "Està processant…"
 
-#: src/mainwindow.cpp:586
+#: src/mainwindow.cpp:585
 #, kde-format
 msgid "Select .deb Package"
 msgstr "Seleccioneu un paquet «.deb»"
 
-#: src/mainwindow.cpp:588
+#: src/mainwindow.cpp:587
 #, kde-format
 msgid "Debian Packages (*.deb)"
 msgstr "Paquets Debian (*.deb)"
 
-#: src/mainwindow.cpp:597
+#: src/mainwindow.cpp:596
 #, kde-format
 msgid "Installing .deb package..."
 msgstr "S'està instal·lant un paquet «.deb»…"
 
-#: src/mainwindow.cpp:624
+#: src/mainwindow.cpp:623
 #, kde-format
 msgid "Select .rpm Package"
 msgstr "Seleccioneu un paquet «.rpm»"
 
-#: src/mainwindow.cpp:626
+#: src/mainwindow.cpp:625
 #, kde-format
 msgid "RPM Packages (*.rpm)"
 msgstr "Paquets RPM (*.rpm)"
 
-#: src/mainwindow.cpp:635
+#: src/mainwindow.cpp:634
 #, kde-format
 msgid "Installing .rpm package..."
 msgstr "S'està instal·lant un paquet «.rpm»…"
 
-#: src/mainwindow.cpp:662
+#: src/mainwindow.cpp:661
 #, kde-format
 msgid "Select Arch Package"
 msgstr "Seleccioneu un paquet d'Arch"
 
 # skip-rule: t-pu_sp
-#: src/mainwindow.cpp:664
+#: src/mainwindow.cpp:663
 #, kde-format
 msgid "Arch Packages (*.pkg.tar.*)"
 msgstr "Paquets d'Arch (*.pkg.tar.*)"
 
-#: src/mainwindow.cpp:673
+#: src/mainwindow.cpp:672
 #, kde-format
 msgid "Installing Arch package..."
 msgstr "S'està instal·lant un paquet Arch…"
 
-#: src/mainwindow.cpp:701
+#: src/mainwindow.cpp:700
 #, kde-format
 msgid "Upgrading container..."
 msgstr "S'està actualitzant el contenidor…"
 
-#: src/mainwindow.cpp:723
+#: src/mainwindow.cpp:722
 #, kde-format
 msgid "Upgrading all containers..."
 msgstr "S'estan actualitzant tots els contenidors…"
+
+# skip-rule: kct-toolbox
+#~ msgctxt "Error message when toolbox deletion fails"
+#~ msgid "Failed to delete Toolbox %1. Error: %2"
+#~ msgstr "No s'ha pogut suprimir ToolboX %1. Error: %2"
+
+# skip-rule: kct-toolbox
+#~ msgctxt ""
+#~ "Inform the User that the Toolbox Deletion Completed since it returns no "
+#~ "output on its own"
+#~ msgid "Toolbox %1 deleted successfully."
+#~ msgstr "ToolboX %1 s'ha suprimit correctament."
+
+#~ msgid "Error: Failed to delete Container."
+#~ msgstr "S'ha produït un error: ha fallat a suprimir el contenidor."
+
+#~ msgid "Result"
+#~ msgstr "Resultat"
