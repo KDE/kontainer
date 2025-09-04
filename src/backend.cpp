@@ -1005,7 +1005,7 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
 {
     QString image = imageUrl.toLower();
 
-    // First check hardcoded URL mappings (exact matches)
+    // First check hardcoded URL mappings (prefix matches)
     static const QMap<QString, QString> hardcodedMappings = {{"ghcr.io/vanilla-os/vso:main", "vso"},
                                                              {"docker.io/blackarchlinux/blackarch:latest", "blackarch"},
                                                              {"cgr.dev/chainguard/wolfi-base", "wolfi"}};
@@ -1028,7 +1028,7 @@ QString Backend::parseDistroFromImage(const QString &imageUrl) const
         {"(^|/)([a-z]+)[.:-]?([0-9]{1,2}\\.?[0-9]{0,2})(:|$)", "$2"}, // ubuntu22.04 -> ubuntu
 
         // 3. Standard distro names in path
-        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu)(:|/|$)", "$2"},
+        {"(^|/)(alma|alpine|amazon|arch|centos|debian|fedora|rocky|rhel|ubuntu|deepin)(:|/|$)", "$2"},
 
         // 4. Common abbreviations and aliases
         {"(^|/)(rh|redhat)(:|/|$)", "rhel"},
