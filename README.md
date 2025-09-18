@@ -1,21 +1,28 @@
-# ⚠️ Kontainer is **ALPHA Software** ⚠️
+# ⚠️ Deprecation Notice – Kontainer (QtWidgets) ⚠️
 
-**This project is under heavy development.**
-- 🐞 There are still **bugs and regressions** in the application  
-- 🚧 Kontainer is **feature frozen** until core issues are fixed  
-- ⏳ Development may move slower since the lead dev (Hadi Chokr) is now employed  
-- 📦 Releases are **for progress tracking only**, *not stable builds*  
+This repository is no longer under active development.  
+The lead developer (Hadi Chokr, author of ~99.99% of commits) has shifted focus to a new **[Kirigami-based Kontainer](https://github.com/DenysMb/Kontainer)** project with the same goals.  
+
+The future of this repository:  
+- 🚧 It will remain archived as a reference of the original QtWidgets-based implementation.  
+- 🔀 The **Kirigami Kontainer** will eventually serve as its successor. I will be backporting most of this backend into it, and it may later be **incubated** or **hard forked** as a replacement for this repo.  
+- ⏳ No new features or fixes will be added here.  
+
+For ongoing development, follow the [Kirigami Kontainer](https://github.com/DenysMb/Kontainer) project.  
+
+Thanks for your interest, contributions, and time.  
+— Hadi Chokr  
 
 ---
 
-# Kontainer – Qt Container Manager  
+# Kontainer – Qt Container Manager (DEPRECATED)
 
-Kontainer is a **Qt-based GUI** for managing container environments.  
-It is free and open source, but still in an early alpha state.  
+Kontainer is a **QtWidgets-based GUI** for managing container environments.  
+It is free and open source, but has now been **superseded by the Kirigami rewrite**.  
 
 ---
 
-## ✨ Current Features  
+## ✨ Features (Historical)
 
 - 🗂️ View, create, delete, and enter containers  
 - 📤 Export and 📥 unexport applications  
@@ -25,51 +32,13 @@ It is free and open source, but still in an early alpha state.
 - 🎨 KDE Plasma integration, theming, and translations  
 - ⚙️ Configurable backend and terminal  
 
-> ⚠️ **Limitations right now:**  
-> - No-terminal mode is temporarily broken  
-> - Not all operations are async → some UI freezes may occur  
-
 ---
 
-## 🗺️ Roadmap  
+## ⚠️ Limitations
 
-- 🔧 Bug fixes & stabilization  
-- 🔄 Make all operations fully async  
-- 📦 Complete Toolbox backend support  
-- 📱 Rewrite UI in **Kirigami** for responsiveness  
-- ✅ Lift feature freeze once the above are complete  
-
----
-
-## 📦 Build & Install  
-
-### 🟢 Flatpak Builder (for development)  
-
-```bash
-git clone https://invent.kde.org/system/kontainer
-flatpak install org.kde.Sdk//6.9
-flatpak-builder --force-clean build-dir kontainer.flatpak.yaml --user --install
-```  
-
-### 🔧 Build from Source  
-
-1. Install Qt 6.9+ with C++17 support  
-2. Clone and build:  
-
-```bash
-git clone https://invent.kde.org/system/kontainer
-cd kontainer
-cmake .
-make
-```  
-
-### 🛠️ Using kde-builder  
-
-Alternatively, you can use [kde-builder](https://invent.kde.org/sdk/kde-builder):  
-
-```bash
-kde-builder kontainer
-```  
+- Development has **stopped**  
+- No-terminal mode was broken  
+- Not all operations were async → UI freezes possible  
 
 ---
 
